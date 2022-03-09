@@ -24,8 +24,8 @@
 \hypersetup{
     bookmarks=false,    % show bookmarks bar?
     pdftitle={Software Requirement Specification},    % title
-    pdfauthor={Jean-Philippe Eisenbarth},                     % author
-    pdfsubject={TeX and LaTeX},                        % subject of the document
+    pdfauthor={Jean-Philippe Eisenbarth},              % author
+    pdfsubject={TeX and LaTeX}, % subject of the document
     pdfkeywords={TeX, LaTeX, graphics, images}, % list of keywords
     colorlinks=true,       % false: boxed links; true: colored links
     linkcolor=blue,       % color of internal links
@@ -33,7 +33,7 @@
     filecolor=black,        % color of file links
     urlcolor=purple,        % color of external links
     linktoc=page            % only page is linked
-}%
+}
 \def\myversion{1.0 }
 \date{}
 %\title{%
@@ -45,19 +45,12 @@
 \begin{flushright}
     \rule{16cm}{5pt}\vskip1cm
     \begin{bfseries}
-        \Huge{SOFTWARE REQUIREMENTS\\ SPECIFICATION}\\
+        \Huge{DOCUMENTO DI SPECIFICA\\ DEI REQUISITI SOFTWARE}\\
         \vspace{1.9cm}
-        for\\
+        Comics Store\\
         \vspace{1.9cm}
-        $<$Project$>$\\
+        Enrico De Salve\\
         \vspace{1.9cm}
-        \LARGE{Version \myversion approved}\\
-        \vspace{1.9cm}
-        Prepared by $<$author$>$\\
-        \vspace{1.9cm}
-        $<$Organization$>$\\
-        \vspace{1.9cm}
-        \today\\
     \end{bfseries}
 \end{flushright}
 
@@ -78,41 +71,76 @@
     \end{tabular}
 \end{center}
 
-\chapter{Introduction}
+\chapter{Introduzione}
 
-\section{Purpose}
-$<$Identify the product whose software requirements are specified in this 
-document, including the revision or release number. Describe the scope of the 
-product that is covered by this SRS, particularly if this SRS describes only 
-part of the system or a single subsystem.$>$
+\section{Propositi}
+Il proposito di questo documento è quello di specificare i requisiti del sistema software
+"Comics Store" per facilitarne la realizzazione e la validazione.
 
-\section{Document Conventions}
-$<$Describe any standards or typographical conventions that were followed when 
-writing this SRS, such as fonts or highlighting that have special significance.  
-For example, state whether priorities  for higher-level requirements are assumed 
-to be inherited by detailed requirements, or whether every requirement statement 
-is to have its own priority.$>$
+\section{Obiettivi}\label{obiettivi}
+È necessaria un’applicazione web per l’implementazione di servizi relativi alla gestione 
+di un negozio online associato ad una fumetteria. L’applicazione si interfaccia con una base 
+di dati per la gestione di quest'ultimi.\\
+\\
+L'amministratore (il gestore della fumetteria) deve poter:
+\begin{itemize}
+    \item aggiungere (e rimuovere, se necessario) nuove collezioni di fumetti specificandone il 
+    nome e l'immagine di copertina;
+    \item creare (e rimuovere) nuove categorie di fumetti specificandone il nome ed una breve
+    descrizione;
+    \item associare le collezioni alle categorie, una collezione deve far parte di almeno una
+    categoria, in generale può far parte di più categorie;
+    \item aggiungere delle copie degli albi alle varie collezioni, si tenga presente che ogni
+    fumetto deve far parte di una ed una sola collezione. Per aggiungere un nuovo fumetto nel 
+    catalogo l'amministratore deve specificare il numero dell'albo, il prezzo unitario, lo 
+    scrittore ed il disegnatore, il numero di pagine, il codice ISBN ed una descrizione;
+    \item creare nuovi sconti specificando la percentuale di sconto e la data di scadenza;
+    \item applicare uno sconto a più fumetti (non necessariamente appartenenti alla stessa 
+    collezione);
+    \item richiedere la generazione di report indicanti, in un certo intervallo di tempo, le
+    vendite.
+\end{itemize}
+Gli utenti (anche se non registrati) possono ricercare le collezioni per titolo, scrittore,
+disegnatore e codice ISBN; l'ordinamento delle collezioni ricercate deve poter essere deciso 
+dall'utente. La ricerca per titolo deve mostrare anche le collezioni che corrispondono parzialmente 
+all’input dell’utente.\\ 
+Ad esempio se l’utente cerca la parola “attacco” l’applicazione deve mostrargli la collezione
+chiamata “L’attacco dei giganti” ma anche “Star Wars: l’attacco dei cloni” e tutte le collezioni 
+che contengano nel nome la parola “attacco”.\\
+La ricerca mostra anche le collezioni contenenti fumetti che non sono disponibili per l'acquisto
+(sono terminate le copie).\\
+\\
+Gli utenti possono registrarsi fornendo nome, cognome, data di nascita, indirizzo e-mail e
+facoltativamente numero di telefono, paese e città in cui abitano.\\
+Dal momento in cui si registra l’utente possiede un carrello.\\
+\\
+L'utente registrato che ha effettuato l'accesso deve poter:
+\begin{itemize}
+    \item aggiungere fumetti al suo carrello a patto che questi siano attualmente disponibili per 
+    l’acquisto. Se esce dall’applicazione (effettua il log out) il contenuto del carrello deve
+    essere memorizzato;
+    \item rimuovere fumetti dal suo carrello;
+    \item acquistare i fumetti contenuti nel suo carrello (se disponibili nel catalogo) attraverso
+    la piattaforma Paypal, al termine dell’operazione il carrello deve essere svuotato;
+    \item creare (ed eliminare, se già presenti) delle liste desideri. Ad ogni lista l’utente deve
+    poter aggiungere e rimuovere qualunque fumetto (anche fumetti che, in quel momento, non sono 
+    disponibili per l’acquisto);
+    \item abilitare le notifiche per ogni lista desideri da lui creata: ogni cambiamento 
+    riguardante prezzo, sconto e disponibilità di ogni fumetto contenuto nella lista gli deve essere
+    notificato via email;
+    \item modificare alcune delle informazioni inserite in fase di registrazione (indirizzo e-mail,
+    numero di telefono, paese e città).
+\end{itemize}
 
-\section{Intended Audience and Reading Suggestions}
-$<$Describe the different types of reader that the document is intended for, 
-such as developers, project managers, marketing staff, users, testers, and 
-documentation writers. Describe what the rest of this SRS contains and how it is 
-organized. Suggest a sequence for reading the document, beginning with the 
-overview sections and proceeding through the sections that are most pertinent to 
-each reader type.$>$
+\section{Definizioni, acronimi ed abbreviazioni}
+da fare
 
-\section{Project Scope}
-$<$Provide a short description of the software being specified and its purpose, 
-including relevant benefits, objectives, and goals. Relate the software to 
-corporate goals or business strategies. If a separate vision and scope document 
-is available, refer to it rather than duplicating its contents here.$>$
+\section{Riferimenti}
+Nel documento "Progettazione base di dati" è riportata la struttura di memorizzazione dei dati.
 
-\section{References}
-$<$List any other documents or Web addresses to which this SRS refers. These may 
-include user interface style guides, contracts, standards, system requirements 
-specifications, use case documents, or a vision and scope document. Provide 
-enough information so that the reader could access a copy of each reference, 
-including title, author, version number, date, and source or location.$>$
+\section{Panoramica}
+La restante parte di questo documento contiene una descrizione dettagliata delle funzionalità richieste
+al sistema software "Comics Store" secondo gli obiettivi espressi al punto \ref*{obiettivi}.
 
 
 \chapter{Overall Description}
