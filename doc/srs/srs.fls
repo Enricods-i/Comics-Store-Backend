@@ -1,8 +1,8 @@
-PWD /home/eds/Progetti/comics_store
+PWD /home/eds/Progetti/comics_store/doc/srs
 INPUT /usr/share/texlive/texmf-dist/web2c/texmf.cnf
 INPUT /usr/share/texlive/texmf-dist/web2c/texmf.cnf
 INPUT /home/eds/.texlive2021/texmf-var/web2c/pdftex/pdflatex.fmt
-INPUT /home/eds/Progetti/comics_store/srs.tex
+INPUT /home/eds/Progetti/comics_store/doc/srs/srs.tex
 OUTPUT srs.log
 INPUT /usr/share/texlive/texmf-dist/tex/latex/koma-script/scrreprt.cls
 INPUT /usr/share/texlive/texmf-dist/tex/latex/koma-script/scrreprt.cls
@@ -582,6 +582,7 @@ INPUT srs.aux
 INPUT ./srs.out
 INPUT ./srs.out
 INPUT /usr/share/texlive/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc
+INPUT /usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb
 INPUT /usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb
 INPUT /usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb
 INPUT /usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb

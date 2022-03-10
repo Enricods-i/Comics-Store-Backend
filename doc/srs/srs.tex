@@ -47,7 +47,7 @@
     \begin{bfseries}
         \Huge{DOCUMENTO DI SPECIFICA\\ DEI REQUISITI SOFTWARE}\\
         \vspace{1.9cm}
-        Comics Store\\
+        Comics Store Back-End\\
         \vspace{1.9cm}
         Enrico De Salve\\
         \vspace{1.9cm}
@@ -56,31 +56,15 @@
 
 \tableofcontents
 
-
-\chapter*{Revision History}
-
-\begin{center}
-    \begin{tabular}{|c|c|c|c|}
-        \hline
-	    Name & Date & Reason For Changes & Version\\
-        \hline
-	    21 & 22 & 23 & 24\\
-        \hline
-	    31 & 32 & 33 & 34\\
-        \hline
-    \end{tabular}
-\end{center}
-
 \chapter{Introduzione}
 
 \section{Propositi}
 Il proposito di questo documento è quello di specificare i requisiti del sistema software
-"Comics Store" per facilitarne la realizzazione e la validazione.
+"Comics Store Back-End" per facilitarne la realizzazione e la validazione.
 
 \section{Obiettivi}\label{obiettivi}
 È necessaria un’applicazione web per l’implementazione di servizi relativi alla gestione 
-di un negozio online associato ad una fumetteria. L’applicazione si interfaccia con una base 
-di dati per la gestione di quest'ultimi.\\
+di un negozio online associato ad una fumetteria.\\
 \\
 L'amministratore (il gestore della fumetteria) deve poter:
 \begin{itemize}
@@ -133,7 +117,7 @@ L'utente registrato che ha effettuato l'accesso deve poter:
 \end{itemize}
 
 \section{Definizioni, acronimi ed abbreviazioni}
-da fare
+BE Back-End
 
 \section{Riferimenti}
 Nel documento "Progettazione base di dati" è riportata la struttura di memorizzazione dei dati.
@@ -143,64 +127,61 @@ La restante parte di questo documento contiene una descrizione dettagliata delle
 al sistema software "Comics Store" secondo gli obiettivi espressi al punto \ref*{obiettivi}.
 
 
-\chapter{Overall Description}
+\chapter{Descrizione generale}
 
-\section{Product Perspective}
-$<$Describe the context and origin of the product being specified in this SRS.  
-For example, state whether this product is a follow-on member of a product 
-family, a replacement for certain existing systems, or a new, self-contained 
-product. If the SRS defines a component of a larger system, relate the 
-requirements of the larger system to the functionality of this software and 
-identify interfaces between the two. A simple diagram that shows the major 
-components of the overall system, subsystem interconnections, and external 
-interfaces can be helpful.$>$
+\section{Prospettive del prodotto}
+Il sistema software "Comics Store BE" è la parte centrale di un'applicazione web (Comics Store per l'appunto),
+rappresenta il componente che implementa la logica di business e deve fornire un interfaccia al componente client
+dell'applicazione (il Front-End). L'interfaccia menzionata sarà una API RESTful.
+Inoltre deve integrarsi con un DBMS che si occupa della memorizzazione e del reperimento dei dati.
 
-\section{Product Functions}
-$<$Summarize the major functions the product must perform or must let the user 
-perform. Details will be provided in Section 3, so only a high level summary 
-(such as a bullet list) is needed here. Organize the functions to make them 
-understandable to any reader of the SRS. A picture of the major groups of 
-related requirements and how they relate, such as a top level data flow diagram 
-or object class diagram, is often effective.$>$
+\section{Funzionalità del prodotto}
+Il sistema "Comics Store BE" deve:
+\begin{itemize}
+    \item Fornire la ricerca di collezioni di fumetti;
+    \item Permettere solo agli utenti registrati di:
+        \begin{itemize}
+            \item aggiungere fumetti al carrello;
+            \item rimuovere fumetti dal carrello;
+            \item acquistare i fumetti presenti nel carrello;
+            \item creare liste desideri;
+            \item eliminare liste desideri;
+            \item aggiungere fumetti ad una lista desideri;
+            \item rimuovere fumetti da una lista desideri;
+            \item modificare alcune delle suo informazioni personali;
+        \end{itemize}
+    \item Permettere solo all'amministratore di:
+        \begin{itemize}
+            \item aggiungere nuove collezioni;
+            \item eliminare collezioni esistenti;
+            \item creare nuove categorie;
+            \item eliminare delle categorie;
+            \item aggiungere delle categorie ad una collezione;
+            \item rimuovere delle categorie da una collezione;
+            \item aggiungere copie di fumetti al catalogo;
+            \item aggiungere nuovi fumetti al catalogo;
+            \item creare nuovi sconti;
+            \item aggiungere uno sconto a dei fumetti;
+            \item generare report delle vendite;
+        \end{itemize}
+    \item Salvare tutti gli acquisti effettuati dagli utenti
+\end{itemize}
 
-\section{User Classes and Characteristics}
-$<$Identify the various user classes that you anticipate will use this product.  
-User classes may be differentiated based on frequency of use, subset of product 
-functions used, technical expertise, security or privilege levels, educational 
-level, or experience. Describe the pertinent characteristics of each user class.  
-Certain requirements may pertain only to certain user classes. Distinguish the 
-most important user classes for this product from those who are less important 
-to satisfy.$>$
+\section{Caratteristiche utente}
+Il sistema software "Comics Store BE" è rivolto agli sviluppatori dell'interfaccia client che faranno
+uso dei servizi forniti da questo sistema.
 
-\section{Operating Environment}
-$<$Describe the environment in which the software will operate, including the 
-hardware platform, operating system and versions, and any other software 
-components or applications with which it must peacefully coexist.$>$
+\section{Vincoli generali}
+Il sistema deve rispettare i seguenti vincoli:
+\begin{itemize}
+    \item Un fumetto deve far parte di una ed una sola collezione
+    \item Una collezione deve appartenere ad almeno una categoria
+    \item Un utente non può aggiungere al carrello più copie di un fumetto di quante ce n'è siano disponibili
+    \item Un utente non deve concludere l'acquisto se un fumetto non è più disponibile al momento dell'acquisto
+\end{itemize}
 
-\section{Design and Implementation Constraints}
-$<$Describe any items or issues that will limit the options available to the 
-developers. These might include: corporate or regulatory policies; hardware 
-limitations (timing requirements, memory requirements); interfaces to other 
-applications; specific technologies, tools, and databases to be used; parallel 
-operations; language requirements; communications protocols; security 
-considerations; design conventions or programming standards (for example, if the 
-customer’s organization will be responsible for maintaining the delivered 
-software).$>$
-
-\section{User Documentation}
-$<$List the user documentation components (such as user manuals, on-line help, 
-and tutorials) that will be delivered along with the software. Identify any 
-known user documentation delivery formats or standards.$>$
 \section{Assumptions and Dependencies}
-
-$<$List any assumed factors (as opposed to known facts) that could affect the 
-requirements stated in the SRS. These could include third-party or commercial 
-components that you plan to use, issues around the development or operating 
-environment, or constraints. The project could be affected if these assumptions 
-are incorrect, are not shared, or change. Also identify any dependencies the 
-project has on external factors, such as software components that you intend to 
-reuse from another project, unless they are already documented elsewhere (for 
-example, in the vision and scope document or the project plan).$>$
+Il sistema software "Comics Store" dovrà essere utilizzato
 
 
 \chapter{External Interface Requirements}
