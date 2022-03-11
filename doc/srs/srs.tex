@@ -63,27 +63,23 @@ Il proposito di questo documento è quello di specificare i requisiti del sistem
 "Comics Store Back-End" per facilitarne la realizzazione e la validazione.
 
 \section{Obiettivi}\label{obiettivi}
-È necessaria un’applicazione web per l’implementazione di servizi relativi alla gestione 
-di un negozio online associato ad una fumetteria.\\
+È necessaria un’applicazione web per l’implementazione di servizi relativi alla
+gestione di un negozio online associato ad una fumetteria.\\
 \\
-L'amministratore (il gestore della fumetteria) deve poter:
-\begin{itemize}
-    \item aggiungere (e rimuovere, se necessario) nuove collezioni di fumetti specificandone il 
-    nome e l'immagine di copertina;
-    \item creare (e rimuovere) nuove categorie di fumetti specificandone il nome ed una breve
-    descrizione;
-    \item associare le collezioni alle categorie, una collezione deve far parte di almeno una
-    categoria, in generale può far parte di più categorie;
-    \item aggiungere delle copie degli albi alle varie collezioni, si tenga presente che ogni
-    fumetto deve far parte di una ed una sola collezione. Per aggiungere un nuovo fumetto nel 
-    catalogo l'amministratore deve specificare il numero dell'albo, il prezzo unitario, lo 
-    scrittore ed il disegnatore, il numero di pagine, il codice ISBN ed una descrizione;
-    \item creare nuovi sconti specificando la percentuale di sconto e la data di scadenza;
-    \item applicare uno sconto a più fumetti (non necessariamente appartenenti alla stessa 
-    collezione);
-    \item richiedere la generazione di report indicanti, in un certo intervallo di tempo, le
-    vendite.
-\end{itemize}
+Bisogna fornire al gestore della fumetteria la possibilità di aggiungere (e rimuovere) collezioni
+di fumetti. Una collezione è caratterizzata da un nome, da un'immagine di copertina e dai fumetti che 
+contiene. Il gestore deve poter aggiungere nuovi fumetti specificandone il numero dell'albo, il prezzo
+unitario, lo scrittore ed il disegnatore, il numero di pagine, il codice ISBN ed una descrizione.
+Per ogni fumetto si memorizza la quantità di copie disponibili nel catalogo; deve, naturalmente, essere
+possibile aggiungere copie di un fumetto incrementandone la quantità.\\
+Ogni collezione fa parte di almeno una categoria, ma in generale ci possono essere più categorie associate
+ad una collezione. Una collezione è caratterizzata da un nome e da una breve descrizione. Il gestore deve
+poter creare ed eliminare le categorie ed associarle alle varie collezioni.\\
+Il gestore della fumetteria deve poter, inoltre, creare nuovi sconti specificandone la percentuale di sconto
+e la data di scadenza e deve poter applicarli a vari fumetti.\\
+Infine, il gestore deve poter richiedere la generazione di report indicanti, per un certo intervallo di tempo,
+le vendite.\\
+\\
 Gli utenti (anche se non registrati) possono ricercare le collezioni per titolo, scrittore,
 disegnatore e codice ISBN; l'ordinamento delle collezioni ricercate deve poter essere deciso 
 dall'utente. La ricerca per titolo deve mostrare anche le collezioni che corrispondono parzialmente 
@@ -93,28 +89,20 @@ chiamata “L’attacco dei giganti” ma anche “Star Wars: l’attacco dei cl
 che contengano nel nome la parola “attacco”.\\
 La ricerca mostra anche le collezioni contenenti fumetti che non sono disponibili per l'acquisto
 (sono terminate le copie).\\
-\\
 Gli utenti possono registrarsi fornendo nome, cognome, data di nascita, indirizzo e-mail e
 facoltativamente numero di telefono, paese e città in cui abitano.\\
 Dal momento in cui si registra l’utente possiede un carrello.\\
-\\
-L'utente registrato che ha effettuato l'accesso deve poter:
-\begin{itemize}
-    \item aggiungere fumetti al suo carrello a patto che questi siano attualmente disponibili per 
-    l’acquisto. Se esce dall’applicazione (effettua il log out) il contenuto del carrello deve
-    essere memorizzato;
-    \item rimuovere fumetti dal suo carrello;
-    \item acquistare i fumetti contenuti nel suo carrello (se disponibili nel catalogo) attraverso
-    la piattaforma Paypal, al termine dell’operazione il carrello deve essere svuotato;
-    \item creare (ed eliminare, se già presenti) delle liste desideri. Ad ogni lista l’utente deve
-    poter aggiungere e rimuovere qualunque fumetto (anche fumetti che, in quel momento, non sono 
-    disponibili per l’acquisto);
-    \item abilitare le notifiche per ogni lista desideri da lui creata: ogni cambiamento 
-    riguardante prezzo, sconto e disponibilità di ogni fumetto contenuto nella lista gli deve essere
-    notificato via email;
-    \item modificare alcune delle informazioni inserite in fase di registrazione (indirizzo e-mail,
-    numero di telefono, paese e città).
-\end{itemize}
+Un utente registrato che ha effettuato l'accesso ha a disposizione tutte le altre funzionalità offerte
+dal sistema (oltre alla ricerca). Può aggiungere fumetti al suo carrello per poi acquistarli, naturalemente
+i fumetti devono essere disponibili al momento dell'acquisto. Il contenuto del carrello deve essere memorizzato
+cosi che quando l'utente effettua nuovamente l'accesso possa concludere l'acquisto, a seguito di un acquisto il
+carrello viene svuotato.\\
+Un utente registrato può creare (e a seguito di ciò eliminare) delle liste dei desideri, sono liste nelle quali
+l'utente deve essere in grado di aggiungere qualunque fumetto (anche se non è attualmente disponibile nel catalogo).
+Per ogni lista l'utente può scegliere se vuole essere notificato sulle modifiche relative ai fumetti presenti
+nella lista desideri quali variazioni di prezzo, nuovi sconti o nuova disponobilità.\\
+L'utente deve poter modificare alcune delle informazioni inserite in fase di registrazione (indirizzo e-mail,
+numero di telefono, paese e città).
 
 \section{Definizioni, acronimi ed abbreviazioni}
 BE Back-End
@@ -131,9 +119,9 @@ al sistema software "Comics Store" secondo gli obiettivi espressi al punto \ref*
 
 \section{Prospettive del prodotto}
 Il sistema software "Comics Store BE" è la parte centrale di un'applicazione web (Comics Store per l'appunto),
-rappresenta il componente che implementa la logica di business e deve fornire un interfaccia al componente client
-dell'applicazione (il Front-End). L'interfaccia menzionata sarà una API RESTful.
-Inoltre deve integrarsi con un DBMS che si occupa della memorizzazione e del reperimento dei dati.
+rappresenta il componente che implementa la logica di business e che deve fornire un'interfaccia al componente client
+dell'applicazione (il Front-End). L'interfaccia menzionata sarà una API REST.
+Inoltre il sistema deve interagire con una base di dati che si occupa della memorizzazione e del reperimento dei dati.
 
 \section{Funzionalità del prodotto}
 Il sistema "Comics Store BE" deve:
@@ -164,7 +152,7 @@ Il sistema "Comics Store BE" deve:
             \item aggiungere uno sconto a dei fumetti;
             \item generare report delle vendite;
         \end{itemize}
-    \item Salvare tutti gli acquisti effettuati dagli utenti
+    \item Salvare tutti gli acquisti effettuati dagli utenti;
 \end{itemize}
 
 \section{Caratteristiche utente}
@@ -172,64 +160,33 @@ Il sistema software "Comics Store BE" è rivolto agli sviluppatori dell'interfac
 uso dei servizi forniti da questo sistema.
 
 \section{Vincoli generali}
-Il sistema deve rispettare i seguenti vincoli:
-\begin{itemize}
-    \item Un fumetto deve far parte di una ed una sola collezione
-    \item Una collezione deve appartenere ad almeno una categoria
-    \item Un utente non può aggiungere al carrello più copie di un fumetto di quante ce n'è siano disponibili
-    \item Un utente non deve concludere l'acquisto se un fumetto non è più disponibile al momento dell'acquisto
-\end{itemize}
-
-\section{Assumptions and Dependencies}
-Il sistema software "Comics Store" dovrà essere utilizzato
+Riguardo all'inserimento nel catalogo di fumetti e collezioni bisogna garantire che un fumetto appartenga ad
+\emph{una ed una sola} collezione e che una collezione appartenga ad \emph{almeno} una categoria.\\
+Bisogna verificare che un utente non aggiunga più copie di un fumetto nel suo carrello di quante siano disponibili.\\
+Prima di procedere all'acquisto dei prodotti contenuti nel carrello và verificato che per ognuno ci siano abbastanza
+copie disponibili.
 
 
-\chapter{External Interface Requirements}
+\chapter{Requisiti di interfaccia esterna}
 
-\section{User Interfaces}
-$<$Describe the logical characteristics of each interface between the software 
-product and the users. This may include sample screen images, any GUI standards 
-or product family style guides that are to be followed, screen layout 
-constraints, standard buttons and functions (e.g., help) that will appear on 
-every screen, keyboard shortcuts, error message display standards, and so on.  
-Define the software components for which a user interface is needed. Details of 
-the user interface design should be documented in a separate user interface 
-specification.$>$
+\section{Interfaccia utente}
+Il sistema software "Comics Store BE" deve essere dotato di un'interfaccia REST.
 
-\section{Hardware Interfaces}
-$<$Describe the logical and physical characteristics of each interface between 
-the software product and the hardware components of the system. This may include 
-the supported device types, the nature of the data and control interactions 
-between the software and the hardware, and communication protocols to be 
-used.$>$
+\section{Interfaccia hardware}
+Il sistema software "Comics Store BE" non deve interfacciarsi con nessun sistema hardware.
 
-\section{Software Interfaces}
-$<$Describe the connections between this product and other specific software 
-components (name and version), including databases, operating systems, tools, 
-libraries, and integrated commercial components. Identify the data items or 
-messages coming into the system and going out and describe the purpose of each.  
-Describe the services needed and the nature of communications. Refer to 
-documents that describe detailed application programming interface protocols.  
-Identify data that will be shared across software components. If the data 
-sharing mechanism must be implemented in a specific way (for example, use of a 
-global data area in a multitasking operating system), specify this as an 
-implementation constraint.$>$
+\section{Interfaccia software}
+Il sistema software "Comics Store BE" deve interfacciarsi con una base di dati per il salvataggio ed il reperimento
+dei dati, è bene che si sia un livello di astrazione tra i due componenti in modo tale che si possa cambiare DBMS senza
+alterare il funzionamento del sistema.\\
+È anche necessario interfacciarsi con la piattaforma di pagamento Paypal che farà da intermediario durante l'acquisto.
 
-\section{Communications Interfaces}
-$<$Describe the requirements associated with any communications functions 
-required by this product, including e-mail, web browser, network server 
-communications protocols, electronic forms, and so on. Define any pertinent 
-message formatting. Identify any communication standards that will be used, such 
-as FTP or HTTP. Specify any communication security or encryption issues, data 
-transfer rates, and synchronization mechanisms.$>$
+\section{Interfaccia di comunicazione}
+Il sistema software "Comics Store BE" deve comunicare con il lato client attraverso il protocollo HTTPS.\\
+Il sistema deve comunicare con gli utenti anche via e-mail.
 
 
 \chapter{System Features}
-$<$This template illustrates organizing the functional requirements for the 
-product by system features, the major services provided by the product. You may 
-prefer to organize this section by use case, mode of operation, user class, 
-object class, functional hierarchy, or combinations of these, whatever makes the 
-most logical sense for your product.$>$
 
 \section{System Feature 1}
 $<$Don’t really say “System Feature 1.” State the feature name in just a few 
