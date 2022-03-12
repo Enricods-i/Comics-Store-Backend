@@ -67,7 +67,7 @@ Il proposito di questo documento è quello di specificare i requisiti del sistem
 gestione di un negozio online associato ad una fumetteria.\\
 \\
 Bisogna fornire al gestore della fumetteria la possibilità di aggiungere (e rimuovere) collezioni
-di fumetti. Una collezione è caratterizzata da un nome, da un'immagine di copertina e dai fumetti che 
+di fumetti. Una collezione è caratterizzata da un titolo, da un'immagine di copertina e dai fumetti che 
 contiene. Il gestore deve poter aggiungere nuovi fumetti specificandone il numero dell'albo, il prezzo
 unitario, lo scrittore ed il disegnatore, il numero di pagine, il codice ISBN ed una descrizione.
 Per ogni fumetto si memorizza la quantità di copie disponibili nel catalogo; deve, naturalmente, essere
@@ -131,12 +131,12 @@ Il sistema "Comics Store BE" deve:
         \begin{itemize}
             \item aggiungere fumetti al carrello;
             \item rimuovere fumetti dal carrello;
-            \item acquistare i fumetti presenti nel carrello;
+            \item acquistare deii fumetti;
             \item creare liste desideri;
             \item eliminare liste desideri;
             \item aggiungere fumetti ad una lista desideri;
             \item rimuovere fumetti da una lista desideri;
-            \item modificare alcune delle suo informazioni personali;
+            \item modificare alcune delle sue informazioni personali;
         \end{itemize}
     \item Permettere solo all'amministratore di:
         \begin{itemize}
@@ -152,7 +152,6 @@ Il sistema "Comics Store BE" deve:
             \item aggiungere uno sconto a dei fumetti;
             \item generare report delle vendite;
         \end{itemize}
-    \item Salvare tutti gli acquisti effettuati dagli utenti;
 \end{itemize}
 
 \section{Caratteristiche utente}
@@ -188,28 +187,96 @@ Il sistema deve comunicare con gli utenti anche via e-mail.
 
 \chapter{Requisiti funzionali}
 
-\section{Ricerca per nome}
+\section{Ricerca per titolo}\label{ric_titolo}
 
-\subsection{Introduzione}
-Consente ad un utente di ricercare delle collezioni di fumetti per nome.
+\subsection*{Introduzione}
+Consente ad un utente di ricercare delle collezioni di fumetti per titolo.
+\subsection*{Input}
+Una sequenza di stringhe rappresentanti il titolo da ricercare.
+\subsection*{Elaborazione}
+Vengono visualizzate tutte le collezioni aventi un titolo che contiene in ordine tutte le stringhe della sequenza
+in input. Per ciascuna collezione viene riportato il titolo e l'immagine di copertina.
+\subsection*{Output}
+L'elenco di collezioni risultato.
 
-\subsection{Input}
-Una sequenza di stringhe indicata con 
-\begin{verbatim}
-    [s1, s2, ... , sN]
-\end{verbatim}
+\section{Ricerca avanzata}
 
-\subsection{Elaborazione}
-Si va a ricercare tutte quelle collezioni aventi un nome \emph{conforme} alla sequenza di stringhe in input.
-Conforme nel senso illustrato nella sezione \ref*{obiettivi}, cioè che soddisfa la seguente espressione regolare
-\begin{verbatim}
-    s1[^ ]* s2[^ ]* ... sN[^ ]*
-\end{verbatim}
+\subsection*{Introduzione}
+Consente ad un utente di ricercare collezioni di fumetti per categoria, scrittore, disegnatore o codice ISBN.
+\subsection*{Input}
+I parametri della ricerca quindi il titolo, la categoria, lo scrittore, il disegnatore ed il codice ISBN.
+In generale i parametri sono tutti opzionali ma almeno uno deve essere specificato.
+\subsection*{Elaborazione}
+Vengono visualizzate tutte le collezioni conformi ai parametri specificati in input. Per quanto riguarda
+il titolo con conforme si intende come specificato nella sezione \ref*{ric_titolo}; tutti gli altri parametri
+devono coincidere perfettamente con il campo corrispondente delle collezioni.
+\subsection*{Output}
+L'elenco di collezoini risultato.
 
-\subsection{Output}
-L'elenco di collezioni.
+\section{Aggiunta di un fumetto al carrello}
 
-\section{System Feature 2 (and so on)}
+\subsection*{Introduzione}
+Consente ad un utente registrato di aggiungere un fumetto al suo carrello.
+\subsection*{Input}
+Il fumetto da aggiungere e un identificativo dell'utente.
+\subsection*{Elaborazione}
+Se non ci sono copie del fumetto disponibili per l'acquisto nessuna aggiunta viene effettuata.
+Se invece c'è almeno una copia disponibile e nel carrello il fumetto è già presente si incrementa
+il numero di copie che l'utente intende acquistare, se il fumetto non è presente nel carrello si
+aggiunge ad esso una copia.
+\subsection*{Output}
+La conferma dell'aggiunta.
+
+\section{Rimozione di un fumetto dal carrello}
+
+\subsection*{Introduzione}
+Consente ad un utente registrato di rimuovere un fumetto dal suo carrello.
+\subsection*{Input}
+Il fumetto da rimuovere e un identificativo dell'utente.
+\subsection*{Elaborazione}
+Occorre verificare che ci siano copie del fumetto all'interno del carrello dell'utente.
+Se c'è più di una copia viene decrementato il numero di copie del fumetto all'interno del carrello,
+se c'è soltanto una copia il fumetto viene rimosso dal carrello. Se invece il fumetto non è presente
+all'interno del carrello dell'utente non viene effettuata nessuna rimozione.
+\subsection*{Output}
+La conferma della rimozione.
+
+\section{Acquisto dei fumetti}
+DA FARE
+\subsection*{Introduzione}
+\subsection*{Input}
+\subsection*{Elaborazione}
+\subsection*{Output}
+
+\section{Creazione lista desideri}
+
+\subsection*{Introduzione}
+Consente ad un utente registrato di creare una lista desideri.
+\subsection*{Input}
+Un identificativo dell'utente ed il nome della lista da creare.
+\subsection*{Elaborazione}
+Bisogna controllare che non esista già una lista creata con lo stesso nome creata dall'utente, in tal
+caso la si crea.
+\subsection*{Output}
+La conferma dell'avvenuta creazione.
+
+\section{Eliminazione lista desideri}
+
+\subsection*{Introduzione}
+Consente ad un utente registrato di eliminare una lista desideri precedentemente creata.
+\subsection*{Input}
+Un identificativo dell’utente e la lista da eliminare.
+\subsection*{Elaborazione}
+Occorre verificare che la lista esista ed in tal caso la si elimina insieme a tutto il suo contenuto.
+\subsection*{Output}
+La conferma dell'avvenuta eliminazione.
+
+\section{}
+
+\subsection*{Introduzione}
+\subsection*{Input}
+\subsection*{Elaborazione}
+\subsection*{Output}
 
 
 \chapter{Other Nonfunctional Requirements}
