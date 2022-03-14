@@ -23,14 +23,18 @@
 \contentsline {section}{\numberline {4.5}Acquisto dei fumetti}{11}{section.4.5}%
 \contentsline {section}{\numberline {4.6}Creazione lista desideri}{11}{section.4.6}%
 \contentsline {section}{\numberline {4.7}Eliminazione lista desideri}{11}{section.4.7}%
-\contentsline {chapter}{\numberline {5}Other Nonfunctional Requirements}{13}{chapter.5}%
-\contentsline {section}{\numberline {5.1}Performance Requirements}{13}{section.5.1}%
-\contentsline {section}{\numberline {5.2}Safety Requirements}{13}{section.5.2}%
-\contentsline {section}{\numberline {5.3}Security Requirements}{13}{section.5.3}%
-\contentsline {section}{\numberline {5.4}Software Quality Attributes}{13}{section.5.4}%
-\contentsline {section}{\numberline {5.5}Business Rules}{14}{section.5.5}%
-\contentsline {chapter}{\numberline {6}Other Requirements}{15}{chapter.6}%
-\contentsline {section}{\numberline {6.1}Appendix A: Glossary}{15}{section.6.1}%
-\contentsline {section}{\numberline {6.2}Appendix B: Analysis Models}{15}{section.6.2}%
-\contentsline {section}{\numberline {6.3}Appendix C: To Be Determined List}{15}{section.6.3}%
+\contentsline {section}{\numberline {4.8}Aggiunta di un fumetto ad una lista desideri}{12}{section.4.8}%
+\contentsline {section}{\numberline {4.9}Rimozione di un fumetto da una lista desideri}{12}{section.4.9}%
+\contentsline {section}{\numberline {4.10}Aggiornamento informazioni personali}{13}{section.4.10}%
+\contentsline {section}{\numberline {4.11}Creazione di collezioni}{13}{section.4.11}%
+\contentsline {chapter}{\numberline {5}Other Nonfunctional Requirements}{15}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Performance Requirements}{15}{section.5.1}%
+\contentsline {section}{\numberline {5.2}Safety Requirements}{15}{section.5.2}%
+\contentsline {section}{\numberline {5.3}Security Requirements}{15}{section.5.3}%
+\contentsline {section}{\numberline {5.4}Software Quality Attributes}{15}{section.5.4}%
+\contentsline {section}{\numberline {5.5}Business Rules}{16}{section.5.5}%
+\contentsline {chapter}{\numberline {6}Other Requirements}{17}{chapter.6}%
+\contentsline {section}{\numberline {6.1}Appendix A: Glossary}{17}{section.6.1}%
+\contentsline {section}{\numberline {6.2}Appendix B: Analysis Models}{17}{section.6.2}%
+\contentsline {section}{\numberline {6.3}Appendix C: To Be Determined List}{17}{section.6.3}%
 \providecommand \tocbasic@end@toc@file {}\tocbasic@end@toc@file 

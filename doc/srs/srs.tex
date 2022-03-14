@@ -129,13 +129,13 @@ Il sistema "Comics Store BE" deve:
     \item Fornire la ricerca di collezioni di fumetti;
     \item Permettere solo agli utenti registrati di:
         \begin{itemize}
-            \item aggiungere fumetti al carrello;
-            \item rimuovere fumetti dal carrello;
-            \item acquistare deii fumetti;
+            \item aggiungere un fumetto al carrello;
+            \item rimuovere un fumetto dal carrello;
+            \item acquistare dei fumetti;
             \item creare liste desideri;
             \item eliminare liste desideri;
-            \item aggiungere fumetti ad una lista desideri;
-            \item rimuovere fumetti da una lista desideri;
+            \item aggiungere un fumetto ad una lista desideri;
+            \item rimuovere un fumetto da una lista desideri;
             \item modificare alcune delle sue informazioni personali;
         \end{itemize}
     \item Permettere solo all'amministratore di:
@@ -255,7 +255,7 @@ Consente ad un utente registrato di creare una lista desideri.
 \subsection*{Input}
 Un identificativo dell'utente ed il nome della lista da creare.
 \subsection*{Elaborazione}
-Bisogna controllare che non esista già una lista creata con lo stesso nome creata dall'utente, in tal
+Bisogna controllare che non esista già una lista con lo stesso nome creata dall'utente ed in tal
 caso la si crea.
 \subsection*{Output}
 La conferma dell'avvenuta creazione.
@@ -270,6 +270,57 @@ Un identificativo dell’utente e la lista da eliminare.
 Occorre verificare che la lista esista ed in tal caso la si elimina insieme a tutto il suo contenuto.
 \subsection*{Output}
 La conferma dell'avvenuta eliminazione.
+
+\section{Aggiunta di un fumetto ad una lista desideri}
+
+\subsection*{Introduzione}
+Consente ad un utente registrato di aggiungere un fumetto ad una sua lista desideri.
+\subsection*{Input}
+Un identificativo dell'utente, la lista ed un fumetto.
+\subsection*{Elaborazione}
+Il fumetto da aggiungere può essere anche non disponibile. La lista però deve appartenere all'utente, nel
+senso che l'ha creata lui.
+Infine, volta controllato che la lista non contenga già il fumetto in questione lo si aggiunge; in caso
+contrario la lista non viene modificata.
+\subsection*{Output}
+La conferma dell'avvenuta aggiunta.
+
+\section{Rimozione di un fumetto da una lista desideri}
+
+\subsection*{Introduzione}
+Consente ad un utente registrato di rimuovere un fumetto da una sua lista desideri
+\subsection*{Input}
+Un identificativo dell'utente, la lista ed il fumetto.
+\subsection*{Elaborazione}
+Si controlla che la lista esista e che sia stata creata dall'utente e che il fumetto appartenga a questa lista,
+dopodiché si effettua la rimozione. Se una delle condizioni sopra elencate non è soddisfatta la lista non viene modificata.
+\subsection*{Output}
+La conferma dell'avvenuta rimozione.
+
+
+\section{Aggiornamento informazioni personali}
+
+\subsection*{Introduzione}
+Permette ad un utente registrato di modificare alcune delle informazioni inserite in fase di registrazione quali: indirizzo
+e-mail, recapito telefonico, paese e città dove dimora.
+\subsection*{Input}
+Tutti i dati che l'utente vuole modificare insieme ai nuovi valori che essi dovranno assumere.
+\subsection*{Elaborazione}
+Si controlla che i nuovi valori rappresentino un input valido ed in seguito si procede alla modifica.
+\subsection*{Output}
+La conferma dell'avvenuta modifica.
+
+\section{Creazione di collezioni}
+
+\subsection*{Introduzione}
+Consente all'amministratore di creare una nuova collezione di fumetti.
+\subsection*{Input}
+Il nome e l'immagine di copertina della collezione.
+\subsection*{Elaborazione}
+Bisogna controllare che non esista già una collezione con lo stesso nome dato in input, successivamente
+si procede alla creazione della collezione.
+\subsection*{Output}
+La conferma dell'avvenuta creazione.
 
 \section{}
 
