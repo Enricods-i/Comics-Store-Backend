@@ -140,16 +140,16 @@ Il sistema "Comics Store BE" deve:
         \end{itemize}
     \item Permettere solo all'amministratore di:
         \begin{itemize}
-            \item aggiungere nuove collezioni;
-            \item eliminare collezioni esistenti;
-            \item creare nuove categorie;
-            \item eliminare delle categorie;
-            \item aggiungere delle categorie ad una collezione;
-            \item rimuovere delle categorie da una collezione;
-            \item aggiungere copie di fumetti al catalogo;
-            \item aggiungere nuovi fumetti al catalogo;
-            \item creare nuovi sconti;
-            \item aggiungere uno sconto a dei fumetti;
+            \item aggiungere una nuova collezione;
+            \item eliminare una collezione esistente;
+            \item creare una nuova categoria;
+            \item eliminare una categoria;
+            \item associare una collezione ad una categoria;
+            \item dissociare una collezione da una categoria;
+            \item aggiungere copie di un fumetto al catalogo;
+            \item aggiungere un nuovo fumetto al catalogo;
+            \item creare un nuovo sconto;
+            \item applicare uno sconto ad un fumetto;
             \item generare report delle vendite;
         \end{itemize}
 \end{itemize}
@@ -321,6 +321,136 @@ Bisogna controllare che non esista già una collezione con lo stesso nome dato i
 si procede alla creazione della collezione.
 \subsection*{Output}
 La conferma dell'avvenuta creazione.
+
+\section{Eliminazione di collezioni}
+
+\subsection*{Introduzione}
+Consente all'amministratore di eliminare collezioni precedentemente create. Bisogna precisare che questa operazione
+è possibile solo se la collezione da eliminare è (ancora) vuota o contiene fumetti che non sono stati venduti neanche
+una volta.
+\subsection*{Input}
+La collezione in questione.
+\subsection*{Elaborazione}
+Occorre controllare che la collezione esista e che essa sia vuota o che non contenga fumetti presenti in un qualiasi
+ordine, sotto queste condizioni la si elimina insieme a tutto il suo contenuto.
+\subsection*{Output}
+La conferma dell'avvenuta eliminazione.
+
+\section{Creazione di una categoria}
+
+\subsection*{Introduzione}
+Consente all'amministratore di creare una nuova categoria.
+\subsection*{Input}
+Il nome ed opzionalmente una descrizione per la categoria.
+\subsection*{Elaborazione}
+Si controlla che non esista una categoria con lo stesso nome passato in input e nel caso la si crea.
+\subsection*{Output}
+La conferma dell'avvenuta creazione.
+
+\section{Eliminazione di una categoria}
+
+\subsection*{Introduzione}
+Permette all'amministratore di eliminare una categoria precedentemente creata, a patto che non esistano
+collezioni che appartengano unicamente a questa categoria.
+\subsection*{Input}
+La categoria da eliminare.
+\subsection*{Elaborazione}
+Si controlla se esistano collezioni che appartengano soltanto alla categoria che si intende eliminare, se quest'ultime
+non esistono si elimina la categoria.
+\subsection*{Output}
+La conferma dell'avvenuta eliminazione.
+
+\section{Associazione di una collazione ad una categoria}
+
+\subsection*{Introduzione}
+Permette all'amministratore di associare una collezione ad una categoria.
+\subsection*{Input}
+La collezione e la categoria.
+\subsection*{Elaborazione}
+Occorre controllare che la collezione e la categoria esistano, in caso di risposta positiva le si associano: la
+collezione specificata entra a far parte della categoria specificata
+\subsection*{Output}
+La conferma dell'avvenuta operazione.
+
+\section{Dissociazione di una collezione da una categoria}
+
+\subsection*{Introduzione}
+Permette all'amministratore di dissociare una collezione da una categoria.
+\subsection*{Input}
+La collezione e la categoria.
+\subsection*{Elaborazione}
+Si controlla che la collezione e la categoria esistano e che la collezione sia associata alla categoria, sotto
+queste condizioni l'operazione viene eseguita.
+\subsection*{Output}
+La conferma dell'avvenuta operazione.
+
+\section{Aggiunta di copie del fumetto al catalogo}
+
+\subsection*{Introduzione}
+Consente all'amministratore di aggiungere un numero di copie di un fumetto presente nel catalogo.
+\subsection*{Input}
+Il fumetto ed il numero di copie da aggiungere.
+\subsection*{Elaborazione}
+Bisogna controllare che il fumetto sia presente nel catalogo e che il numero di copie passato in input sia
+maggiore di zero, sotto queste condizioni si incrementa il campo quantità del fumetto del numero di copie
+passato un input.
+\subsection*{Output}
+La conferma dell'avvenuta aggiunta.
+
+\section{Aggiunta di un nuovo fumetto al catalogo}
+
+\subsection*{Introduzione}
+Permette all'amministratore di aggiungere un nuovo fumetto al catalogo specificandone i suoi dati.
+\subsection*{Input}
+Tutti i dati del nuovo fumetto: la collezione di cui fa parte, il numero, il prezzo unitario, la quantità
+di copie disponibili, l'immagine di copertina, lo scrittore, il disegnatore, il numero di pagine, il codice
+ISBN ed una descrizione.
+\subsection*{Elaborazione}
+Bisogna controllare che il numero del fumetto sia maggiore di zero e che non esista un fumetto appartenente alla
+stessa collezione (che deve esistere) con lo stesso numero passato in input; il prezzo, la quantità e il numero
+di pagine devono essere maggiori di zero; infine il codice ISBN deve essere valido.
+Se tutte queste condizioni sono verificate si procede all'aggiunta del fumetto.
+\subsection*{Output}
+La conferma dell'avvenuta aggiunta.
+
+\section{Creazione di un nuovo sconto}
+
+\subsection*{Introduzione}
+Consente all'amministratore di creare un nuovo sconto specificandone tutti i suoi dati.
+\subsection*{Input}
+La percentuale di sconto, la data di scadenza ed un nome.
+\subsection*{Elaborazione}
+Si controlla che la percentuale sia un numero compreso tra zero ed uno, che la data di scadenza non sia
+antecedente alla data attuale e che non esista uno sconto con gli stessi dati (percentuale e data di scadenza).
+Sotto queste condizioni si crea lo sconto.
+\subsection*{Output}
+La conferma dell'avvenuta creazione.
+
+\section{Applicazione di uno sconto ad un fumetto}
+
+\subsection*{Introduzione}
+Consente all'amministratore di applicare uno sconto precedentemente creato a un fumetto presente nel catalogo.
+\subsection*{Input}
+Lo sconto ed il fumetto.
+\subsection*{Elaborazione}
+Bisogna controllare che lo sconto e il fumetto passati in input devono esistere e lo sconto non deve essere scaduto,
+se queste condizioni sono verificare lo sconto viene applicato al fumetto.
+\subsection*{Output}
+La conferma dell'avvenuta operazione.
+
+\section{Generazione report vendite}
+
+\subsection*{Introduzione}
+Consente all'amministratore di ottenere un report delle vendite in un intervallo di tempo da lui scelto
+\subsection*{Input}
+Un intervallo di tempo quindi una data di inizio ed una di fine.
+\subsection*{Elaborazione}
+L'intervallo passato in input deve essere valido: la data di fine deve essere successiva alla data di inizio ma
+antecedente alla data attuale.
+Si recuperano tutti gli ordini effettuati dagli utenti nell'intervallo specificato, per ogni ordine si mostra l'utente,
+il costo totale, i fumetti acquistati e gli sconti applicati a ciascun fumetto.
+\subsection*{Output}
+L'elenco degli ordini risultato.
 
 \section{}
 

@@ -27,14 +27,24 @@
 \contentsline {section}{\numberline {4.9}Rimozione di un fumetto da una lista desideri}{12}{section.4.9}%
 \contentsline {section}{\numberline {4.10}Aggiornamento informazioni personali}{13}{section.4.10}%
 \contentsline {section}{\numberline {4.11}Creazione di collezioni}{13}{section.4.11}%
-\contentsline {chapter}{\numberline {5}Other Nonfunctional Requirements}{15}{chapter.5}%
-\contentsline {section}{\numberline {5.1}Performance Requirements}{15}{section.5.1}%
-\contentsline {section}{\numberline {5.2}Safety Requirements}{15}{section.5.2}%
-\contentsline {section}{\numberline {5.3}Security Requirements}{15}{section.5.3}%
-\contentsline {section}{\numberline {5.4}Software Quality Attributes}{15}{section.5.4}%
-\contentsline {section}{\numberline {5.5}Business Rules}{16}{section.5.5}%
-\contentsline {chapter}{\numberline {6}Other Requirements}{17}{chapter.6}%
-\contentsline {section}{\numberline {6.1}Appendix A: Glossary}{17}{section.6.1}%
-\contentsline {section}{\numberline {6.2}Appendix B: Analysis Models}{17}{section.6.2}%
-\contentsline {section}{\numberline {6.3}Appendix C: To Be Determined List}{17}{section.6.3}%
+\contentsline {section}{\numberline {4.12}Eliminazione di collezioni}{13}{section.4.12}%
+\contentsline {section}{\numberline {4.13}Creazione di una categoria}{14}{section.4.13}%
+\contentsline {section}{\numberline {4.14}Eliminazione di una categoria}{14}{section.4.14}%
+\contentsline {section}{\numberline {4.15}Associazione di una collazione ad una categoria}{15}{section.4.15}%
+\contentsline {section}{\numberline {4.16}Dissociazione di una collezione da una categoria}{15}{section.4.16}%
+\contentsline {section}{\numberline {4.17}Aggiunta di copie del fumetto al catalogo}{16}{section.4.17}%
+\contentsline {section}{\numberline {4.18}Aggiunta di un nuovo fumetto al catalogo}{16}{section.4.18}%
+\contentsline {section}{\numberline {4.19}Creazione di un nuovo sconto}{17}{section.4.19}%
+\contentsline {section}{\numberline {4.20}Applicazione di uno sconto ad un fumetto}{17}{section.4.20}%
+\contentsline {section}{\numberline {4.21}Generazione report vendite}{17}{section.4.21}%
+\contentsline {chapter}{\numberline {5}Other Nonfunctional Requirements}{19}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Performance Requirements}{19}{section.5.1}%
+\contentsline {section}{\numberline {5.2}Safety Requirements}{19}{section.5.2}%
+\contentsline {section}{\numberline {5.3}Security Requirements}{19}{section.5.3}%
+\contentsline {section}{\numberline {5.4}Software Quality Attributes}{19}{section.5.4}%
+\contentsline {section}{\numberline {5.5}Business Rules}{20}{section.5.5}%
+\contentsline {chapter}{\numberline {6}Other Requirements}{21}{chapter.6}%
+\contentsline {section}{\numberline {6.1}Appendix A: Glossary}{21}{section.6.1}%
+\contentsline {section}{\numberline {6.2}Appendix B: Analysis Models}{21}{section.6.2}%
+\contentsline {section}{\numberline {6.3}Appendix C: To Be Determined List}{21}{section.6.3}%
 \providecommand \tocbasic@end@toc@file {}\tocbasic@end@toc@file 
