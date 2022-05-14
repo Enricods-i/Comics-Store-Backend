@@ -18,40 +18,40 @@ CREATE TABLE collection (
 );
 
 CREATE TABLE cart_data (
-    user BIGINT PRIMARY KEY REFERENCES personal_data (id),
-    total DECIMAL(7,2) NOT NULL,
-    size INT,
+    user_id BIGINT PRIMARY KEY REFERENCES personal_data (id),
+    total MONEY NOT NULL,
+    size SMALLINT NOT NULL,
     modified_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
 CREATE TABLE comic (
     id BIGSERIAL PRIMARY KEY,
-    collection BIGINT REFERENCES collection (name),
-	number INT,
-	price DECIMAL(5,2) NOT NULL,
-	quantity INT NOT NULL,
+    collection VARCHAR(50) NOT NULL REFERENCES collection (name) ON UPDATE CASCADE,
+	number SMALLINT NOT NULL,
+	price MONEY NOT NULL,
+	quantity SMALLINT NOT NULL,
 	image VARCHAR(100),
 	writers VARCHAR(50),
 	catoonists VARCHAR(50),
-    format_and_binding 
-	pages INT,
-    format_binding VARCHAR(50)
-	isbn VARCHAR(13) NOT NULL UNIQUE,
+    format_and_binding VARCHAR(30),
+	pages SMALLINT,
+    format_binding VARCHAR(50),
+	isbn VARCHAR(13) UNIQUE,
 	description VARCHAR(200),
 	created_at TIMESTAMP NOT NULL DEFAULT NOW(),
     modified_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
 CREATE TABLE cart_content(
-    cart BIGINT REFERENCES cart_data (user),
+    cart BIGINT REFERENCES cart_data (user_id),
     comic BIGINT REFERENCES comic (id),
-    quantity INT
+    quantity SMALLINT NOT NULL,
     PRIMARY KEY (cart,comic)
 );
 
 CREATE TABLE wish_list(
     id BIGSERIAL PRIMARY KEY,
-    user BIGINT REFERENCES personal_data (id),
+    user_id BIGINT NOT NULL REFERENCES personal_data (id),
     name VARCHAR(70) NOT NULL,
     notifications BOOLEAN DEFAULT FALSE,
 	created_at TIMESTAMP NOT NULL DEFAULT NOW(),
@@ -59,7 +59,7 @@ CREATE TABLE wish_list(
 );
 
 CREATE TABLE list_content(
-    list BIGINT REFERENCES wish_list (id),
+    list BIGINT REFERENCES wish_list (id) ON DELETE CASCADE,
     comic BIGINT REFERENCES comic (id),
     PRIMARY KEY (list,comic)
 );
@@ -70,14 +70,41 @@ CREATE TABLE category(
 );
 
 CREATE TABLE classification(
-    category BIGINT REFERENCES category (name),
-    collection BIGINT REFERENCES collection (name),
+    category VARCHAR(50) REFERENCES category (name),
+    collection VARCHAR(50) REFERENCES collection (name),
     PRIMARY KEY (category,collection)
 );
 
 CREATE TABLE discount(
     id BIGSERIAL PRIMARY KEY,
-    percentage
-    expiration_date
+    percentage SMALLINT NOT NULL,
+    expiration_date DATE NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE promotion(
+    comic BIGINT REFERENCES comic (id),
+    discount BIGINT REFERENCES discount (id),
+    PRIMARY KEY (comic,discount)
+);
+
+CREATE TABLE purchase(
+    id BIGSERIAL PRIMARY KEY,
+    user_id BIGINT NOT NULL REFERENCES personal_data (id),
+    total MONEY NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE comic_in_purchase(
+    id BIGSERIAL PRIMARY KEY,
+    purchase BIGINT NOT NULL REFERENCES purchase (id),
+    comic BIGINT NOT NULL REFERENCES comic (id),
+    price MONEY NOT NULL,
+    quantity SMALLINT NOT NULL
+);
+
+CREATE TABLE discount_application(
+    comic BIGINT REFERENCES comic (id),
+    discount BIGINT REFERENCES discount (id),
+    PRIMARY KEY (comic,discount)
 );
