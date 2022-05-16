@@ -1,4 +1,4 @@
-package com.example.ComicsStore.entities;
+package im.enricods.ComicsStore.entities;
 
 import java.util.Set;
 
@@ -6,6 +6,9 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -28,7 +31,15 @@ public class Collection {
     @Column(name = "description", length = 1000)
     private String description;
 
-    @OneToMany(mappedBy = "collection")
+    @OneToMany(targetEntity = Comic.class, mappedBy = "collection")
     private Set<Comic> comics;
+
+    @ManyToMany
+    @JoinTable(
+        name = "classification",
+        joinColumns = @JoinColumn(name = "collection"),
+        inverseJoinColumns = @JoinColumn(name = "category")
+    )
+    private Set<Category> categories;
 
 }//Collection

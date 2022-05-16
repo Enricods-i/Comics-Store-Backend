@@ -37,7 +37,7 @@ CREATE TABLE comic (
 		pages SMALLINT,
 		isbn VARCHAR(13) UNIQUE,
 		description VARCHAR(200),
-		version LONG,
+		version BIGINT,
 		created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     	modified_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
@@ -45,7 +45,6 @@ CREATE TABLE comic (
 CREATE TABLE cart_content(
     	cart BIGINT REFERENCES cart_data (user_id),
    		comic BIGINT REFERENCES comic (id),
-   		quantity SMALLINT NOT NULL,
     	PRIMARY KEY (cart,comic)
 );
 
@@ -104,7 +103,7 @@ CREATE TABLE comic_in_purchase(
 );
 
 CREATE TABLE discount_application(
-    	comic BIGINT REFERENCES comic (id),
+    	purchased_comic BIGINT REFERENCES comic_in_purchase (id),
     	discount BIGINT REFERENCES discount (id),
-    	PRIMARY KEY (comic,discount)
+    	PRIMARY KEY (purchased_comic,discount)
 );

@@ -1,13 +1,16 @@
-package com.example.ComicsStore.entities;
+package im.enricods.ComicsStore.entities;
 
 import java.math.BigInteger;
 import java.util.Date;
+import java.util.Set;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -37,5 +40,12 @@ public class Cart {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "modified_at", nullable = false)
     private Date modifiedAt;
+
+    @ManyToMany
+    @JoinTable(name = "cart_content",
+        joinColumns = {@JoinColumn(name = "cart")},
+        inverseJoinColumns = {@JoinColumn(name = "comic")}
+    )
+    private Set<Comic> comicsInCart;
 
 }//Cart

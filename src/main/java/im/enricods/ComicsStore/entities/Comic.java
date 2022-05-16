@@ -1,7 +1,8 @@
-package com.example.ComicsStore.entities;
+package im.enricods.ComicsStore.entities;
 
 import java.math.BigInteger;
 import java.util.Date;
+import java.util.Set;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -10,7 +11,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -40,6 +44,14 @@ public class Comic {
     @Basic
     @Column(name = "price", nullable = false)
     private float price;
+
+    @ManyToMany
+    @JoinTable(
+        name = "promotion",
+        joinColumns = @JoinColumn(name = "comic"),
+        inverseJoinColumns = @JoinColumn(name = "discount")
+    )
+    private Set<Discount> discounts;
 
     @Basic
     @Column(name = "quantity", nullable = false)
@@ -83,5 +95,8 @@ public class Comic {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "modified_at", nullable = false)
     private Date modifiedAt;
+
+    @OneToMany(targetEntity = ComicInPurchase.class,  mappedBy = "comic")
+    private Set<ComicInPurchase> comicsSold;
 
 }//Comic

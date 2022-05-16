@@ -1,7 +1,8 @@
-package com.example.ComicsStore.entities;
+package im.enricods.ComicsStore.entities;
 
 import java.math.BigInteger;
 import java.util.Date;
+import java.util.Set;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -9,6 +10,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -65,5 +67,11 @@ public class User {
 
     @OneToOne(optional = false, mappedBy = "user")
     private Cart cart;
+
+    @OneToMany(targetEntity = WishList.class, mappedBy = "owner")
+    private Set<WishList> wishListsx;
+
+    @OneToMany(targetEntity = Purchase.class, mappedBy = "buyer")
+    private Set<Purchase> purchases;
 
 }//User

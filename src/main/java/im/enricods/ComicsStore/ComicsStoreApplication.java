@@ -1,4 +1,4 @@
-package com.example.ComicsStore;
+package im.enricods.ComicsStore;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
