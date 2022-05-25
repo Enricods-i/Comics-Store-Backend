@@ -27,7 +27,7 @@ public class Discount {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
-    private BigInteger id;
+    private long id;
 
     @Basic
     @Column(name = "percentage", nullable = false)

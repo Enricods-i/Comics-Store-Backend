@@ -1,6 +1,5 @@
 package im.enricods.ComicsStore.entities;
 
-import java.math.BigInteger;
 import java.util.Date;
 import java.util.Set;
 
@@ -26,7 +25,7 @@ public class Cart {
     @Id
     @OneToOne(optional = false)
     @JoinColumn(name = "user_id", unique = true, nullable = false, updatable = false)
-    private BigInteger user;
+    private long user;
 
     @Basic
     @Column(name = "total", nullable = false)

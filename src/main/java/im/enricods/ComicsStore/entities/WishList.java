@@ -30,7 +30,7 @@ public class WishList {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
-    private BigInteger id;
+    private long id;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

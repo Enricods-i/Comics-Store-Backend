@@ -1,6 +1,5 @@
 package im.enricods.ComicsStore.entities;
 
-import java.math.BigInteger;
 import java.util.Date;
 import java.util.Set;
 
@@ -28,7 +27,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
-    private BigInteger id;
+    private long id;
 
     @Basic
     @Column(name = "first_name", nullable = false, length = 50)

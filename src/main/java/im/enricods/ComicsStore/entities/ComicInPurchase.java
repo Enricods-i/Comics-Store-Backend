@@ -1,6 +1,5 @@
 package im.enricods.ComicsStore.entities;
 
-import java.math.BigInteger;
 import java.util.Set;
 
 import javax.persistence.Basic;
@@ -25,7 +24,7 @@ public class ComicInPurchase {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
-    private BigInteger id;
+    private long id;
 
     @ManyToOne
     @JoinColumn(name = "purchase")
