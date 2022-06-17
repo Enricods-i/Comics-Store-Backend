@@ -38,7 +38,7 @@ public class Discount {
     private Date expirationDate;
 
     @ManyToMany(targetEntity = Comic.class, mappedBy = "discounts")
-    private Set<Comic> discounComics;
+    private Set<Comic> comicsInPromotion;
 
     @Basic
     @CreationTimestamp
@@ -46,4 +46,7 @@ public class Discount {
     @Column(name = "created_at", nullable = false)
     private Date createdAt;
     
+    @ManyToMany(mappedBy = "discountsApplied")
+    private Set<ComicInPurchase> discountedComics;
+
 }

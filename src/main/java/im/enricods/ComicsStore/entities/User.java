@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.Set;
 
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -21,7 +22,7 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "personal_data", schema = "public")
+@Table(name = "personal_data")
 public class User {
     
     @Id
@@ -31,26 +32,26 @@ public class User {
 
     @Basic
     @Column(name = "first_name", nullable = false, length = 50)
-    private String first_name;
+    private String firstName;
 
     @Basic
     @Column(name = "last_name", nullable = false, length = 50)    
-    private String last_name;
+    private String lastName;
 
     @Basic
     @Column(name = "email", nullable = false, unique = true, length = 90)
     private String email;
 
     @Basic
-    @Column(name = "phone_number", nullable = true, length = 20)
+    @Column(name = "phone_number", length = 20)
     private String phoneNumber;
 
     @Basic
-    @Column(name = "address", nullable = true, length = 50)
+    @Column(name = "address", length = 50)
     private String address;
 
     @Basic
-    @Column(name = "city", nullable = false, length = 30)
+    @Column(name = "city", length = 30)
     private String city;
 
     @Basic
@@ -64,13 +65,13 @@ public class User {
     @Column(name = "modified_at", nullable = false)
     private Date modifiedAt;
 
-    @OneToOne(optional = false, mappedBy = "user")
+    @OneToOne(mappedBy = "user")
     private Cart cart;
 
-    @OneToMany(targetEntity = WishList.class, mappedBy = "owner")
-    private Set<WishList> wishListsx;
+    @OneToMany(/*targetEntity = WishList.class,*/ mappedBy = "owner")
+    private Set<WishList> wishLists;
 
-    @OneToMany(targetEntity = Purchase.class, mappedBy = "buyer")
+    @OneToMany(mappedBy = "buyer")
     private Set<Purchase> purchases;
 
 }//User

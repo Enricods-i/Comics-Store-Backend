@@ -23,7 +23,7 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "wish_list", schema = "public")
+@Table(name = "wish_list")
 public class WishList {
     
     @Id
@@ -48,7 +48,7 @@ public class WishList {
         joinColumns = {@JoinColumn(name = "list")},
         inverseJoinColumns = {@JoinColumn(name = "comic")}
     )
-    private Set<Comic> comicsInList;
+    private Set<Comic> content;
 
     @Basic
     @CreationTimestamp

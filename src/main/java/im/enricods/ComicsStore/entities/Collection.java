@@ -16,7 +16,7 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "collection", schema = "public")
+@Table(name = "collection")
 public class Collection {
     
     @Id
@@ -31,7 +31,7 @@ public class Collection {
     @Column(name = "description", length = 1000)
     private String description;
 
-    @OneToMany(targetEntity = Comic.class, mappedBy = "collection")
+    @OneToMany(mappedBy = "collection")
     private Set<Comic> comics;
 
     @ManyToMany

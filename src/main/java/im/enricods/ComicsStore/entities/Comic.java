@@ -17,8 +17,11 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Version;
 
 import org.hibernate.annotations.CreationTimestamp;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 
@@ -77,12 +80,17 @@ public class Comic {
     private int pages;
 
     @Basic
-    @Column(name = "isbn", length = 13, unique = true)
+    @Column(name = "isbn", length = 13, unique = true, nullable = false)
     private String isbn;
 
     @Basic
     @Column(name = "description", length = 200)
     private String description;
+
+    @Version
+    @Column(name = "version", nullable = false)
+    @JsonIgnore
+    private long version;
 
     @Basic
     @CreationTimestamp
@@ -95,7 +103,13 @@ public class Comic {
     @Column(name = "modified_at", nullable = false)
     private Date modifiedAt;
 
+    //questa relazione può essere evitata
     @OneToMany(targetEntity = ComicInPurchase.class,  mappedBy = "comic")
     private Set<ComicInPurchase> comicsSold;
+
+    @ManyToMany(targetEntity = WishList.class, mappedBy = "content")
+    private Set<WishList> lists;
+
+    //FARE L'ENTITA' PER GLI ELEMENTI NEL CARRELLO
 
 }//Comic

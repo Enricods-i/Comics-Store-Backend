@@ -8,8 +8,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -23,9 +21,12 @@ import lombok.Data;
 public class Cart {
     
     @Id
-    @OneToOne(optional = false)
-    @JoinColumn(name = "user_id", unique = true, nullable = false, updatable = false)
-    private long user;
+    @Column(name = "user_id")
+    private long id;
+
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @Basic
     @Column(name = "total", nullable = false)
@@ -40,11 +41,6 @@ public class Cart {
     @Column(name = "modified_at", nullable = false)
     private Date modifiedAt;
 
-    @ManyToMany
-    @JoinTable(name = "cart_content",
-        joinColumns = {@JoinColumn(name = "cart")},
-        inverseJoinColumns = {@JoinColumn(name = "comic")}
-    )
-    private Set<Comic> comicsInCart;
+    //FARE LA ENTITA' PER GLI ELEMENTI NEL CARRELLO
 
 }//Cart
