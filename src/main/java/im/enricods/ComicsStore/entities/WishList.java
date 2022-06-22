@@ -3,7 +3,6 @@ package im.enricods.ComicsStore.entities;
 import java.util.Date;
 import java.util.Set;
 
-import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -35,11 +34,9 @@ public class WishList {
     @JoinColumn(name = "user_id")
     private User owner;
 
-    @Basic
     @Column(name = "name", nullable = false, length = 70)
     private String name;
 
-    @Basic
     @Column(name = "notifications")
     private boolean notifications;
 
@@ -50,15 +47,9 @@ public class WishList {
     )
     private Set<Comic> content;
 
-    @Basic
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_at", nullable = false)
     private Date createdAt;
 
-    @Basic
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "modified_at", nullable = false)
-    private Date modifiedAt;
-
-}
+}//WishList

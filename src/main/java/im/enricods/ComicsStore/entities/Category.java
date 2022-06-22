@@ -1,13 +1,17 @@
 package im.enricods.ComicsStore.entities;
 
+import java.util.Date;
 import java.util.Set;
 
-import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+import org.hibernate.annotations.CreationTimestamp;
 
 import lombok.Data;
 
@@ -20,9 +24,10 @@ public class Category {
     @Column(name = "name", nullable = false, length = 50)
     private String name;
 
-    @Basic
-    @Column(name = "description",nullable = false, length = 200)
-    private String description;
+    @CreationTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "created_at",nullable = false)
+    private Date createdAt;
 
     @ManyToMany(targetEntity = Collection.class,  mappedBy = "categories")
     private Set<Collection> collections;

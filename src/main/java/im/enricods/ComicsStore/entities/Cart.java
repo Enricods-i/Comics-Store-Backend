@@ -3,7 +3,6 @@ package im.enricods.ComicsStore.entities;
 import java.util.Date;
 import java.util.Set;
 
-import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -17,7 +16,7 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "cart_data", schema = "public")
+@Table(name = "cart_data")
 public class Cart {
     
     @Id
@@ -28,15 +27,15 @@ public class Cart {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @Basic
+    
     @Column(name = "total", nullable = false)
     private float total;
 
-    @Basic
+    
     @Column(name = "size", nullable = false)
     private int size;
 
-    @Basic
+    
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "modified_at", nullable = false)
     private Date modifiedAt;

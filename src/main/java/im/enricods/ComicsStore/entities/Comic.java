@@ -3,7 +3,6 @@ package im.enricods.ComicsStore.entities;
 import java.util.Date;
 import java.util.Set;
 
-import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -27,25 +26,21 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "comic", schema = "public")
+@Table(name = "comic")
 public class Comic {
     
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id", nullable = false)
+    @Column(name = "id")
     private long id;
 
     @ManyToOne
     @JoinColumn(name = "collection")
     private Collection collection;
 
-    @Basic
+    
     @Column(name = "number", nullable = false)
     private int number;
-
-    @Basic
-    @Column(name = "price", nullable = false)
-    private float price;
 
     @ManyToMany
     @JoinTable(
@@ -55,35 +50,29 @@ public class Comic {
     )
     private Set<Discount> discounts;
 
-    @Basic
+    
     @Column(name = "quantity", nullable = false)
     private int quantity;
 
-    @Basic
+    
     @Column(name = "image", length = 100)
     private String image;
 
-    @Basic
-    @Column(name = "writers", length = 50)
-    private String writers;
+    @ManyToMany(mappedBy = "works")
+    private Set<Author> authors;
 
-    @Basic
-    @Column(name = "cartoonists", length = 50)
-    private String cartoonists;
-
-    @Basic
-    @Column(name = "formatAndBinding", length = 30)
-    private String formatAndBinding;
-
-    @Basic
     @Column(name = "pages")
     private int pages;
 
-    @Basic
+    @Temporal(TemporalType.DATE)
+    @Column(name = "publication_date")
+    private Date publicationDate;
+
+    
     @Column(name = "isbn", length = 13, unique = true, nullable = false)
     private String isbn;
 
-    @Basic
+    
     @Column(name = "description", length = 200)
     private String description;
 
@@ -92,13 +81,13 @@ public class Comic {
     @JsonIgnore
     private long version;
 
-    @Basic
+    
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_at", nullable = false)
     private Date createdAt;
 
-    @Basic
+    
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "modified_at", nullable = false)
     private Date modifiedAt;

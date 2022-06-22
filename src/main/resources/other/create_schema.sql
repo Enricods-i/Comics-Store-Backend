@@ -13,8 +13,12 @@ CREATE TABLE personal_data (
 
 CREATE TABLE collection (
 		name VARCHAR(50) PRIMARY KEY,
+		price FLOAT NOT NULL,
 		image VARCHAR(60),
-		description VARCHAR(1000)
+    	format_and_binding VARCHAR(30),
+		color BOOLEAN,
+		description VARCHAR(1000),
+		created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE cart_data (
@@ -28,14 +32,11 @@ CREATE TABLE comic (
     	id BIGSERIAL PRIMARY KEY,
     	collection VARCHAR(50) NOT NULL REFERENCES collection (name) ON UPDATE CASCADE,
 		number SMALLINT NOT NULL,
-		price FLOAT NOT NULL,
 		quantity SMALLINT NOT NULL,
 		image VARCHAR(60),
-		writers VARCHAR(50),
-		catoonists VARCHAR(50),
-    	format_and_binding VARCHAR(30),
 		pages SMALLINT,
 		isbn VARCHAR(13) UNIQUE,
+		publication_date DATE,
 		description VARCHAR(200),
 		version BIGINT,
 		created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -45,7 +46,19 @@ CREATE TABLE comic (
 CREATE TABLE cart_content(
     	cart BIGINT REFERENCES cart_data (user_id),
    		comic BIGINT REFERENCES comic (id),
+		quantity SMALLINT NOT NULL,
     	PRIMARY KEY (cart,comic)
+);
+
+CREATE TABLE author (
+		id BIGSERIAL PRIMARY KEY,
+		name VARCHAR(30) NOT NULL
+);
+
+CREATE TABLE authors (
+		author BIGINT REFERENCES author(id),
+		comic BIGINT REFERENCES comic(id),
+		PRIMARY KEY (author,comic)
 );
 
 CREATE TABLE wish_list(
@@ -53,8 +66,7 @@ CREATE TABLE wish_list(
     	user_id BIGINT NOT NULL REFERENCES personal_data (id),
     	name VARCHAR(70) NOT NULL,
     	notifications BOOLEAN DEFAULT FALSE,
-		created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    	modified_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+		created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE list_content(
@@ -65,7 +77,7 @@ CREATE TABLE list_content(
 
 CREATE TABLE category(
     	name VARCHAR(50) PRIMARY KEY,
-    	description VARCHAR(200)
+    	created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE classification(
