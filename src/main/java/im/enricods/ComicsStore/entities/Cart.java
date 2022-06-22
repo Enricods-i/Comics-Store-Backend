@@ -18,13 +18,14 @@ import lombok.Data;
 @Entity
 @Table(name = "cart_data")
 public class Cart {
-    
+
     @Id
-    @Column(name = "user_id")
+    @Column(name = "id")
     private long id;
 
+
     @OneToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user")
     private User user;
 
     

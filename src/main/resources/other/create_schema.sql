@@ -22,7 +22,8 @@ CREATE TABLE collection (
 );
 
 CREATE TABLE cart_data (
-    	user_id BIGINT PRIMARY KEY REFERENCES personal_data (id),
+		id BIGSERIAL PRIMARY KEY,
+    	user BIGINT REFERENCES personal_data (id),
     	total FLOAT NOT NULL,
     	size SMALLINT NOT NULL,
     	modified_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
@@ -44,7 +45,7 @@ CREATE TABLE comic (
 );
 
 CREATE TABLE cart_content(
-    	cart BIGINT REFERENCES cart_data (user_id),
+    	cart BIGINT REFERENCES cart_data (id),
    		comic BIGINT REFERENCES comic (id),
 		quantity SMALLINT NOT NULL,
     	PRIMARY KEY (cart,comic)
