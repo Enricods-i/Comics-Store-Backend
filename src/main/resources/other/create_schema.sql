@@ -5,7 +5,6 @@ CREATE TABLE personal_data (
 		birth_date DATE NOT NULL,
 		email VARCHAR(90) NOT NULL UNIQUE,
 		phone_number VARCHAR(20),
-		address VARCHAR(50),
 		city VARCHAR(30),
 		created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 		modified_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
@@ -24,7 +23,6 @@ CREATE TABLE collection (
 CREATE TABLE cart_data (
 		id BIGSERIAL PRIMARY KEY,
     	user BIGINT REFERENCES personal_data (id),
-    	total FLOAT NOT NULL,
     	size SMALLINT NOT NULL,
     	modified_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
@@ -36,7 +34,7 @@ CREATE TABLE comic (
 		quantity SMALLINT NOT NULL,
 		image VARCHAR(60),
 		pages SMALLINT,
-		isbn VARCHAR(13) UNIQUE,
+		isbn VARCHAR(13) UNIQUE NOT NULL,
 		publication_date DATE,
 		description VARCHAR(200),
 		version BIGINT,
@@ -64,7 +62,7 @@ CREATE TABLE authors (
 
 CREATE TABLE wish_list(
     	id BIGSERIAL PRIMARY KEY,
-    	user_id BIGINT NOT NULL REFERENCES personal_data (id),
+    	user BIGINT NOT NULL REFERENCES personal_data (id),
     	name VARCHAR(70) NOT NULL,
     	notifications BOOLEAN DEFAULT FALSE,
 		created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
@@ -82,8 +80,8 @@ CREATE TABLE category(
 );
 
 CREATE TABLE classification(
-    	category VARCHAR(50) REFERENCES category (name),
-    	collection VARCHAR(50) REFERENCES collection (name),
+    	category VARCHAR(50) REFERENCES category (name) ON UPDATE CASCADE,
+    	collection VARCHAR(50) REFERENCES collection (name) ON UPDATE CASCADE,
     	PRIMARY KEY (category,collection)
 );
 
@@ -102,7 +100,7 @@ CREATE TABLE promotion(
 
 CREATE TABLE purchase(
     	id BIGSERIAL PRIMARY KEY,
-    	user_id BIGINT NOT NULL REFERENCES personal_data (id),
+    	user BIGINT NOT NULL REFERENCES personal_data (id),
     	total FLOAT NOT NULL,
     	created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );

@@ -18,6 +18,8 @@ import javax.persistence.TemporalType;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.Data;
 
 @Data
@@ -51,31 +53,29 @@ public class User {
     private String phoneNumber;
 
     
-    @Column(name = "address", length = 50)
-    private String address;
-
-    
     @Column(name = "city", length = 30)
     private String city;
 
+    @JsonIgnore
+    @OneToOne(mappedBy = "user", cascade = CascadeType.MERGE)
+    private Cart cart;
     
+    @JsonIgnore
+    @OneToMany( mappedBy = "owner")
+    private Set<WishList> wishLists;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "buyer")
+    private Set<Purchase> purchases;
+
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_at", nullable = false)
-    private Date createdAt;
+    private Date creationDate;
 
     @UpdateTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "modified_at", nullable = false)
-    private Date modifiedAt;
-
-    @OneToOne(mappedBy = "user")
-    private Cart cart;
-
-    @OneToMany( mappedBy = "owner")
-    private Set<WishList> wishLists;
-
-    @OneToMany(mappedBy = "buyer")
-    private Set<Purchase> purchases;
+    private Date dateOfLastModification;
 
 }//User

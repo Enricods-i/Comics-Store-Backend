@@ -1,7 +1,10 @@
 package im.enricods.ComicsStore.entities;
 
+import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -9,7 +12,14 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+import org.hibernate.annotations.CreationTimestamp;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 
@@ -19,10 +29,10 @@ import lombok.Data;
 public class Collection {
     
     @Id
-    @Column(name = "name", nullable = false, length = 50)
+    @Column(name = "name", length = 50)
     private String name;
 
-    @Column(name = "image", length = 100)
+    @Column(name = "image", length = 60)
     private String image;
    
     @Column(name = "description", length = 1000)
@@ -34,11 +44,13 @@ public class Collection {
     @Column(name = "color")
     private boolean color;
 
-    @Column(name = "format_and_binding")
+    @Column(name = "format_and_binding", length = 30)
     private String formatAndBinding;
 
-    @OneToMany(mappedBy = "collection")
-    private Set<Comic> comics;
+    @JsonIgnore
+    @OneToMany(mappedBy = "collection", cascade = CascadeType.MERGE)
+    @OrderBy(value = "number asc")
+    private List<Comic> comics;
 
     @ManyToMany
     @JoinTable(
@@ -47,5 +59,10 @@ public class Collection {
         inverseJoinColumns = @JoinColumn(name = "category")
     )
     private Set<Category> categories;
+
+    @CreationTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "created_at", nullable = false)
+    private Date creationDate;
 
 }//Collection

@@ -3,6 +3,7 @@ package im.enricods.ComicsStore.entities;
 import java.util.Date;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -27,29 +28,29 @@ public class WishList {
     
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id", nullable = false)
+    @Column(name = "id")
     private long id;
-
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User owner;
 
     @Column(name = "name", nullable = false, length = 70)
     private String name;
 
-    @Column(name = "notifications")
-    private boolean notifications;
+    @ManyToOne
+    @JoinColumn(name = "user")
+    private User owner;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.MERGE)
     @JoinTable(name = "list_content",
         joinColumns = {@JoinColumn(name = "list")},
         inverseJoinColumns = {@JoinColumn(name = "comic")}
     )
     private Set<Comic> content;
 
+    @Column(name = "notifications")
+    private boolean notifications;
+
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_at", nullable = false)
-    private Date createdAt;
+    private Date creationDate;
 
 }//WishList

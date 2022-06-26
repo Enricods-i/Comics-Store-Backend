@@ -2,7 +2,6 @@ package im.enricods.ComicsStore.entities;
 
 import java.util.Set;
 
-import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -18,12 +17,12 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "personal_data", schema = "public")
+@Table(name = "personal_data")
 public class ComicInPurchase {
     
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id", nullable = false)
+    @Column(name = "id")
     private long id;
 
     @ManyToOne
@@ -42,10 +41,10 @@ public class ComicInPurchase {
     )
     private Set<Discount> discountsApplied;
 
-    @Basic
     @Column(name = "price", nullable = false)
     private float price;
 
     @Column(name = "quantity", nullable = false)
     private int quantity;
-}
+
+}//ComicInPurchase

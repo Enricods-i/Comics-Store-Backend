@@ -17,17 +17,17 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "category", schema = "public")
+@Table(name = "category")
 public class Category {
     
     @Id
-    @Column(name = "name", nullable = false, length = 50)
+    @Column(name = "name", length = 50)
     private String name;
 
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_at",nullable = false)
-    private Date createdAt;
+    private Date creationDate;
 
     @ManyToMany(targetEntity = Collection.class,  mappedBy = "categories")
     private Set<Collection> collections;
