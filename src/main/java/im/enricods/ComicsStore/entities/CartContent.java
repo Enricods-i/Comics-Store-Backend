@@ -18,8 +18,8 @@ public class CartContent {
     
     @EmbeddedId
     @AttributeOverrides({
-        @AttributeOverride(name = "cart", column = @Column(name = "cart")),
-        @AttributeOverride(name = "comic", column = @Column(name = "comic"))
+        @AttributeOverride(name = "cart", column = @Column(name = "cart_id")),
+        @AttributeOverride(name = "comic", column = @Column(name = "comic_id"))
     })
     private CartContentId id;
 

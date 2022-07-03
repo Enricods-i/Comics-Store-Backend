@@ -13,6 +13,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -39,7 +40,7 @@ public class Comic {
     private int number;
 
     @ManyToOne
-    @JoinColumn(name = "collection")
+    @JoinColumn(name = "collection_id")
     private Collection collection;
 
     @ManyToMany(mappedBy = "works", cascade = CascadeType.MERGE)
@@ -67,18 +68,18 @@ public class Comic {
     @ManyToMany(cascade = CascadeType.MERGE)
     @JoinTable(
         name = "promotion",
-        joinColumns = @JoinColumn(name = "comic"),
-        inverseJoinColumns = @JoinColumn(name = "discount")
+        joinColumns = @JoinColumn(name = "comic_id"),
+        inverseJoinColumns = @JoinColumn(name = "discount_id")
     )
     private Set<Discount> discounts;
+
+    @OneToMany(mappedBy = "comic")
+    private Set<ComicInPurchase> copiesSold;
 
     @Version
     @Column(name = "version", nullable = false)
     @JsonIgnore
     private long version;
-
-    @ManyToMany(targetEntity = WishList.class, mappedBy = "content")
-    private Set<WishList> lists;
 
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)

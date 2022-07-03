@@ -12,7 +12,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -34,14 +33,10 @@ public class WishList {
     @Column(name = "name", nullable = false, length = 70)
     private String name;
 
-    @ManyToOne
-    @JoinColumn(name = "user")
-    private User owner;
-
     @ManyToMany(cascade = CascadeType.MERGE)
     @JoinTable(name = "list_content",
-        joinColumns = {@JoinColumn(name = "list")},
-        inverseJoinColumns = {@JoinColumn(name = "comic")}
+        joinColumns = {@JoinColumn(name = "wish_list_id")},
+        inverseJoinColumns = {@JoinColumn(name = "comic_id")}
     )
     private Set<Comic> content;
 

@@ -31,18 +31,18 @@ public class Purchase {
     private long id;
 
     @ManyToOne
-    @JoinColumn(name = "user")
+    @JoinColumn(name = "user_id")
     private User buyer; 
 
     @Column(name = "total", nullable = false)
     private float total;
 
-    @OneToMany(targetEntity = ComicInPurchase.class,  mappedBy = "purchase", cascade = CascadeType.MERGE)
+    @OneToMany(mappedBy = "purchase", cascade = CascadeType.MERGE)
     private Set<ComicInPurchase> purchasedComics;
 
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_at", nullable = false)
-    private Date createdAt;
+    private Date creationDate;
 
 }//Purchase

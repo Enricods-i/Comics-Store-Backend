@@ -41,10 +41,8 @@ public class Discount {
     @ManyToMany(mappedBy = "discounts")
     private Set<Comic> comicsInPromotion;
     
-    /* NON VOGLIO SIA BIDIREZIONALE
     @ManyToMany(mappedBy = "discountsApplied")
     private Set<ComicInPurchase> discountedComics;
-    */
 
     @Getter
     @CreationTimestamp

@@ -55,8 +55,8 @@ public class Collection {
     @ManyToMany
     @JoinTable(
         name = "classification",
-        joinColumns = @JoinColumn(name = "collection"),
-        inverseJoinColumns = @JoinColumn(name = "category")
+        joinColumns = @JoinColumn(name = "collection_id"),
+        inverseJoinColumns = @JoinColumn(name = "category_id")
     )
     private Set<Category> categories;
 

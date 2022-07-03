@@ -29,8 +29,8 @@ public class Author {
 
     @ManyToMany
     @JoinTable(name = "authors",
-        joinColumns = {@JoinColumn(name = "author")},
-        inverseJoinColumns = {@JoinColumn(name = "comic")}
+        joinColumns = {@JoinColumn(name = "author_id")},
+        inverseJoinColumns = {@JoinColumn(name = "comic_id")}
     )
     private Set<Comic> works;
     

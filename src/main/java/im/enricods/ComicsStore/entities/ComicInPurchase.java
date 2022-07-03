@@ -17,7 +17,7 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "personal_data")
+@Table(name = "comic_in_purchase")
 public class ComicInPurchase {
     
     @Id
@@ -26,18 +26,18 @@ public class ComicInPurchase {
     private long id;
 
     @ManyToOne
-    @JoinColumn(name = "purchase")
+    @JoinColumn(name = "purchase_id")
     private Purchase purchase;
 
     @ManyToOne
-    @JoinColumn(name = "comic")
+    @JoinColumn(name = "comic_id")
     private Comic comic;
 
     @ManyToMany
     @JoinTable(
         name = "discount_application",
-        joinColumns = @JoinColumn(name = "purchased_comic"),
-        inverseJoinColumns = @JoinColumn(name = "discount")
+        joinColumns = @JoinColumn(name = "comic_in_purchase_id"),
+        inverseJoinColumns = @JoinColumn(name = "discount_id")
     )
     private Set<Discount> discountsApplied;
 

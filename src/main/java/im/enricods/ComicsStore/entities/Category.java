@@ -29,7 +29,7 @@ public class Category {
     @Column(name = "created_at",nullable = false)
     private Date creationDate;
 
-    @ManyToMany(targetEntity = Collection.class,  mappedBy = "categories")
+    @ManyToMany(mappedBy = "categories")
     private Set<Collection> collections;
 
 }//Category
