@@ -21,6 +21,7 @@ CREATE TABLE collection (
 		name VARCHAR(50) PRIMARY KEY,
 		price FLOAT NOT NULL,
 		image VARCHAR(60),
+		first_release DATE,
     	format_and_binding VARCHAR(30),
 		color BOOLEAN,
 		description VARCHAR(1000),

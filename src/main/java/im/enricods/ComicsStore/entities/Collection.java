@@ -34,18 +34,22 @@ public class Collection {
 
     @Column(name = "image", length = 60)
     private String image;
-   
-    @Column(name = "description", length = 1000)
-    private String description;
 
     @Column(name = "price", nullable = false)
     private float price;
+
+    @Temporal(TemporalType.DATE)
+    @Column(name = "first_release")
+    private Date firstRelease;
 
     @Column(name = "color")
     private boolean color;
 
     @Column(name = "format_and_binding", length = 30)
     private String formatAndBinding;
+   
+    @Column(name = "description", length = 1000)
+    private String description;
 
     @JsonIgnore
     @OneToMany(mappedBy = "collection", cascade = CascadeType.MERGE)
