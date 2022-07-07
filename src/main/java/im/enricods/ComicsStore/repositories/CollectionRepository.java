@@ -23,7 +23,7 @@ public interface CollectionRepository extends JpaRepository<Collection,String>{
     Page<Collection> findByFirstReleaseBetween(Date startDate, Date endDate, Pageable pageable);
 
     @Query("SELECT DISTINCT com.collection FROM Comics com JOIN com.authors auth WHERE auth.name = :author")
-    Page<Collection> findByAuthor(String author);
+    Page<Collection> findByAuthor(String author, Pageable pageable);
 
     List<Collection> findByCategories(Set<Category> categories);
 
