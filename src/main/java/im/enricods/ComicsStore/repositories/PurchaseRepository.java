@@ -17,7 +17,7 @@ public interface PurchaseRepository extends JpaRepository<Purchase,Long> {
 
     List<Purchase> findByPurchaseTime(Date date);
 
-    @Query("select p from Purchase p where p.creationDate > ?1 and p.creationDate < ?2 and p.buyer = ?3")
+    @Query("select p from Purchase p where p.creationDate > :startDate and p.creationDate < :endDate and p.buyer = :user")
     List<Purchase> findByBuyerInPeriod(Date startDate, Date endDate, User user);
 
 }//PurchaseRepository
