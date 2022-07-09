@@ -11,8 +11,8 @@ import im.enricods.ComicsStore.entities.Discount;
 @Repository
 public interface DiscountRepository extends JpaRepository<DiscountRepository,Long>{
     
-    List<Discount> findByExpirationDate(Date expirationDate);
+    List<Discount> findByExpirationDateGreaterThan(Date date);
 
-    List<Discount> findByCreationDate(Date creationDate);
+    List<Discount> findByActivationDate(Date activationDate);
 
 }//Discount

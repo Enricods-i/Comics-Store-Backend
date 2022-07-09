@@ -17,7 +17,7 @@ import im.enricods.ComicsStore.entities.Category;
 import im.enricods.ComicsStore.entities.Collection;
 
 @Service
-public class ResearchService {
+public class ResearchCollectionsService {
     
     @Autowired
     private CollectionRepository collectionRepository;

@@ -35,6 +35,12 @@ public class Discount {
     @Getter
     @Setter
     @Temporal(TemporalType.DATE)
+    @Column(name = "activation_date", nullable = false)
+    private Date activationDate;
+
+    @Getter
+    @Setter
+    @Temporal(TemporalType.DATE)
     @Column(name = "expiration_date", nullable = false)
     private Date expirationDate;
 

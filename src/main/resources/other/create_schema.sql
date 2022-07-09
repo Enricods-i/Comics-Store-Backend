@@ -90,6 +90,7 @@ CREATE TABLE discount(
     	id BIGSERIAL PRIMARY KEY,
     	percentage SMALLINT NOT NULL,
     	expiration_date DATE NOT NULL,
+		activation_date DATE NOT NULL,
     	created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
