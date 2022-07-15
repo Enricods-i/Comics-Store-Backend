@@ -56,6 +56,11 @@ public class Collection {
     @OrderBy(value = "number asc")
     private List<Comic> comics;
 
+    public void addComic(Comic comic){
+        comics.add(comic);
+        comic.setCollection(this);
+    }//addComic
+
     @ManyToMany
     @JoinTable(
         name = "classification",
@@ -63,6 +68,11 @@ public class Collection {
         inverseJoinColumns = @JoinColumn(name = "category_id")
     )
     private Set<Category> categories;
+
+    public void bindCategory(Category category){
+        categories.add(category);
+        category.getCollections().add(this);
+    }//bindCategory
 
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)

@@ -45,6 +45,11 @@ public class Comic {
 
     @ManyToMany(mappedBy = "works", cascade = CascadeType.MERGE)
     private Set<Author> authors;
+
+    public void addAuthor(Author author){
+        authors.add(author);
+        author.getWorks().add(this);
+    }//addAuthor
     
     @Column(name = "image", length = 60)
     private String image;
