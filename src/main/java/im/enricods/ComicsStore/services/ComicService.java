@@ -47,7 +47,7 @@ public class ComicService {
 
 
     @Transactional(readOnly = true)
-    public List<Comic> showComicsInCollectionCreatedByAuthor(String collectionName, Long authorId, int pageNumber, int pageSize, String sortBy){
+    public List<Comic> showComicsInCollectionCreatedByAuthor(String collectionName, long authorId, int pageNumber, int pageSize, String sortBy){
 
         Optional<Collection> resultCollection = collectionRepository.findById(collectionName);
          if(!resultCollection.isPresent())
@@ -74,10 +74,10 @@ public class ComicService {
         if(resultComic.isPresent())
             throw new RuntimeException(); //il fumetto esiste già
         
+        Comic c = comicRepository.save(comic);
         //add comic to the collection's list
-        resultCollection.get().addComic(comic);
-
-        return comicRepository.save(comic);
+        resultCollection.get().addComic(c);
+        return c;
 
     }//addComic
 
@@ -93,7 +93,7 @@ public class ComicService {
     }//updateComic
 
 
-    public void addAuthorToComic(Long authorId, Long comicId){
+    public void addAuthorToComic(long authorId, long comicId){
 
         Optional<Author> resultAuthor = authorRepository.findById(authorId);
         if(!resultAuthor.isPresent())

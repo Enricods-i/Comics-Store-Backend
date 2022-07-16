@@ -22,38 +22,36 @@ import lombok.Setter;
 @Table(name = "discount")
 public class Discount {
     
-    @Getter
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
-    private long id;
+    @Getter private long id;
 
-    @Getter
     @Column(name = "percentage", nullable = false)
-    private int percentage;
+    @Getter private int percentage;
 
-    @Getter
-    @Setter
     @Temporal(TemporalType.DATE)
     @Column(name = "activation_date", nullable = false)
-    private Date activationDate;
+    @Getter private Date activationDate;
 
-    @Getter
-    @Setter
     @Temporal(TemporalType.DATE)
     @Column(name = "expiration_date", nullable = false)
-    private Date expirationDate;
+    @Getter private Date expirationDate;
 
     @ManyToMany(mappedBy = "discounts")
-    private Set<Comic> comicsInPromotion;
+    @Getter @Setter private Set<Comic> comicsInPromotion;
+
+    public void addPromotion(Comic comic){
+        comic.getDiscounts().add(this);
+        comicsInPromotion.add(comic);
+    }//addPromotion
     
     @ManyToMany(mappedBy = "discountsApplied")
-    private Set<ComicInPurchase> discountedComics;
+    @Getter @Setter private Set<ComicInPurchase> discountedComics;
 
-    @Getter
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_at", nullable = false)
-    private Date creationDate;
+    @Getter private Date creationDate;
 
 }//Discount

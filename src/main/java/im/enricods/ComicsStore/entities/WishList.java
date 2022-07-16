@@ -40,6 +40,10 @@ public class WishList {
     )
     private Set<Comic> content;
 
+    public void addComic(Comic comic){
+        content.add(comic);
+    }//addComic
+
     @Column(name = "notifications")
     private boolean notifications;
 

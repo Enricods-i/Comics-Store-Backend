@@ -11,5 +11,7 @@ import im.enricods.ComicsStore.entities.Author;
 public interface AuthorRepository extends JpaRepository<Author,Long>{
 
     List<Author> findByName(String name);
+
+    boolean existsByName(String name);
     
 }//AuthorRepository

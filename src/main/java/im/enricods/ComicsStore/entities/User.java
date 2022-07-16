@@ -66,6 +66,10 @@ public class User {
     @JoinColumn(name = "user_id") //user_id è nella tabella wish_list
     private Set<WishList> wishLists;
 
+    public void addWishList(WishList wishList){
+        wishLists.add(wishList);
+    }//addWishList
+
     @JsonIgnore
     @OneToMany(mappedBy = "buyer")
     private Set<Purchase> purchases;

@@ -28,13 +28,13 @@ public class CategoryService {
     }//showAllCategories
 
 
-    public Category addCategory(Category category){
+    public Category createCategory(Category category){
 
         if(categoryRepository.existsById(category.getName()))
             throw new RuntimeException(); //la categoria esiste già
         
         return categoryRepository.save(category);
 
-    }//addAuthor
+    }//createCategory
 
 }//CategoryService

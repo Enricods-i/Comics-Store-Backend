@@ -28,10 +28,13 @@ public class AuthorService {
     }//showAllAuthors
 
 
-    public Author addAuthor(Author author){
+    public Author addAuthor(String authorName){
 
-        if(authorRepository.existsById(author.getId()))
+        if(authorRepository.existsByName(authorName))
             throw new RuntimeException(); //l'autore esiste già
+        
+        Author author = new Author();
+        author.setName(authorName);
         
         return authorRepository.save(author);
 
