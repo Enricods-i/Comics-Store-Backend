@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import im.enricods.ComicsStore.entities.Category;
+import im.enricods.ComicsStore.exceptions.CategoryAlreadyExistsException;
 import im.enricods.ComicsStore.repositories.CategoryRepository;
 
 @Service
@@ -31,7 +32,7 @@ public class CategoryService {
     public Category createCategory(Category category){
 
         if(categoryRepository.existsById(category.getName()))
-            throw new RuntimeException(); //la categoria esiste già
+            throw new CategoryAlreadyExistsException();
         
         return categoryRepository.save(category);
 

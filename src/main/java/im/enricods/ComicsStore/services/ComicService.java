@@ -14,6 +14,10 @@ import org.springframework.transaction.annotation.Transactional;
 import im.enricods.ComicsStore.entities.Author;
 import im.enricods.ComicsStore.entities.Collection;
 import im.enricods.ComicsStore.entities.Comic;
+import im.enricods.ComicsStore.exceptions.AuthorNotFoundException;
+import im.enricods.ComicsStore.exceptions.CollectionNotFoundException;
+import im.enricods.ComicsStore.exceptions.ComicAlreadyExistsException;
+import im.enricods.ComicsStore.exceptions.ComicNotFoundException;
 import im.enricods.ComicsStore.repositories.AuthorRepository;
 import im.enricods.ComicsStore.repositories.CollectionRepository;
 import im.enricods.ComicsStore.repositories.ComicRepository;
@@ -37,7 +41,7 @@ public class ComicService {
 
          Optional<Collection> result = collectionRepository.findById(collectionName);
          if(!result.isPresent())
-            throw new RuntimeException(); //la collezione non esiste
+            throw new CollectionNotFoundException();
         
         Pageable paging = PageRequest.of(pageNumber, pageSize, Sort.by(sortBy));
         Page<Comic> pagedResult = comicRepository.findByCollection(result.get(), paging);
@@ -51,11 +55,11 @@ public class ComicService {
 
         Optional<Collection> resultCollection = collectionRepository.findById(collectionName);
          if(!resultCollection.isPresent())
-            throw new RuntimeException(); //la collezione non esiste
+            throw new CollectionNotFoundException();
         
         Optional<Author> resultAuthor = authorRepository.findById(authorId);
         if(!resultAuthor.isPresent())
-            throw new RuntimeException(); //l'autore non esiste
+            throw new AuthorNotFoundException();
         
         Pageable paging = PageRequest.of(pageNumber, pageSize, Sort.by(sortBy));
         Page<Comic> pagedResult = comicRepository.findByCollectionAndAuthor(resultCollection.get(), resultAuthor.get(), paging);
@@ -68,11 +72,11 @@ public class ComicService {
 
         Optional<Collection> resultCollection = collectionRepository.findById(collectionName);
         if(!resultCollection.isPresent())
-            throw new RuntimeException(); //la collezione non esiste
+            throw new CollectionNotFoundException();
         
         Optional<Comic> resultComic = comicRepository.findByIsbn(comic.getIsbn());
         if(resultComic.isPresent())
-            throw new RuntimeException(); //il fumetto esiste già
+            throw new ComicAlreadyExistsException();
         
         Comic c = comicRepository.save(comic);
         //add comic to the collection's list
@@ -85,7 +89,7 @@ public class ComicService {
     public void updateComic(Comic comic){
 
         if(!comicRepository.existsById(comic.getId()))
-            throw new RuntimeException(); //il fumetto non esiste
+            throw new ComicNotFoundException();
         
         //merge
         comicRepository.save(comic);
@@ -97,11 +101,11 @@ public class ComicService {
 
         Optional<Author> resultAuthor = authorRepository.findById(authorId);
         if(!resultAuthor.isPresent())
-            throw new RuntimeException(); //l'autore non esiste
+            throw new AuthorNotFoundException();
         
         Optional<Comic> resultComic = comicRepository.findById(comicId);
         if(!resultComic.isPresent())
-            throw new RuntimeException(); //il fumetto non esiste
+            throw new ComicNotFoundException();
 
         resultComic.get().addAuthor(resultAuthor.get());
 

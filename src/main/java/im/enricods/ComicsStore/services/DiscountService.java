@@ -14,6 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import im.enricods.ComicsStore.entities.Comic;
 import im.enricods.ComicsStore.entities.Discount;
+import im.enricods.ComicsStore.exceptions.ComicNotFoundException;
+import im.enricods.ComicsStore.exceptions.DiscountNotFoundException;
 import im.enricods.ComicsStore.repositories.ComicRepository;
 import im.enricods.ComicsStore.repositories.DiscountRepository;
 
@@ -57,11 +59,11 @@ public class DiscountService {
 
         Optional<Discount> resultDiscount = discountRepository.findById(discountId);
         if(!resultDiscount.isPresent())
-            throw new RuntimeException(); //lo sconto non esiste
+            throw new DiscountNotFoundException();
 
         Optional<Comic> resultComic = comicRepository.findById(comicId);
         if(!resultComic.isPresent())
-            throw new RuntimeException(); //il fumetto non esiste
+            throw new ComicNotFoundException();
         
         resultDiscount.get().addPromotion(resultComic.get());
 

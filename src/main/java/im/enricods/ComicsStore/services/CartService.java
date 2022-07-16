@@ -11,6 +11,10 @@ import im.enricods.ComicsStore.entities.CartContent;
 import im.enricods.ComicsStore.entities.CartContentId;
 import im.enricods.ComicsStore.entities.Comic;
 import im.enricods.ComicsStore.entities.User;
+import im.enricods.ComicsStore.exceptions.ComicNotFoundException;
+import im.enricods.ComicsStore.exceptions.ComicNotInCartException;
+import im.enricods.ComicsStore.exceptions.ComicsQuantityUnavaiableException;
+import im.enricods.ComicsStore.exceptions.UserNotFoundException;
 import im.enricods.ComicsStore.repositories.CartContentRepository;
 import im.enricods.ComicsStore.repositories.CartRepository;
 import im.enricods.ComicsStore.repositories.ComicRepository;
@@ -38,7 +42,7 @@ public class CartService {
 
         Optional<User> resultUser = userRepository.findById(userId);
         if(!resultUser.isPresent())
-            throw new RuntimeException(); //l'utente non esiste
+            throw new UserNotFoundException();
 
         return cartRepository.findByUser(resultUser.get());
     }//getUsersCart
@@ -48,7 +52,7 @@ public class CartService {
 
         Optional<User> resultUser = userRepository.findById(userId);
         if(!resultUser.isPresent())
-            throw new RuntimeException(); //l'utente non esiste
+            throw new UserNotFoundException();
         
         Cart cart = new Cart();
         cartRepository.save(cart);
@@ -61,11 +65,11 @@ public class CartService {
 
         Optional<User> resultUser = userRepository.findById(userId);
         if(!resultUser.isPresent())
-            throw new RuntimeException(); //l'utente non esiste
+            throw new UserNotFoundException();
         
         Optional<Comic> resultComic = comicRepository.findById(comicId);
         if(!resultComic.isPresent())
-            throw new RuntimeException(); //il fumetto non esiste
+            throw new ComicNotFoundException();
         
         if(quantity > resultComic.get().getQuantity())
             throw new RuntimeException(); //quantità non disponibile
@@ -89,17 +93,17 @@ public class CartService {
 
         Optional<User> resultUser = userRepository.findById(userId);
         if(!resultUser.isPresent())
-            throw new RuntimeException(); //l'utente non esiste
+            throw new UserNotFoundException();
         
         Optional<Comic> resultComic = comicRepository.findById(comicId);
         if(!resultComic.isPresent())
-            throw new RuntimeException(); //il fumetto non esiste
+            throw new ComicNotFoundException();
         
         Cart usersCart = resultUser.get().getCart();
 
         Optional<CartContent> target = cartContentRepository.findById(new CartContentId(usersCart.getId(), comicId));
         if(!target.isPresent())
-            throw new RuntimeException(); //il fumetto non è nel carrello
+            throw new ComicNotInCartException();
         
         cartContentRepository.delete(target.get());
 
@@ -113,19 +117,19 @@ public class CartService {
 
         Optional<User> resultUser = userRepository.findById(userId);
         if(!resultUser.isPresent())
-            throw new RuntimeException(); //l'utente non esiste
+            throw new UserNotFoundException();
         
         Optional<Comic> resultComic = comicRepository.findById(comicId);
         if(!resultComic.isPresent())
-            throw new RuntimeException(); //il fumetto non esiste
+            throw new ComicNotFoundException();
 
         long cartId = resultUser.get().getCart().getId();
         Optional<CartContent> comicInCart = cartContentRepository.findById(new CartContentId(cartId, comicId));
         if(!comicInCart.isPresent())
-            throw new RuntimeException(); //il fumetto non è nel carrello
+            throw new ComicNotInCartException();
 
         if(newQuantity > resultComic.get().getQuantity())
-            throw new RuntimeException(); //quantità non disponibile
+            throw new ComicsQuantityUnavaiableException();
         
         comicInCart.get().setQuantity(newQuantity);
 

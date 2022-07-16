@@ -10,6 +10,10 @@ import org.springframework.transaction.annotation.Transactional;
 import im.enricods.ComicsStore.entities.Comic;
 import im.enricods.ComicsStore.entities.User;
 import im.enricods.ComicsStore.entities.WishList;
+import im.enricods.ComicsStore.exceptions.ComicNotFoundException;
+import im.enricods.ComicsStore.exceptions.UserNotFoundException;
+import im.enricods.ComicsStore.exceptions.WishListAlreadyExistsException;
+import im.enricods.ComicsStore.exceptions.WishListNotFoundException;
 import im.enricods.ComicsStore.repositories.ComicRepository;
 import im.enricods.ComicsStore.repositories.UserRepository;
 import im.enricods.ComicsStore.repositories.WishListRepository;
@@ -33,7 +37,7 @@ public class WishListService {
         
         Optional<User> resultUser = userRepository.findById(userId);
         if(!resultUser.isPresent())
-            throw new RuntimeException(); //l'utente non esiste
+            throw new UserNotFoundException();
         
         return wishListRepository.findByUserAndName(resultUser.get(), name);
 
@@ -45,7 +49,7 @@ public class WishListService {
 
         Optional<User> resultUser = userRepository.findById(userId);
         if(!resultUser.isPresent())
-            throw new RuntimeException(); //l'utente non esiste
+            throw new UserNotFoundException();
         
         return wishListRepository.findByUser(resultUser.get());
 
@@ -56,10 +60,10 @@ public class WishListService {
 
         Optional<User> resultUser = userRepository.findById(userId);
         if(!resultUser.isPresent())
-            throw new RuntimeException(); //l'utente non esiste
+            throw new UserNotFoundException();
 
         if(wishListRepository.existsByName(wishList.getName()))
-            throw new RuntimeException(); //la lista esiste già
+            throw new WishListAlreadyExistsException();
 
         WishList wl = wishListRepository.save(wishList);
         resultUser.get().addWishList(wl);
@@ -72,11 +76,11 @@ public class WishListService {
         
         Optional<Comic> resultComic = comicRepository.findById(comicId);
         if(!resultComic.isPresent())
-            throw new RuntimeException(); //il fumetto non esiste
+            throw new ComicNotFoundException();
         
         Optional<WishList> resultList = wishListRepository.findById(wishListId);
         if(!resultList.isPresent())
-            throw new RuntimeException(); //la lista non esiste
+            throw new WishListNotFoundException();
         
         resultList.get().addComic(resultComic.get());
 
@@ -86,7 +90,7 @@ public class WishListService {
     public void updateWishList(WishList wishList){
 
         if(!wishListRepository.existsByName(wishList.getName()))
-            throw new RuntimeException(); //la lista non esiste
+            throw new WishListNotFoundException();
         
         //merge
         wishListRepository.save(wishList);

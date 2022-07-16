@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import im.enricods.ComicsStore.repositories.CartContentRepository;
+import im.enricods.ComicsStore.repositories.ComicInPurchaseRepository;
 import im.enricods.ComicsStore.repositories.PurchaseRepository;
 import im.enricods.ComicsStore.repositories.UserRepository;
 import im.enricods.ComicsStore.entities.Cart;
@@ -22,6 +23,9 @@ import im.enricods.ComicsStore.entities.ComicInPurchase;
 import im.enricods.ComicsStore.entities.Discount;
 import im.enricods.ComicsStore.entities.Purchase;
 import im.enricods.ComicsStore.entities.User;
+import im.enricods.ComicsStore.exceptions.ComicsQuantityUnavaiableException;
+import im.enricods.ComicsStore.exceptions.DateWrongRangeException;
+import im.enricods.ComicsStore.exceptions.UserNotFoundException;
 
 @Service
 @Transactional
@@ -35,6 +39,9 @@ public class PurchaseService {
 
     @Autowired
     private CartContentRepository cartContentRepository;
+
+    @Autowired
+    private ComicInPurchaseRepository comicInPurchaseRepository;
 
 
     @Transactional(readOnly = true)
@@ -52,7 +59,7 @@ public class PurchaseService {
         
         Optional<User> resultUser = userRepository.findById(userId);
         if(!resultUser.isPresent())
-            throw new RuntimeException(); //l'utente non esiste
+            throw new UserNotFoundException();
 
         return purchaseRepository.findByUser(resultUser.get());
 
@@ -64,10 +71,10 @@ public class PurchaseService {
         
         Optional<User> resultUser = userRepository.findById(userId);
         if(!resultUser.isPresent())
-            throw new RuntimeException(); //l'utente non esiste
+            throw new UserNotFoundException();
         
         if ( startDate.compareTo(endDate) >= 0 )
-            throw new RuntimeException(); //la data end è precedente alla start
+            throw new DateWrongRangeException();
 
         return purchaseRepository.findByBuyerInPeriod(startDate, endDate, resultUser.get());
 
@@ -86,7 +93,7 @@ public class PurchaseService {
 
         Optional<User> resultUser = userRepository.findById(userId);
         if(!resultUser.isPresent())
-            throw new RuntimeException(); //l'utente non esiste
+            throw new UserNotFoundException();
         
         Cart usersCart = resultUser.get().getCart();
 
@@ -126,13 +133,15 @@ public class PurchaseService {
 
             newQuantity = c.getQuantity() - cc.getQuantity();
             if(newQuantity < 0)
-                throw new RuntimeException(); //quantità non disponibile
+                throw new ComicsQuantityUnavaiableException();
             cip.setQuantity(cc.getQuantity());
 
             //aggiorno la quantità del fumetto
             c.setQuantity(newQuantity);
 
             total += newPrice * cc.getQuantity();
+
+            comicInPurchaseRepository.save(cip);
         }//for
 
         //pulisco il carrello

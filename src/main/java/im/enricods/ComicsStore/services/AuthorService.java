@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import im.enricods.ComicsStore.entities.Author;
+import im.enricods.ComicsStore.exceptions.AuthorAlreadyExistsException;
+import im.enricods.ComicsStore.exceptions.AuthorNotFoundException;
 import im.enricods.ComicsStore.repositories.AuthorRepository;
 
 @Service
@@ -31,7 +33,7 @@ public class AuthorService {
     public Author addAuthor(String authorName){
 
         if(authorRepository.existsByName(authorName))
-            throw new RuntimeException(); //l'autore esiste già
+            throw new AuthorAlreadyExistsException();
         
         Author author = new Author();
         author.setName(authorName);
@@ -44,7 +46,7 @@ public class AuthorService {
     public void updateAuthor(Author author){
 
         if(!authorRepository.existsById(author.getId()))
-            throw new RuntimeException(); //l'autore non esiste
+            throw new AuthorNotFoundException();
         
         authorRepository.save(author);
 
