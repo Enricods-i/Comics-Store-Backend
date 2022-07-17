@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import im.enricods.ComicsStore.repositories.UserRepository;
 import im.enricods.ComicsStore.entities.User;
+import im.enricods.ComicsStore.exceptions.UserNotFoundException;
 
 @Service
 @Transactional
@@ -19,9 +20,14 @@ public class UserService {
 
 
     @Transactional(readOnly = true)
-    public Optional<User> getUserByEmail(String email){
+    public User getUserByEmail(String email){
 
-        return userRepository.findByEmail(email);
+        Optional<User> result = userRepository.findByEmail(email);
+
+        if(result.isPresent())
+            return result.get();
+        else
+            throw new UserNotFoundException();
 
     }//getUserByEmail
 
@@ -29,7 +35,7 @@ public class UserService {
     @Transactional(readOnly = true)
     public List<User> getUsersByName(String firstName, String lastName){
 
-        return userRepository.findByFirstnameOrLastnameAllIgnoreCase(firstName, lastName);
+        return userRepository.findByFirstNameOrLastNameAllIgnoreCase(firstName, lastName);
 
     }//getUsersByName
 
@@ -49,8 +55,21 @@ public class UserService {
 
     }//getUsersByPhoneNumber
 
-    //add User
+    
+    public User createUser(User user){
 
-    //update User
+        return userRepository.save(user);
+
+    }//createUser
+
+    
+    public void updateUser(User user){
+
+        if(!userRepository.existsById(user.getId()))
+            throw new UserNotFoundException();
+
+        userRepository.save(user);
+
+    }//createUser
 
 }//UserService

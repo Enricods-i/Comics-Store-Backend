@@ -11,6 +11,8 @@ import im.enricods.ComicsStore.entities.CartContent;
 import im.enricods.ComicsStore.entities.CartContentId;
 import im.enricods.ComicsStore.entities.Comic;
 import im.enricods.ComicsStore.entities.User;
+import im.enricods.ComicsStore.exceptions.CartNotFoundException;
+import im.enricods.ComicsStore.exceptions.ComicAlreadyExistsException;
 import im.enricods.ComicsStore.exceptions.ComicNotFoundException;
 import im.enricods.ComicsStore.exceptions.ComicNotInCartException;
 import im.enricods.ComicsStore.exceptions.ComicsQuantityUnavaiableException;
@@ -38,16 +40,28 @@ public class CartService {
 
 
     @Transactional(readOnly = true)
-    public Optional<Cart> getUsersCart(long userId){
+    public Cart getUsersCart(long userId){
 
         Optional<User> resultUser = userRepository.findById(userId);
         if(!resultUser.isPresent())
             throw new UserNotFoundException();
 
-        return cartRepository.findByUser(resultUser.get());
+        Optional<Cart> resultCart = cartRepository.findByUser(resultUser.get());
+        if(!resultCart.isPresent())
+            throw new CartNotFoundException();
+        
+        float amount = 0;
+        Cart result = resultCart.get();
+        for(CartContent cc : result.getContent()){
+            amount += cc.getComic().getCollection().getPrice();
+        }
+
+        result.setTotal(amount);
+        return result;
+
     }//getUsersCart
 
-
+    /*
     public void createUsersCart(long userId){
 
         Optional<User> resultUser = userRepository.findById(userId);
@@ -59,6 +73,7 @@ public class CartService {
         resultUser.get().setCart(cart);
 
     }//createUsersCart
+    */
 
 
     public void addComicToUsersCart(long userId, long comicId, int quantity){
@@ -72,18 +87,21 @@ public class CartService {
             throw new ComicNotFoundException();
         
         if(quantity > resultComic.get().getQuantity())
-            throw new RuntimeException(); //quantità non disponibile
+            throw new ComicsQuantityUnavaiableException("Unavaiable quantity for comic "+ resultComic.get().getNumber()+ " in collection "+ resultComic.get().getCollection().getName() +" !");
         
         Cart usersCart = resultUser.get().getCart();
 
-        CartContent newComic = new CartContent();
-        newComic.setCart(usersCart);
-        newComic.setComic(resultComic.get());
-        newComic.setQuantity(quantity);
+        CartContent newComicInCart = new CartContent();
+        newComicInCart.setComic(resultComic.get());
+        newComicInCart.setCart(usersCart);
+        newComicInCart.setQuantity(quantity);
 
-        cartContentRepository.save(newComic);
+        if(usersCart.getContent().contains(newComicInCart))
+            throw new ComicAlreadyExistsException();
         
-        usersCart.getContent().add(newComic);
+        cartContentRepository.save(newComicInCart);
+        
+        usersCart.getContent().add(newComicInCart);
         usersCart.setSize(usersCart.getSize()+1);
 
     }//addComicToUsersCart
@@ -107,13 +125,13 @@ public class CartService {
         
         cartContentRepository.delete(target.get());
 
-        usersCart.getContent().remove(target.get());
+        //con cascade type remove rimuovo la relazione con Cart
         usersCart.setSize(usersCart.getSize()-1);
 
     }//deleteComicFromUsersCart
 
 
-    public void modifyComicsQuantity(long userId, long comicId, int newQuantity){
+    public void updateComicsQuantity(long userId, long comicId, int newQuantity){
 
         Optional<User> resultUser = userRepository.findById(userId);
         if(!resultUser.isPresent())
@@ -133,6 +151,6 @@ public class CartService {
         
         comicInCart.get().setQuantity(newQuantity);
 
-    }//modifyComicsQuantity
+    }//updateComicsQuantity
 
 }//CartService

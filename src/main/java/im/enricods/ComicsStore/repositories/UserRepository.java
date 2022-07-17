@@ -11,7 +11,7 @@ import im.enricods.ComicsStore.entities.User;
 @Repository
 public interface UserRepository extends JpaRepository<User,Long> {
 
-    List<User> findByFirstnameOrLastnameAllIgnoreCase(String firstName, String lastName);
+    List<User> findByFirstNameOrLastNameAllIgnoreCase(String firstName, String lastName);
     
     Optional<User> findByEmail(String email);
 

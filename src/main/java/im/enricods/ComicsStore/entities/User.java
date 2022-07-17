@@ -22,23 +22,26 @@ import org.hibernate.annotations.UpdateTimestamp;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 @Table(name = "personal_data")
 public class User {
-    
+
+    @EqualsAndHashCode.Include
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
     private long id;
 
     
-    @Column(name = "first_name", nullable = false, length = 50)
+    @Column(name = "first_name", nullable = false, length = 20)
     private String firstName;
 
     
-    @Column(name = "last_name", nullable = false, length = 50)    
+    @Column(name = "last_name", nullable = false, length = 20)    
     private String lastName;
 
     @Temporal(TemporalType.DATE)
@@ -46,7 +49,7 @@ public class User {
     private Date birthDate;
 
     
-    @Column(name = "email", nullable = false, unique = true, length = 90)
+    @Column(name = "email", nullable = false, unique = true, length = 50)
     private String email;
 
     
@@ -54,31 +57,39 @@ public class User {
     private String phoneNumber;
 
     
-    @Column(name = "city", length = 30)
+    @Column(name = "city", length = 20)
     private String city;
 
+    @JsonIgnore
     @OneToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "cart_id")
     private Cart cart;
+
+    public void addCart(Cart cart){
+        this.setCart(cart);
+        cart.setUser(this);
+    }//addCart
     
     @JsonIgnore
-    @OneToMany
-    @JoinColumn(name = "user_id") //user_id è nella tabella wish_list
+    @OneToMany(mappedBy = "owner")
     private Set<WishList> wishLists;
 
     public void addWishList(WishList wishList){
         wishLists.add(wishList);
+        wishList.setOwner(this);
     }//addWishList
 
     @JsonIgnore
     @OneToMany(mappedBy = "buyer")
     private Set<Purchase> purchases;
 
+    @JsonIgnore
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_at", nullable = false)
     private Date creationDate;
 
+    @JsonIgnore
     @UpdateTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "modified_at", nullable = false)

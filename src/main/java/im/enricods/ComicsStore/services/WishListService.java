@@ -11,6 +11,7 @@ import im.enricods.ComicsStore.entities.Comic;
 import im.enricods.ComicsStore.entities.User;
 import im.enricods.ComicsStore.entities.WishList;
 import im.enricods.ComicsStore.exceptions.ComicNotFoundException;
+import im.enricods.ComicsStore.exceptions.UnavaiableWishList;
 import im.enricods.ComicsStore.exceptions.UserNotFoundException;
 import im.enricods.ComicsStore.exceptions.WishListAlreadyExistsException;
 import im.enricods.ComicsStore.exceptions.WishListNotFoundException;
@@ -39,7 +40,7 @@ public class WishListService {
         if(!resultUser.isPresent())
             throw new UserNotFoundException();
         
-        return wishListRepository.findByUserAndName(resultUser.get(), name);
+        return wishListRepository.findByOwnerAndName(resultUser.get(), name);
 
     }//showUsersWishListByName
 
@@ -51,7 +52,7 @@ public class WishListService {
         if(!resultUser.isPresent())
             throw new UserNotFoundException();
         
-        return wishListRepository.findByUser(resultUser.get());
+        return wishListRepository.findByOwner(resultUser.get());
 
     }//showAllUsersLists
 
@@ -72,8 +73,12 @@ public class WishListService {
     }//createList
 
 
-    public void addComicToList(long comicId, long wishListId){
+    public void addComicToList(long userId, long comicId, long wishListId){
         
+        Optional<User> resultUser = userRepository.findById(userId);
+        if(!resultUser.isPresent())
+            throw new UserNotFoundException();
+
         Optional<Comic> resultComic = comicRepository.findById(comicId);
         if(!resultComic.isPresent())
             throw new ComicNotFoundException();
@@ -82,15 +87,47 @@ public class WishListService {
         if(!resultList.isPresent())
             throw new WishListNotFoundException();
         
-        resultList.get().addComic(resultComic.get());
+        if(!resultUser.get().getWishLists().contains(resultList.get()))
+            throw new UnavaiableWishList();
+
+        resultList.get().getContent().add(resultComic.get());
 
     }//addComicToList
 
 
-    public void updateWishList(WishList wishList){
+    public void deleteComicToList(long userId, long comicId, long wishListId){
+        
+        Optional<User> resultUser = userRepository.findById(userId);
+        if(!resultUser.isPresent())
+            throw new UserNotFoundException();
+        
+        Optional<Comic> resultComic = comicRepository.findById(comicId);
+        if(!resultComic.isPresent())
+            throw new ComicNotFoundException();
+        
+        Optional<WishList> resultList = wishListRepository.findById(wishListId);
+        if(!resultList.isPresent())
+            throw new WishListNotFoundException();
+
+        if(!resultUser.get().getWishLists().contains(resultList.get()))
+            throw new UnavaiableWishList();
+        
+        resultList.get().getContent().remove(resultComic.get());
+
+    }//addComicToList
+
+
+    public void updateWishList(long userId, WishList wishList){
+
+        Optional<User> resultUser = userRepository.findById(userId);
+        if(!resultUser.isPresent())
+            throw new UserNotFoundException();
 
         if(!wishListRepository.existsByName(wishList.getName()))
             throw new WishListNotFoundException();
+        
+        if(!resultUser.get().getWishLists().contains(wishList))
+            throw new UnavaiableWishList();
         
         //merge
         wishListRepository.save(wishList);

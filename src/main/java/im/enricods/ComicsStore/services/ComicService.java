@@ -51,18 +51,18 @@ public class ComicService {
 
 
     @Transactional(readOnly = true)
-    public List<Comic> showComicsInCollectionCreatedByAuthor(String collectionName, long authorId, int pageNumber, int pageSize, String sortBy){
+    public List<Comic> showComicsInCollectionCreatedByAuthor(String collectionName, String authorName, int pageNumber, int pageSize, String sortBy){
 
         Optional<Collection> resultCollection = collectionRepository.findById(collectionName);
          if(!resultCollection.isPresent())
             throw new CollectionNotFoundException();
         
-        Optional<Author> resultAuthor = authorRepository.findById(authorId);
+        Optional<Author> resultAuthor = authorRepository.findById(authorName);
         if(!resultAuthor.isPresent())
             throw new AuthorNotFoundException();
         
         Pageable paging = PageRequest.of(pageNumber, pageSize, Sort.by(sortBy));
-        Page<Comic> pagedResult = comicRepository.findByCollectionAndAuthor(resultCollection.get(), resultAuthor.get(), paging);
+        Page<Comic> pagedResult = comicRepository.findByCollectionAndAuthor(resultCollection.get(), authorName, paging);
         return pagedResult.getContent();
 
     }//showComicsInCollectionCreatedByAuthor
@@ -79,8 +79,9 @@ public class ComicService {
             throw new ComicAlreadyExistsException();
         
         Comic c = comicRepository.save(comic);
-        //add comic to the collection's list
+    
         resultCollection.get().addComic(c);
+
         return c;
 
     }//addComic
@@ -97,9 +98,9 @@ public class ComicService {
     }//updateComic
 
 
-    public void addAuthorToComic(long authorId, long comicId){
+    public void addAuthorToComic(String authorName, long comicId){
 
-        Optional<Author> resultAuthor = authorRepository.findById(authorId);
+        Optional<Author> resultAuthor = authorRepository.findById(authorName);
         if(!resultAuthor.isPresent())
             throw new AuthorNotFoundException();
         

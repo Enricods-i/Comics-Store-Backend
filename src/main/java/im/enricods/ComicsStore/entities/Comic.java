@@ -25,12 +25,15 @@ import org.hibernate.annotations.UpdateTimestamp;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 @Table(name = "comic")
 public class Comic {
     
+    @EqualsAndHashCode.Include
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
@@ -51,7 +54,7 @@ public class Comic {
         author.getWorks().add(this);
     }//addAuthor
     
-    @Column(name = "image", length = 60)
+    @Column(name = "image", length = 20)
     private String image;
 
     @Column(name = "pages")
@@ -70,6 +73,7 @@ public class Comic {
     @Column(name = "quantity", nullable = false)
     private int quantity;
 
+    @JsonIgnore
     @ManyToMany(cascade = CascadeType.MERGE)
     @JoinTable(
         name = "promotion",
@@ -78,19 +82,22 @@ public class Comic {
     )
     private Set<Discount> discounts;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "comic")
     private Set<ComicInPurchase> copiesSold;
 
+    @JsonIgnore
     @Version
     @Column(name = "version", nullable = false)
-    @JsonIgnore
     private long version;
 
+    @JsonIgnore
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_at", nullable = false)
     private Date creationDate;
 
+    @JsonIgnore
     @UpdateTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "modified_at", nullable = false)

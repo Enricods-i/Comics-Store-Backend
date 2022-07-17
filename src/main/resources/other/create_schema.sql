@@ -6,13 +6,13 @@ CREATE TABLE cart_data (
 
 CREATE TABLE personal_data (
 		id BIGSERIAL PRIMARY KEY,
-		first_name VARCHAR(50) NOT NULL,
-		last_name VARCHAR(50) NOT NULL,
+		first_name VARCHAR(20) NOT NULL,
+		last_name VARCHAR(20) NOT NULL,
 		birth_date DATE NOT NULL,
 		cart_id BIGINT REFERENCES cart_data(id),
-		email VARCHAR(90) NOT NULL UNIQUE,
+		email VARCHAR(50) NOT NULL UNIQUE,
 		phone_number VARCHAR(20),
-		city VARCHAR(30),
+		city VARCHAR(20),
 		created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 		modified_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
@@ -20,9 +20,8 @@ CREATE TABLE personal_data (
 CREATE TABLE collection (
 		name VARCHAR(50) PRIMARY KEY,
 		price FLOAT NOT NULL,
-		image VARCHAR(60),
-		first_release DATE,
-    	format_and_binding VARCHAR(30),
+		image VARCHAR(20),
+		year_of_release INT,
 		color BOOLEAN,
 		description VARCHAR(1000),
 		created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
@@ -33,7 +32,7 @@ CREATE TABLE comic (
     	collection_id VARCHAR(50) NOT NULL REFERENCES collection (name) ON UPDATE CASCADE,
 		number SMALLINT NOT NULL,
 		quantity SMALLINT NOT NULL,
-		image VARCHAR(60),
+		image VARCHAR(20),
 		pages SMALLINT,
 		isbn VARCHAR(13) UNIQUE NOT NULL,
 		publication_date DATE,
@@ -47,16 +46,17 @@ CREATE TABLE cart_content(
     	cart_id BIGINT REFERENCES cart_data (id),
    		comic_id BIGINT REFERENCES comic (id),
 		quantity SMALLINT NOT NULL,
-    	PRIMARY KEY (cart,comic)
+    	PRIMARY KEY (cart_id,comic_id)
 );
 
 CREATE TABLE author (
-		id BIGSERIAL PRIMARY KEY,
-		name VARCHAR(30) NOT NULL
+		name VARCHAR(20) PRIMARY KEY,
+		bio VARCHAR(500),
+		created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE authors (
-		author_id BIGINT REFERENCES author(id),
+		author_id VARCHAR(20) REFERENCES author(name),
 		comic_id BIGINT REFERENCES comic(id),
 		PRIMARY KEY (author_id, comic_id)
 );
@@ -64,7 +64,7 @@ CREATE TABLE authors (
 CREATE TABLE wish_list(
     	id BIGSERIAL PRIMARY KEY,
     	user_id BIGINT NOT NULL REFERENCES personal_data (id),
-    	name VARCHAR(70) NOT NULL,
+    	name VARCHAR(50) NOT NULL,
     	notifications BOOLEAN DEFAULT FALSE,
 		created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
@@ -76,12 +76,12 @@ CREATE TABLE list_content(
 );
 
 CREATE TABLE category(
-    	name VARCHAR(50) PRIMARY KEY,
+    	name VARCHAR(30) PRIMARY KEY,
     	created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE classification(
-    	category_id VARCHAR(50) REFERENCES category (name) ON UPDATE CASCADE,
+    	category_id VARCHAR(30) REFERENCES category (name) ON UPDATE CASCADE,
     	collection_id VARCHAR(50) REFERENCES collection (name) ON UPDATE CASCADE,
     	PRIMARY KEY (category_id, collection_id)
 );

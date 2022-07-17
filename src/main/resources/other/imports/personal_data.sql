@@ -1,0 +1,18 @@
+insert into personal_data (first_name, last_name, birth_date, cart_id, email, phone_number, city) values ('Trumaine', 'Paynter', '17/07/1975', 1, 'tpaynter0@imgur.com', '703-977-0066', 'Złoczew');
+insert into personal_data (first_name, last_name, birth_date, cart_id, email, phone_number, city) values ('Idalia', 'Allridge', '21/02/1983', 2, 'iallridge1@stumbleupon.com', '613-613-7984', 'Kalangbret');
+insert into personal_data (first_name, last_name, birth_date, cart_id, email, phone_number, city) values ('Keene', 'Yard', '04/01/1993', 3, 'kyard2@1und1.de', '348-507-9426', 'Smithers');
+insert into personal_data (first_name, last_name, birth_date, cart_id, email, phone_number, city) values ('Robin', 'Behneke', '12/02/1991', 4, 'rbehneke3@google.co.jp', '981-801-8045', 'Freiburg im Breisgau');
+insert into personal_data (first_name, last_name, birth_date, cart_id, email, phone_number, city) values ('Bekki', 'Meininger', '29/01/2000', 5, 'bmeininger4@smh.com.au', '258-108-1563', 'Bungabon');
+insert into personal_data (first_name, last_name, birth_date, cart_id, email, phone_number, city) values ('Ashlin', 'Kuschke', '26/01/2000', 6, 'akuschke5@upenn.edu', '489-890-0086', 'Al Mawşil al Jadīdah');
+insert into personal_data (first_name, last_name, birth_date, cart_id, email, phone_number, city) values ('Timofei', 'Donan', '07/11/1977', 7, 'tdonan6@csmonitor.com', '728-186-8479', 'Villiers');
+insert into personal_data (first_name, last_name, birth_date, cart_id, email, phone_number, city) values ('Hastings', 'Mobberley', '21/12/1990', 8, 'hmobberley7@google.es', '511-140-3061', 'Dubreuil');
+insert into personal_data (first_name, last_name, birth_date, cart_id, email, phone_number, city) values ('Addison', 'Rushbrooke', '09/02/1984', 9, 'arushbrooke8@indiegogo.com', '234-254-2393', 'Xiangyang');
+insert into personal_data (first_name, last_name, birth_date, cart_id, email, phone_number, city) values ('Marilee', 'Corriea', '21/03/1975', 10, 'mcorriea9@com.com', '151-771-9411', 'Lashkar Gāh');
+insert into personal_data (first_name, last_name, birth_date, cart_id, email, phone_number, city) values ('Peirce', 'Lemm', '18/10/1972', 11, 'plemma@com.com', '839-796-3789', 'San Antonio');
+insert into personal_data (first_name, last_name, birth_date, cart_id, email, phone_number, city) values ('Zenia', 'Carlan', '08/06/1990', 12, 'zcarlanb@cnn.com', '591-642-3658', 'Paraparaumu');
+insert into personal_data (first_name, last_name, birth_date, cart_id, email, phone_number, city) values ('Gamaliel', 'Cumberledge', '17/11/1970', 13, 'gcumberledgec@hao123.com', '411-736-3661', 'Maple Ridge');
+insert into personal_data (first_name, last_name, birth_date, cart_id, email, phone_number, city) values ('Sela', 'Fynan', '03/03/1985', 14, 'sfynand@nifty.com', '157-658-0228', 'Sapadun');
+insert into personal_data (first_name, last_name, birth_date, cart_id, email, phone_number, city) values ('Emmett', 'Wheeldon', '15/06/1980', 15, 'ewheeldone@homestead.com', '777-661-7090', 'Alejo Ledesma');
+insert into personal_data (first_name, last_name, birth_date, cart_id, email, phone_number, city) values ('Cinderella', 'Vatcher', '23/10/1983', 16, 'cvatcherf@e-recht24.de', '919-669-3687', 'Caridade');
+insert into personal_data (first_name, last_name, birth_date, cart_id, email, phone_number, city) values ('Merrie', 'Tolworthie', '27/09/1981', 17, 'mtolworthieg@weather.com', '229-997-0364', 'Libenge');
+insert into personal_data (first_name, last_name, birth_date, cart_id, email, phone_number, city) values ('Tobiah', 'Storrier', '03/12/1970', 18, 'tstorrierh@patch.com', '260-345-6823', 'Tsuma');

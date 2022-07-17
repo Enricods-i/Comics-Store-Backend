@@ -61,32 +61,20 @@ public class PurchaseService {
         if(!resultUser.isPresent())
             throw new UserNotFoundException();
 
-        return purchaseRepository.findByUser(resultUser.get());
+        return purchaseRepository.findByBuyer(resultUser.get());
 
     }//getAllUsersPurchases
 
 
     @Transactional(readOnly = true)
-    public List<Purchase> getUsersPurchasesInPeriod(long userId, Date startDate, Date endDate){
-        
-        Optional<User> resultUser = userRepository.findById(userId);
-        if(!resultUser.isPresent())
-            throw new UserNotFoundException();
+    public List<Purchase> getPurchasesInPeriod(Date startDate, Date endDate){
         
         if ( startDate.compareTo(endDate) >= 0 )
             throw new DateWrongRangeException();
 
-        return purchaseRepository.findByBuyerInPeriod(startDate, endDate, resultUser.get());
+        return purchaseRepository.findByPurchaseTimeBetween(startDate, endDate);
 
     }//getUsersPurchasesInPeriod
-
-
-    @Transactional(readOnly = true)
-    public List<Purchase> getPurchasesByPurchaseTime(Date date){
-
-        return purchaseRepository.findByPurchaseTime(date);
-
-    }//getPurchasesByPurchaseTime
 
 
     public Purchase addPurchase(long userId){
@@ -133,7 +121,7 @@ public class PurchaseService {
 
             newQuantity = c.getQuantity() - cc.getQuantity();
             if(newQuantity < 0)
-                throw new ComicsQuantityUnavaiableException();
+                throw new ComicsQuantityUnavaiableException("Unavaiable quantity for comic "+ c.getNumber()+ " in collection "+ c.getCollection().getName() +" !");
             cip.setQuantity(cc.getQuantity());
 
             //aggiorno la quantità del fumetto

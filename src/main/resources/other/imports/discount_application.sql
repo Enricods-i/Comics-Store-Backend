@@ -1,0 +1,10 @@
+insert into discount_application (comic_in_purchae_id, dicount_it) values (null, null);
+insert into discount_application (comic_in_purchae_id, dicount_it) values (null, null);
+insert into discount_application (comic_in_purchae_id, dicount_it) values (null, null);
+insert into discount_application (comic_in_purchae_id, dicount_it) values (null, null);
+insert into discount_application (comic_in_purchae_id, dicount_it) values (null, null);
+insert into discount_application (comic_in_purchae_id, dicount_it) values (null, null);
+insert into discount_application (comic_in_purchae_id, dicount_it) values (null, null);
+insert into discount_application (comic_in_purchae_id, dicount_it) values (null, null);
+insert into discount_application (comic_in_purchae_id, dicount_it) values (null, null);
+insert into discount_application (comic_in_purchae_id, dicount_it) values (null, null);

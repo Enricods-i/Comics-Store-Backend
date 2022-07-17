@@ -22,31 +22,30 @@ import org.hibernate.annotations.CreationTimestamp;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 @Table(name = "collection")
 public class Collection {
     
+    @EqualsAndHashCode.Include
     @Id
     @Column(name = "name", length = 50)
     private String name;
 
-    @Column(name = "image", length = 60)
+    @Column(name = "image", length = 20)
     private String image;
 
     @Column(name = "price", nullable = false)
     private float price;
 
-    @Temporal(TemporalType.DATE)
-    @Column(name = "first_release")
-    private Date firstRelease;
+    @Column(name = "year_of_release")
+    private int yearOfRelease;
 
     @Column(name = "color")
     private boolean color;
-
-    @Column(name = "format_and_binding", length = 30)
-    private String formatAndBinding;
    
     @Column(name = "description", length = 1000)
     private String description;
@@ -61,6 +60,7 @@ public class Collection {
         comic.setCollection(this);
     }//addComic
 
+    @JsonIgnore
     @ManyToMany
     @JoinTable(
         name = "classification",
@@ -74,6 +74,7 @@ public class Collection {
         category.getCollections().add(this);
     }//bindCategory
 
+    @JsonIgnore
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_at", nullable = false)

@@ -15,13 +15,18 @@ import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.CreationTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 @Table(name = "discount")
 public class Discount {
     
+    @EqualsAndHashCode.Include
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
@@ -38,6 +43,7 @@ public class Discount {
     @Column(name = "expiration_date", nullable = false)
     @Getter private Date expirationDate;
 
+    @JsonIgnore
     @ManyToMany(mappedBy = "discounts")
     @Getter @Setter private Set<Comic> comicsInPromotion;
 
@@ -46,9 +52,11 @@ public class Discount {
         comicsInPromotion.add(comic);
     }//addPromotion
     
+    @JsonIgnore
     @ManyToMany(mappedBy = "discountsApplied")
     @Getter @Setter private Set<ComicInPurchase> discountedComics;
 
+    @JsonIgnore
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_at", nullable = false)

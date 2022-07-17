@@ -1,6 +1,5 @@
 package im.enricods.ComicsStore.services;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -12,14 +11,12 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import im.enricods.ComicsStore.entities.Author;
 import im.enricods.ComicsStore.entities.Category;
 import im.enricods.ComicsStore.entities.Collection;
 import im.enricods.ComicsStore.exceptions.AuthorNotFoundException;
 import im.enricods.ComicsStore.exceptions.CategoryNotFoundException;
 import im.enricods.ComicsStore.exceptions.CollectionAlreadyExistsException;
 import im.enricods.ComicsStore.exceptions.CollectionNotFoundException;
-import im.enricods.ComicsStore.exceptions.DateWrongRangeException;
 import im.enricods.ComicsStore.repositories.AuthorRepository;
 import im.enricods.ComicsStore.repositories.CategoryRepository;
 import im.enricods.ComicsStore.repositories.CollectionRepository;
@@ -62,37 +59,23 @@ public class CollectionService {
 
 
     @Transactional(readOnly = true)
-    public List<Collection> showCollectionsByAuthor(Author author, int pageNumber, int pageSize, String sortBy){
+    public List<Collection> showCollectionsByAuthor(String authorName, int pageNumber, int pageSize, String sortBy){
 
-        if(!authorRepository.existsById(author.getId()))
+        if(!authorRepository.existsById(authorName))
             throw new AuthorNotFoundException();
 
         Pageable paging = PageRequest.of(pageNumber, pageSize, Sort.by(sortBy));
-        Page<Collection> pagedResult = collectionRepository.findByAuthor(author, paging);
+        Page<Collection> pagedResult = collectionRepository.findByAuthor(authorName, paging);
         return pagedResult.getContent();
         
     }//showCollectionsByAuthor
 
-
-    @Transactional(readOnly = true)
-    public List<Collection> showCollectionsInPeriod(Date startDate, Date endDate, int pageNumber, int pageSize, String sortBy){
-
-        if ( startDate.compareTo(endDate) >= 0 ) 
-            throw new DateWrongRangeException();
-        
-        Pageable paging = PageRequest.of(pageNumber, pageSize, Sort.by(sortBy));
-        Page<Collection> pagedResult = collectionRepository.findByFirstReleaseBetween(startDate, endDate, paging);
-        return pagedResult.getContent();
-
-    }//showCollectionsInPeriod
-
-
-    public Collection addCollection(Collection collection){
+    public void addCollection(Collection collection){
 
         if(collectionRepository.existsById(collection.getName()))
             throw new CollectionAlreadyExistsException();
         
-        return collectionRepository.save(collection);
+        collectionRepository.save(collection);
 
     }//addCollection
 

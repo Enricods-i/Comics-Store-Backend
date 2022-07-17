@@ -1,6 +1,7 @@
 package im.enricods.ComicsStore.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -30,24 +31,33 @@ public class AuthorService {
     }//showAllAuthors
 
 
-    public Author addAuthor(String authorName){
+    public void addAuthor(Author author){
 
-        if(authorRepository.existsByName(authorName))
+        if(authorRepository.existsById(author.getName()))
             throw new AuthorAlreadyExistsException();
         
-        Author author = new Author();
-        author.setName(authorName);
-        
-        return authorRepository.save(author);
+        //persist
+        authorRepository.save(author);
 
     }//addAuthor
 
+    public void deleteAuthor(String authorName){
+
+        Optional<Author> resultAuthor = authorRepository.findById(authorName);
+        if(!resultAuthor.isPresent())
+            throw new AuthorNotFoundException();
+        
+        authorRepository.delete(resultAuthor.get());
+        //con cascade type remove rimuovo anche le relazioni
+
+    }//deleteAuthor
 
     public void updateAuthor(Author author){
 
-        if(!authorRepository.existsById(author.getId()))
+        if(!authorRepository.existsById(author.getName()))
             throw new AuthorNotFoundException();
         
+        //merge
         authorRepository.save(author);
 
     }//updateAuthor

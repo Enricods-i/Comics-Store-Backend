@@ -1,0 +1,10 @@
+insert into author (name, bio) values ('Hajime Isayama', 'Nato in un villaggio nella prefettura di Ōita. Sin dall asilo mostrò una passione per il disegno; A 20 anni si trasferì a Tokio, dove continuò a disegnare. ha iniziato la sua prima serializzazione col manga L attacco dei giganti');
+insert into author (name, bio) values ('Osamu Tezuka', 'Tezuka nacque a Toyonaka il 3 novembre 1928. Ma si trasferì all età di cinque anni, nella piccola città di Takarazuka dove crebbe, e dove, nel 1994, verrà poi edificato un museo in sua memoria. Incoraggiato dai genitori sin da giovanissimo a dedicarsi all arte del disegno. Negli anni ottanta, l opera più significativa è il dramma storico La storia dei tre Adolf. Tezuka continuò a disegnare fino a che si spense il 9 febbraio 1989.');
+insert into author (name, bio) values ('Natale Baversor', 'Biography');
+insert into author (name, bio) values ('Ninetta Rennles', 'Biography');
+insert into author (name, bio) values ('Teodoro Badsworth', 'Biography');
+insert into author (name, bio) values ('Jessalin Scarffe', 'Biography');
+insert into author (name, bio) values ('Mirabella Briat', 'Biography');
+insert into author (name, bio) values ('Emelyne Roloff', 'Biography');
+insert into author (name, bio) values ('Rolando Wernham', 'Biography');
+insert into author (name, bio) values ('Jyoti Loffill', 'Biography');

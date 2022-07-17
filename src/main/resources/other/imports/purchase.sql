@@ -1,0 +1,10 @@
+insert into purchase (user_id, total) values (null, null);
+insert into purchase (user_id, total) values (null, null);
+insert into purchase (user_id, total) values (null, null);
+insert into purchase (user_id, total) values (null, null);
+insert into purchase (user_id, total) values (null, null);
+insert into purchase (user_id, total) values (null, null);
+insert into purchase (user_id, total) values (null, null);
+insert into purchase (user_id, total) values (null, null);
+insert into purchase (user_id, total) values (null, null);
+insert into purchase (user_id, total) values (null, null);

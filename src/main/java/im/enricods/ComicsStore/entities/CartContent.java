@@ -2,6 +2,7 @@ package im.enricods.ComicsStore.entities;
 
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -9,9 +10,13 @@ import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 @Table(name = "cart_content")
 public class CartContent {
@@ -26,10 +31,12 @@ public class CartContent {
     @Column(name = "quantity")
     private int quantity;
 
+    @JsonIgnore
     @MapsId(value = "cart")
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REMOVE)
     private Cart cart;
 
+    @EqualsAndHashCode.Include
     @MapsId(value = "comic")
     @ManyToOne
     private Comic comic;
