@@ -31,95 +31,95 @@ public class WishListController {
     private WishListService wishListService;
 
     @GetMapping(path = "/searchByName")
-    public ResponseEntity getByName(@RequestParam(value = "lName") String listName, @RequestParam("user") long userId){
+    public ResponseEntity<?> getByName(@RequestParam(value = "lName") String listName, @RequestParam("user") long userId){
         try{
             List<WishList> result = wishListService.showUsersListsByName(userId, listName);
-            return new ResponseEntity<>(result, HttpStatus.OK);
+            return new ResponseEntity<List<WishList>>(result, HttpStatus.OK);
         }
         catch(UserNotFoundException e){
-            return new ResponseEntity<>("User "+userId+" not found!", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<String>("User "+userId+" not found!", HttpStatus.BAD_REQUEST);
         }
     }//getByName
 
     @GetMapping(path = "/user")
-    public ResponseEntity getByUser(@RequestParam("user") long userId){
+    public ResponseEntity<?> getByUser(@RequestParam("user") long userId){
         try{
             List<WishList> result = wishListService.showAllUsersLists(userId);
-            return new ResponseEntity<>(result, HttpStatus.OK);
+            return new ResponseEntity<List<WishList>>(result, HttpStatus.OK);
         }
         catch(UserNotFoundException e){
-            return new ResponseEntity<>("User "+userId+" not found!", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<String>("User "+userId+" not found!", HttpStatus.BAD_REQUEST);
         }
     }//getByUser
 
     @PostMapping
-    public ResponseEntity create(@RequestBody @Valid WishList wishList, @RequestParam("user") long userId){
+    public ResponseEntity<?> create(@RequestBody @Valid WishList wishList, @RequestParam("user") long userId){
         try{
             WishList result = wishListService.createUsersList(userId, wishList);
-            return new ResponseEntity<>(result, HttpStatus.OK);
+            return new ResponseEntity<WishList>(result, HttpStatus.OK);
         }
         catch(UserNotFoundException e){
-            return new ResponseEntity<>("User "+userId+" not found!", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<String>("User "+userId+" not found!", HttpStatus.BAD_REQUEST);
         }
         catch(WishListAlreadyExistsException e){
-            return new ResponseEntity<>("WishList "+wishList.getName()+" already exists!", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<String>("WishList "+wishList.getName()+" already exists!", HttpStatus.BAD_REQUEST);
         }
     }//create
 
     @PutMapping
-    public ResponseEntity update(@RequestBody @Valid WishList wishList, @RequestParam("user") long userId){
+    public ResponseEntity<String> update(@RequestBody @Valid WishList wishList, @RequestParam("user") long userId){
         try{
             wishListService.updateWishList(userId, wishList);
-            return new ResponseEntity<>("WishList "+wishList.getName()+" updated successful!", HttpStatus.OK);
+            return new ResponseEntity<String>("WishList "+wishList.getName()+" updated successful!", HttpStatus.OK);
         }
         catch(UserNotFoundException e){
-            return new ResponseEntity<>("User "+userId+" not found!", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<String>("User "+userId+" not found!", HttpStatus.BAD_REQUEST);
         }
         catch(WishListNotFoundException e){
-            return new ResponseEntity<>("WishList "+wishList.getName()+" not found!", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<String>("WishList "+wishList.getName()+" not found!", HttpStatus.BAD_REQUEST);
         }
         catch(UnavaiableWishList e){
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<String>(HttpStatus.UNAUTHORIZED);
         }
     }//update
 
     @PutMapping(path = "/addComic")
-    public ResponseEntity addComicToList(@RequestParam("user") long userId, @RequestParam("comic") long comicId, @RequestParam("list") long wishListId){
+    public ResponseEntity<String> addComicToList(@RequestParam("user") long userId, @RequestParam("comic") long comicId, @RequestParam("list") long wishListId){
         try{
             wishListService.addComicToList(userId, comicId, wishListId);
-            return new ResponseEntity<>("Comic "+comicId+" added successful to wish list "+wishListId+" .", HttpStatus.OK);
+            return new ResponseEntity<String>("Comic "+comicId+" added successful to wish list "+wishListId+" .", HttpStatus.OK);
         }
         catch(UserNotFoundException e){
-            return new ResponseEntity<>("User "+userId+" not found!", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<String>("User "+userId+" not found!", HttpStatus.BAD_REQUEST);
         }
         catch(ComicNotFoundException e){
-            return new ResponseEntity<>("Comic \""+comicId+"\" not found!", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<String>("Comic \""+comicId+"\" not found!", HttpStatus.BAD_REQUEST);
         }
         catch(WishListNotFoundException e){
-            return new ResponseEntity<>("WishList "+wishListId+" not found!", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<String>("WishList "+wishListId+" not found!", HttpStatus.BAD_REQUEST);
         }
         catch(UnavaiableWishList e){
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<String>(HttpStatus.UNAUTHORIZED);
         }
     }//addComicToList
 
     @PutMapping(path = "/deleteComic")
-    public ResponseEntity deleteComicToList(@RequestParam("user") long userId, @RequestParam("comic") long comicId, @RequestParam("list") long wishListId){
+    public ResponseEntity<String> deleteComicToList(@RequestParam("user") long userId, @RequestParam("comic") long comicId, @RequestParam("list") long wishListId){
         try{
             wishListService.deleteComicToList(userId, comicId, wishListId);
-            return new ResponseEntity<>("Comic "+comicId+" deleted successful to wish list "+wishListId+" .", HttpStatus.OK);
+            return new ResponseEntity<String>("Comic "+comicId+" deleted successful to wish list "+wishListId+" .", HttpStatus.OK);
         }
         catch(UserNotFoundException e){
-            return new ResponseEntity<>("User "+userId+" not found!", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<String>("User "+userId+" not found!", HttpStatus.BAD_REQUEST);
         }
         catch(ComicNotFoundException e){
-            return new ResponseEntity<>("Comic \""+comicId+"\" not found!", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<String>("Comic \""+comicId+"\" not found!", HttpStatus.BAD_REQUEST);
         }
         catch(WishListNotFoundException e){
-            return new ResponseEntity<>("WishList "+wishListId+" not found!", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<String>("WishList "+wishListId+" not found!", HttpStatus.BAD_REQUEST);
         }
         catch(UnavaiableWishList e){
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<String>(HttpStatus.UNAUTHORIZED);
         }
     }//addComicToList
 

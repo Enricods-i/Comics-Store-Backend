@@ -32,39 +32,38 @@ public class PurchaseController {
     }//getAll
 
     @GetMapping(path = "/user")
-    public ResponseEntity getUsersPurchases(@RequestParam(value = "user") long userId, @RequestParam(value = "pageNumber", defaultValue = "0") int pageNumber, @RequestParam(value = "pageSize", defaultValue = "10") int pageSize, @RequestParam(value = "sortBy", defaultValue = "purchaseTime") String sortBy){
+    public ResponseEntity<?> getUsersPurchases(@RequestParam(value = "user") long userId, @RequestParam(value = "pageNumber", defaultValue = "0") int pageNumber, @RequestParam(value = "pageSize", defaultValue = "10") int pageSize, @RequestParam(value = "sortBy", defaultValue = "purchaseTime") String sortBy){
         try{
             List<Purchase> result = purchaseService.getAllUsersPurchases(userId);
-            return new ResponseEntity<>(result, HttpStatus.OK);
+            return new ResponseEntity<List<Purchase>>(result, HttpStatus.OK);
         }
         catch(UserNotFoundException e){
-            return new ResponseEntity<>(HttpStatus.SEE_OTHER);
+            return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
         }
     }//getUsersPurchases
 
     @GetMapping(path = "/inPeriod")
-    public ResponseEntity getPurchasesInPeriod(@RequestParam(value = "start") @DateTimeFormat(pattern = "dd-MM-yyyy") Date startDate, @RequestParam(value = "end") @DateTimeFormat(pattern = "dd-MM-yyyy") Date endDate){
+    public ResponseEntity<?> getPurchasesInPeriod(@RequestParam(value = "start") @DateTimeFormat(pattern = "dd-MM-yyyy") Date startDate, @RequestParam(value = "end") @DateTimeFormat(pattern = "dd-MM-yyyy") Date endDate){
         try{
             List<Purchase> result = purchaseService.getPurchasesInPeriod(startDate, endDate);
-            return new ResponseEntity<>(result, HttpStatus.OK);
+            return new ResponseEntity<List<Purchase>>(result, HttpStatus.OK);
         }
         catch(DateWrongRangeException e){
-            return new ResponseEntity<>("Start date must be previous end date!", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<String>("Start date must be previous end date!", HttpStatus.BAD_REQUEST);
         }
     }//getUsersPurchases
 
     @PostMapping
-    public ResponseEntity create(@RequestParam(value = "user") long userId){
+    public ResponseEntity<?> create(@RequestParam(value = "user") long userId){
         try{
             Purchase result = purchaseService.addPurchase(userId);
-            return new ResponseEntity<>(result, HttpStatus.OK);
+            return new ResponseEntity<Purchase>(result, HttpStatus.OK);
         }
-        
         catch(UserNotFoundException e){
-            return new ResponseEntity<>(HttpStatus.SEE_OTHER);
+            return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
         }
         catch(ComicsQuantityUnavaiableException e){
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }//create
 

@@ -37,13 +37,13 @@ public class UserController {
     }//getByCity
 
     @GetMapping(path = "email")
-    public ResponseEntity getByEmail(@RequestParam(value = "email") String email){
+    public ResponseEntity<?> getByEmail(@RequestParam(value = "email") String email){
         try{
             User result = userService.getUserByEmail(email);
-            return new ResponseEntity<>(result, HttpStatus.OK);
+            return new ResponseEntity<User>(result, HttpStatus.OK);
         }
         catch(UserNotFoundException e){
-            return new ResponseEntity<>("User with email "+email+" not found", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<String>("User with email "+email+" not found", HttpStatus.BAD_REQUEST);
         }
     }//getByEmail
 
@@ -53,13 +53,13 @@ public class UserController {
     }//create
 
     @PutMapping
-    public ResponseEntity update(@RequestBody @Valid User user){
+    public ResponseEntity<String> update(@RequestBody @Valid User user){
         try{
             userService.updateUser(user);
-            return new ResponseEntity<>("User "+user.getFirstName()+" "+user.getLastName()+ "/"+user.getId()+" updated successful!", HttpStatus.OK);
+            return new ResponseEntity<String>("User "+user.getFirstName()+" "+user.getLastName()+ "/"+user.getId()+" updated successful!", HttpStatus.OK);
         }
         catch(UserNotFoundException e){
-            return new ResponseEntity<>("User \""+user.getId()+"\" not found", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<String>("User \""+user.getId()+"\" not found", HttpStatus.BAD_REQUEST);
         }
     }//getByEmail
 

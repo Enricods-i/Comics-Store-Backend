@@ -35,61 +35,61 @@ public class CollectionController {
     }//getByName
 
     @GetMapping(path = "/byCategory")
-    public ResponseEntity  getByCategory(@RequestParam(value = "ctgy") String categoryName, @RequestParam(value = "pageNumber", defaultValue = "0") int pageNumber, @RequestParam(value = "pageSize", defaultValue = "10") int pageSize, @RequestParam(value = "sortBy", defaultValue = "id") String sortBy){
+    public ResponseEntity<?>  getByCategory(@RequestParam(value = "ctgy") String categoryName, @RequestParam(value = "pageNumber", defaultValue = "0") int pageNumber, @RequestParam(value = "pageSize", defaultValue = "10") int pageSize, @RequestParam(value = "sortBy", defaultValue = "id") String sortBy){
         try{
             List<Collection> result = collectionService.showCollectionsByCategory(categoryName, pageNumber, pageSize, sortBy);
             return new ResponseEntity<List<Collection>>(result, HttpStatus.OK);
         }
         catch(CategoryNotFoundException e){
-            return new ResponseEntity<>("Category \""+categoryName+"\" not found!",HttpStatus.NOT_FOUND);
+            return new ResponseEntity<String>("Category \""+categoryName+"\" not found!",HttpStatus.BAD_REQUEST);
         }
     }//getByCategory
 
     @GetMapping(path = "/byAuthor")
-    public ResponseEntity getByAuthor(@RequestParam(value = "authName") String authorName, @RequestParam(value = "pageNumber", defaultValue = "0") int pageNumber, @RequestParam(value = "pageSize", defaultValue = "10") int pageSize, @RequestParam(value = "sortBy", defaultValue = "id") String sortBy){
+    public ResponseEntity<?> getByAuthor(@RequestParam(value = "authName") String authorName, @RequestParam(value = "pageNumber", defaultValue = "0") int pageNumber, @RequestParam(value = "pageSize", defaultValue = "10") int pageSize, @RequestParam(value = "sortBy", defaultValue = "id") String sortBy){
         try{
             List<Collection> result = collectionService.showCollectionsByAuthor(authorName, pageNumber, pageSize, sortBy);
             return new ResponseEntity<List<Collection>>(result, HttpStatus.OK);
         }
         catch(AuthorNotFoundException e){
-            return new ResponseEntity<>("Author \""+authorName+"\" not found!",HttpStatus.NOT_FOUND);
+            return new ResponseEntity<String>("Author \""+authorName+"\" not found!",HttpStatus.BAD_REQUEST);
         }
     }//getByAuthor
 
     @PostMapping
-    public ResponseEntity create(@RequestBody @Valid Collection collection){
+    public ResponseEntity<String> create(@RequestBody @Valid Collection collection){
         try{
             collectionService.addCollection(collection);
+            return new ResponseEntity<String>("Collection \""+collection.getName()+"\" added successful!", HttpStatus.OK);
         }
         catch(CollectionAlreadyExistsException e){
-            return new ResponseEntity<>("Collection \"" + collection.getName() + "\" already exists!",HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<String>("Collection \"" + collection.getName() + "\" already exists!",HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>("Collection \""+collection.getName()+"\" added successful!", HttpStatus.OK);
     }//create
 
     @PutMapping
-    public ResponseEntity update(@RequestBody @Valid Collection collection){
+    public ResponseEntity<String> update(@RequestBody @Valid Collection collection){
         try{
             collectionService.updateCollection(collection);
+            return new ResponseEntity<String>("Collection "+ collection.getName()  +" updated successful!", HttpStatus.OK);
         }
         catch(CollectionNotFoundException e){
-            return new ResponseEntity<>("Collection "+ collection.getName()  +" not found!", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<String>("Collection "+ collection.getName()  +" not found!", HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>("Collection "+ collection.getName()  +" updated successful!", HttpStatus.OK);
     }//update
 
     @PutMapping(path = "/bindCategory")
-    public ResponseEntity bindCategory(@RequestParam(value = "col") String collectionName, @RequestParam(value = "cat") String categoryName){
+    public ResponseEntity<String> bindCategory(@RequestParam(value = "col") String collectionName, @RequestParam(value = "cat") String categoryName){
         try{
-            collectionService.bindCategoryToCollection(categoryName, collectionName);;
+            collectionService.bindCategoryToCollection(categoryName, collectionName);
+            return new ResponseEntity<String>("Collection "+ collectionName  +" binded to "+ categoryName, HttpStatus.OK);
         }
         catch(CategoryNotFoundException e){
-            return new ResponseEntity<>("Category \"" + categoryName + "\" not found!", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<String>("Category \"" + categoryName + "\" not found!", HttpStatus.BAD_REQUEST);
         }
         catch(CollectionNotFoundException e){
-            return new ResponseEntity<>("Collection \"" + collectionName + "\" not found!", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<String>("Collection \"" + collectionName + "\" not found!", HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>("Collection "+ collectionName  +" binded to "+ categoryName, HttpStatus.OK);
     }//update
     
 }//CollectionService

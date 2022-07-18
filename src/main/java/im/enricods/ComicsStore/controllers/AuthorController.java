@@ -34,36 +34,36 @@ public class AuthorController {
     }//getAll
 
     @PostMapping
-    public ResponseEntity create(@RequestBody @Valid Author author){
+    public ResponseEntity<String> create(@RequestBody @Valid Author author){
         try{
             authorService.addAuthor(author);
+            return new ResponseEntity<String>("Author \""+ author.getName()  +"\" added succesful!", HttpStatus.OK);
         }
         catch(AuthorAlreadyExistsException e){
-            return new ResponseEntity<>("Author with name \"" + author.getName() + "\" already exist!", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<String>("Author with name \"" + author.getName() + "\" already exist!", HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>("Author \""+ author.getName()  +"\" added succesful!", HttpStatus.OK);
     }//create
 
     @PutMapping
-    public ResponseEntity update(@RequestBody @Valid Author author){
+    public ResponseEntity<String> update(@RequestBody @Valid Author author){
         try{
             authorService.updateAuthor(author);
+            return new ResponseEntity<String>("Author with name \""+ author.getName()  +"\" updated succesful!", HttpStatus.OK);
         }
         catch(AuthorNotFoundException e){
-            return new ResponseEntity<>("Author with name \"" + author.getName() + "\" not found!", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<String>("Author with name \"" + author.getName() + "\" not found!", HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>("Author with name \""+ author.getName()  +"\" updated succesful!", HttpStatus.OK);
     }//update
 
     @DeleteMapping
-    public ResponseEntity delete(@RequestParam(value = "authName") String authorName){
+    public ResponseEntity<String> delete(@RequestParam(value = "authName") String authorName){
         try{
             authorService.deleteAuthor(authorName);
+            return new ResponseEntity<String>("Author \""+ authorName + "\" deleted succesful!", HttpStatus.OK);
         }
         catch(AuthorNotFoundException e){
-            return new ResponseEntity<>("Author with name \"" + authorName + "\" not found!", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<String>("Author with name \"" + authorName + "\" not found!", HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>("Author \""+ authorName + "\" deleted succesful!", HttpStatus.OK);
     }//delete
 
 }//AuthorController

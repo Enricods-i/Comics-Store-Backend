@@ -38,22 +38,22 @@ public class DiscountController {
     }//getActives
 
     @PostMapping
-    public ResponseEntity create(@RequestBody @Valid Discount discount){
+    public ResponseEntity<Discount> create(@RequestBody @Valid Discount discount){
         Discount result = discountService.addDiscount(discount);
-        return new ResponseEntity<>(result,HttpStatus.OK);
+        return new ResponseEntity<Discount>(result,HttpStatus.OK);
     }//create
 
     @PutMapping(path = "/addPromotion")
-    public ResponseEntity createPromotion(@RequestParam(value = "discount") long discountId, @RequestParam(value = "comic") long comicId){
+    public ResponseEntity<String> createPromotion(@RequestParam(value = "discount") long discountId, @RequestParam(value = "comic") long comicId){
         try{
             discountService.addPromotion(discountId, comicId);
-            return new ResponseEntity<>("Comic \""+comicId+"\" is now in discount \""+discountId+"\".",HttpStatus.OK);
+            return new ResponseEntity<String>("Comic \""+comicId+"\" is now in discount \""+discountId+"\".",HttpStatus.OK);
         }
         catch(DiscountNotFoundException e){
-            return new ResponseEntity<>("Discount \""+discountId+"\" not found", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<String>("Discount \""+discountId+"\" not found", HttpStatus.BAD_REQUEST);
         }
         catch(ComicNotFoundException e){
-            return new ResponseEntity<>("Comic \""+comicId+"\" not found!", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<String>("Comic \""+comicId+"\" not found!", HttpStatus.BAD_REQUEST);
         }
     }//createPromotion
 

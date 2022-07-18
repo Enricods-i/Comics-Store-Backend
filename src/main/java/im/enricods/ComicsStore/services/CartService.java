@@ -92,6 +92,7 @@ public class CartService {
         Cart usersCart = resultUser.get().getCart();
 
         CartContent newComicInCart = new CartContent();
+        newComicInCart.setId(new CartContentId(usersCart.getId(), comicId));
         newComicInCart.setComic(resultComic.get());
         newComicInCart.setCart(usersCart);
         newComicInCart.setQuantity(quantity);
