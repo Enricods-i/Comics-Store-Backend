@@ -2,7 +2,6 @@ package im.enricods.ComicsStore.entities;
 
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -33,7 +32,7 @@ public class CartContent {
 
     @JsonIgnore
     @MapsId(value = "cart")
-    @ManyToOne(cascade = CascadeType.REMOVE)
+    @ManyToOne
     private Cart cart;
 
     @EqualsAndHashCode.Include

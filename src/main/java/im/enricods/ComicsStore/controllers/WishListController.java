@@ -7,6 +7,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -41,7 +42,7 @@ public class WishListController {
         }
     }//getByName
 
-    @GetMapping(path = "/byUser")
+    @GetMapping(path = "/searchByUser")
     public ResponseEntity<?> getByUser(@RequestParam("usr") long userId){
         try{
             List<WishList> result = wishListService.showAllUsersLists(userId);
@@ -65,6 +66,23 @@ public class WishListController {
             return new ResponseEntity<String>("WishList "+wishList.getName()+" already exists!", HttpStatus.BAD_REQUEST);
         }
     }//create
+
+    @DeleteMapping
+    public ResponseEntity<?> delete(@RequestParam(value = "list") long wishListId, @RequestParam("usr") long userId){
+        try{
+            wishListService.deleteUsersList(userId, wishListId);
+            return new ResponseEntity<String>("Wish list \""+wishListId+"\" deleted successful!", HttpStatus.OK);
+        }
+        catch(UserNotFoundException e){
+            return new ResponseEntity<String>("User "+userId+" not found!", HttpStatus.BAD_REQUEST);
+        }
+        catch(WishListNotFoundException e){
+            return new ResponseEntity<String>("WishList \""+wishListId+"\" not found!", HttpStatus.BAD_REQUEST);
+        }
+        catch(UnavaiableWishList e){
+            return new ResponseEntity<String>(HttpStatus.UNAUTHORIZED);
+        }
+    }//delete
 
     @PutMapping
     public ResponseEntity<String> update(@RequestBody @Valid WishList wishList, @RequestParam("usr") long userId){
@@ -103,7 +121,7 @@ public class WishListController {
         }
     }//addComicToList
 
-    @PutMapping(path = "/deleteComic")
+    @DeleteMapping(path = "/deleteComic")
     public ResponseEntity<String> deleteComicToList(@RequestParam("usr") long userId, @RequestParam("cmc") long comicId, @RequestParam("list") long wishListId){
         try{
             wishListService.deleteComicToList(userId, comicId, wishListId);

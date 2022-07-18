@@ -77,6 +77,9 @@ public class ComicController {
         catch(ComicNotFoundException e){
             return new ResponseEntity<String>("Comic \""+comic.getId()+"\" not found!", HttpStatus.BAD_REQUEST);
         }
+        catch(ComicAlreadyExistsException e){
+            return new ResponseEntity<String>("Comic with ISBN\""+comic.getIsbn()+"\" or with number "+comic.getNumber()+" already exists in its collection!", HttpStatus.BAD_REQUEST);
+        }
     }//update
 
     @PutMapping(path = "addAuthor")

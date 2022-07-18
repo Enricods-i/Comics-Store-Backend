@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import im.enricods.ComicsStore.entities.User;
+import im.enricods.ComicsStore.exceptions.UserAlreadyExists;
 import im.enricods.ComicsStore.exceptions.UserNotFoundException;
 import im.enricods.ComicsStore.services.UserService;
 
@@ -48,8 +49,14 @@ public class UserController {
     }//getByEmail
 
     @PostMapping
-    public User create(@RequestBody @Valid User user){
-        return userService.createUser(user);
+    public ResponseEntity<?> create(@RequestBody @Valid User user){
+        try{
+            User result = userService.createUser(user);
+            return new ResponseEntity<User>(result, HttpStatus.OK);
+        }
+        catch(UserAlreadyExists e){
+            return new ResponseEntity<String>("User \""+user.getFirstName()+" "+user.getLastName()+"\" already exists!", HttpStatus.BAD_REQUEST);
+        }
     }//create
 
     @PutMapping

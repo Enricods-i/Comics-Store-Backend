@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import im.enricods.ComicsStore.entities.Discount;
 import im.enricods.ComicsStore.exceptions.ComicNotFoundException;
+import im.enricods.ComicsStore.exceptions.DateWrongRangeException;
 import im.enricods.ComicsStore.exceptions.DiscountNotFoundException;
 import im.enricods.ComicsStore.services.DiscountService;
 
@@ -38,9 +39,14 @@ public class DiscountController {
     }//getActives
 
     @PostMapping
-    public ResponseEntity<Discount> create(@RequestBody @Valid Discount discount){
-        Discount result = discountService.addDiscount(discount);
-        return new ResponseEntity<Discount>(result,HttpStatus.OK);
+    public ResponseEntity<?> create(@RequestBody @Valid Discount discount){
+        try{
+            Discount result = discountService.addDiscount(discount);
+            return new ResponseEntity<Discount>(result,HttpStatus.OK);
+        }
+        catch(DateWrongRangeException e){
+            return new ResponseEntity<String>("Activation date must be previous Expiration date in discount",HttpStatus.BAD_REQUEST);
+        }
     }//create
 
     @PutMapping(path = "/addPromotion")

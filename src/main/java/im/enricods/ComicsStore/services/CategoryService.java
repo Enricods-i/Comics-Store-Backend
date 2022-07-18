@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import im.enricods.ComicsStore.entities.Category;
+import im.enricods.ComicsStore.entities.Collection;
 import im.enricods.ComicsStore.exceptions.CategoryAlreadyExistsException;
 import im.enricods.ComicsStore.exceptions.CategoryNotFoundException;
 import im.enricods.ComicsStore.repositories.CategoryRepository;
@@ -29,6 +30,7 @@ public class CategoryService {
 
     public void createCategory(String categoryName){
 
+        //verify that Category with the name specified doesn't already exists
         if(categoryRepository.existsById(categoryName))
             throw new CategoryAlreadyExistsException();
         
@@ -42,12 +44,18 @@ public class CategoryService {
 
     public void deleteCategory(String categoryName){
 
+        //verify that Category with the name specified already exists
         Optional<Category> resultCategory = categoryRepository.findById(categoryName);
         if(!resultCategory.isPresent())
             throw new CategoryNotFoundException();
         
-        categoryRepository.delete(resultCategory.get());
-        //cascade type remove rimuove la relazione con collection
+        Category target = resultCategory.get();
+
+        categoryRepository.delete(target);
+
+        //unbind bidirectional relations
+        for(Collection c : target.getCollections())
+            c.getCategories().remove(target);
         
     }//deleteCategory
 

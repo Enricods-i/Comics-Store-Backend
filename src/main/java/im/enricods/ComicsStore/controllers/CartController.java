@@ -33,7 +33,7 @@ public class CartController {
     @GetMapping(path = "/{userId}")
     public ResponseEntity<?> getCart(@PathVariable long userId) {
         try{
-            Cart result = cartService.getUsersCart(userId);
+            Cart result = cartService.getCartByUser(userId);
             return new ResponseEntity<Cart>(result, HttpStatus.OK);
         }
         catch(UserNotFoundException e){
@@ -67,7 +67,7 @@ public class CartController {
     @PutMapping(path = "/{userId}")
     public ResponseEntity<String> updateComicQuantity(@PathVariable long userId, @RequestParam(value = "cmcId") long comicId, @RequestParam(value = "qty") int quantity){
         try{
-            cartService.updateComicsQuantity(userId, comicId, quantity);
+            cartService.updateComicQuantity(userId, comicId, quantity);
         }
         catch(UserNotFoundException e){
             return new ResponseEntity<String>("User \""+userId+"\" not found", HttpStatus.BAD_REQUEST);

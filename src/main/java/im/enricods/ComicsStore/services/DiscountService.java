@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import im.enricods.ComicsStore.entities.Comic;
 import im.enricods.ComicsStore.entities.Discount;
 import im.enricods.ComicsStore.exceptions.ComicNotFoundException;
+import im.enricods.ComicsStore.exceptions.DateWrongRangeException;
 import im.enricods.ComicsStore.exceptions.DiscountNotFoundException;
 import im.enricods.ComicsStore.repositories.ComicRepository;
 import im.enricods.ComicsStore.repositories.DiscountRepository;
@@ -50,6 +51,10 @@ public class DiscountService {
 
     public Discount addDiscount(Discount discount){
 
+        //verify that discount's ActivationDate is previous discount's ExpirationDate
+        if ( discount.getActivationDate().compareTo(discount.getExpirationDate()) >= 0 )
+            throw new DateWrongRangeException();
+
         return discountRepository.save(discount);
 
     }//addDiscount
@@ -57,14 +62,17 @@ public class DiscountService {
 
     public void addPromotion(long discountId, long comicId){
 
+        //verify that Discount specified by discountId exists
         Optional<Discount> resultDiscount = discountRepository.findById(discountId);
         if(!resultDiscount.isPresent())
             throw new DiscountNotFoundException();
 
+        //verify that Comic specified by comicId exists
         Optional<Comic> resultComic = comicRepository.findById(comicId);
         if(!resultComic.isPresent())
             throw new ComicNotFoundException();
         
+        //bind bidirectional relation
         resultDiscount.get().addPromotion(resultComic.get());
 
     }//addPromotion

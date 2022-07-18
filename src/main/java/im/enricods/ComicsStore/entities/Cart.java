@@ -13,7 +13,6 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.persistence.Transient;
 
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -30,7 +29,7 @@ public class Cart {
 
     @EqualsAndHashCode.Include
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private long id;
 
@@ -40,9 +39,6 @@ public class Cart {
 
     @OneToMany(mappedBy = "cart")
     private Set<CartContent> content;
-    
-    @Transient
-    private float total;
     
     @Column(name = "size", nullable = false)
     private int size;

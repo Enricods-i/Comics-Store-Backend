@@ -11,6 +11,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import im.enricods.ComicsStore.entities.Author;
 import im.enricods.ComicsStore.entities.Category;
 import im.enricods.ComicsStore.entities.Collection;
 import im.enricods.ComicsStore.exceptions.AuthorNotFoundException;
@@ -47,6 +48,7 @@ public class CollectionService {
     @Transactional(readOnly = true)
     public List<Collection> showCollectionsByCategory(String categoryName, int pageNumber, int pageSize, String sortBy){
 
+        //verify that Category specified by categoryName exists
         Optional<Category> result = categoryRepository.findById(categoryName);
         if(!result.isPresent())
             throw new CategoryNotFoundException();
@@ -61,17 +63,20 @@ public class CollectionService {
     @Transactional(readOnly = true)
     public List<Collection> showCollectionsByAuthor(String authorName, int pageNumber, int pageSize, String sortBy){
 
-        if(!authorRepository.existsById(authorName))
+        //verify that Author specified by authorName exists
+        Optional<Author> resultAuthor = authorRepository.findById(authorName);
+        if(!resultAuthor.isPresent())
             throw new AuthorNotFoundException();
 
         Pageable paging = PageRequest.of(pageNumber, pageSize, Sort.by(sortBy));
-        Page<Collection> pagedResult = collectionRepository.findByAuthor(authorName, paging);
+        Page<Collection> pagedResult = collectionRepository.findByAuthor(resultAuthor.get(), paging);
         return pagedResult.getContent();
         
     }//showCollectionsByAuthor
 
     public void addCollection(Collection collection){
 
+        //verify that Collection specified doesn't already exists
         if(collectionRepository.existsById(collection.getName()))
             throw new CollectionAlreadyExistsException();
         
@@ -82,8 +87,13 @@ public class CollectionService {
 
     public void updateCollection(Collection collection){
 
-        if(!collectionRepository.existsById(collection.getName()))
+        //verify that Collection specified already exists
+        Optional<Collection> resultCollection = collectionRepository.findById(collection.getName());
+        if(!resultCollection.isPresent())
             throw new CollectionNotFoundException();
+
+        //set CreationDate field, client don't know that
+        collection.setCreationDate(resultCollection.get().getCreationDate());
 
         //merge
         collectionRepository.save(collection);
@@ -93,14 +103,17 @@ public class CollectionService {
     
     public void bindCategoryToCollection(String categoryName, String collectionName){
 
+        //verify that Category specified by categoryName exists
         Optional<Category> resultCategory = categoryRepository.findById(categoryName);
         if(!resultCategory.isPresent())
             throw new CategoryNotFoundException();
         
+        //verify that Collection specified by collectionName exists
         Optional<Collection> resultCollection = collectionRepository.findById(collectionName);
         if(!resultCollection.isPresent())
             throw new CollectionNotFoundException();
 
+        //bind bidirectional relation
         resultCollection.get().bindCategory(resultCategory.get());
 
     }//bindCategoryToCollection

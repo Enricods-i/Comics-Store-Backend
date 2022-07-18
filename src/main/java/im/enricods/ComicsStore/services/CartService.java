@@ -40,68 +40,55 @@ public class CartService {
 
 
     @Transactional(readOnly = true)
-    public Cart getUsersCart(long userId){
+    public Cart getCartByUser(long userId){
 
+        //verify that User with Id specified exists
         Optional<User> resultUser = userRepository.findById(userId);
         if(!resultUser.isPresent())
             throw new UserNotFoundException();
 
+        //verify that User has a Cart
         Optional<Cart> resultCart = cartRepository.findByUser(resultUser.get());
         if(!resultCart.isPresent())
             throw new CartNotFoundException();
         
-        float amount = 0;
-        Cart result = resultCart.get();
-        for(CartContent cc : result.getContent()){
-            amount += cc.getComic().getCollection().getPrice();
-        }
-
-        result.setTotal(amount);
-        return result;
+        return resultCart.get();
 
     }//getUsersCart
-
-    /*
-    public void createUsersCart(long userId){
-
-        Optional<User> resultUser = userRepository.findById(userId);
-        if(!resultUser.isPresent())
-            throw new UserNotFoundException();
-        
-        Cart cart = new Cart();
-        cartRepository.save(cart);
-        resultUser.get().setCart(cart);
-
-    }//createUsersCart
-    */
 
 
     public void addComicToUsersCart(long userId, long comicId, int quantity){
 
+        //verify that a User with userId exists
         Optional<User> resultUser = userRepository.findById(userId);
         if(!resultUser.isPresent())
             throw new UserNotFoundException();
         
+        //verify that a Comic with comicId exists
         Optional<Comic> resultComic = comicRepository.findById(comicId);
         if(!resultComic.isPresent())
             throw new ComicNotFoundException();
         
+        //verify that the quantity specified is avaiable
         if(quantity > resultComic.get().getQuantity())
             throw new ComicsQuantityUnavaiableException("Unavaiable quantity for comic "+ resultComic.get().getNumber()+ " in collection "+ resultComic.get().getCollection().getName() +" !");
         
         Cart usersCart = resultUser.get().getCart();
 
+        //create new cart entry and set all fields
         CartContent newComicInCart = new CartContent();
         newComicInCart.setId(new CartContentId(usersCart.getId(), comicId));
         newComicInCart.setComic(resultComic.get());
         newComicInCart.setCart(usersCart);
         newComicInCart.setQuantity(quantity);
 
+        //verify that user's Cart doesn't contains the Comic specified by comicId yet
         if(usersCart.getContent().contains(newComicInCart))
             throw new ComicAlreadyExistsException();
         
         cartContentRepository.save(newComicInCart);
         
+        //bind bidirectional relation and update cart's Size
         usersCart.getContent().add(newComicInCart);
         usersCart.setSize(usersCart.getSize()+1);
 
@@ -110,43 +97,53 @@ public class CartService {
 
     public void deleteComicFromUsersCart(long userId, long comicId){
 
+        //verify that User with userId exists
         Optional<User> resultUser = userRepository.findById(userId);
         if(!resultUser.isPresent())
             throw new UserNotFoundException();
         
+        //verify that Comic with comicId exists
         Optional<Comic> resultComic = comicRepository.findById(comicId);
         if(!resultComic.isPresent())
             throw new ComicNotFoundException();
         
         Cart usersCart = resultUser.get().getCart();
 
+        //verify that user's Cart contains Comic specified by comicId 
         Optional<CartContent> target = cartContentRepository.findById(new CartContentId(usersCart.getId(), comicId));
         if(!target.isPresent())
             throw new ComicNotInCartException();
         
         cartContentRepository.delete(target.get());
 
-        //con cascade type remove rimuovo la relazione con Cart
+        //unbind bidirectional relation
+        usersCart.getContent().remove(target.get());
+        //update cart's Size
         usersCart.setSize(usersCart.getSize()-1);
 
     }//deleteComicFromUsersCart
 
 
-    public void updateComicsQuantity(long userId, long comicId, int newQuantity){
+    public void updateComicQuantity(long userId, long comicId, int newQuantity){
 
+        //verify that User with userId exists
         Optional<User> resultUser = userRepository.findById(userId);
         if(!resultUser.isPresent())
             throw new UserNotFoundException();
         
+        //verify that Comic with comicId exists
         Optional<Comic> resultComic = comicRepository.findById(comicId);
         if(!resultComic.isPresent())
             throw new ComicNotFoundException();
 
         long cartId = resultUser.get().getCart().getId();
+
+        //verify that user's Cart contains Comic specified by comicId 
         Optional<CartContent> comicInCart = cartContentRepository.findById(new CartContentId(cartId, comicId));
         if(!comicInCart.isPresent())
             throw new ComicNotInCartException();
 
+        //verify that the quantity specified is avaiable
         if(newQuantity > resultComic.get().getQuantity())
             throw new ComicsQuantityUnavaiableException();
         

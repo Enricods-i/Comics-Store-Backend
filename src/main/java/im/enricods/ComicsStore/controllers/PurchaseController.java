@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import im.enricods.ComicsStore.entities.Purchase;
+import im.enricods.ComicsStore.exceptions.CartEmptyException;
 import im.enricods.ComicsStore.exceptions.ComicsQuantityUnavaiableException;
 import im.enricods.ComicsStore.exceptions.DateWrongRangeException;
 import im.enricods.ComicsStore.exceptions.UserNotFoundException;
@@ -61,6 +62,9 @@ public class PurchaseController {
         }
         catch(UserNotFoundException e){
             return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+        }
+        catch(CartEmptyException e){
+            return new ResponseEntity<String>("Your cart is empty", HttpStatus.BAD_REQUEST);
         }
         catch(ComicsQuantityUnavaiableException e){
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);

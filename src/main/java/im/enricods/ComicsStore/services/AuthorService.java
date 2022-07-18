@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import im.enricods.ComicsStore.entities.Author;
+import im.enricods.ComicsStore.entities.Comic;
 import im.enricods.ComicsStore.exceptions.AuthorAlreadyExistsException;
 import im.enricods.ComicsStore.exceptions.AuthorNotFoundException;
 import im.enricods.ComicsStore.repositories.AuthorRepository;
@@ -21,6 +22,7 @@ public class AuthorService {
     
     @Autowired
     private AuthorRepository authorRepository;
+
 
     @Transactional(readOnly = true)
     public List<Author> showAllAuthors(int pageNumber, int pageSize, String sortBy){
@@ -33,6 +35,7 @@ public class AuthorService {
 
     public void addAuthor(Author author){
 
+        //verify that Author specified doesn't already exists
         if(authorRepository.existsById(author.getName()))
             throw new AuthorAlreadyExistsException();
         
@@ -41,19 +44,28 @@ public class AuthorService {
 
     }//addAuthor
 
+
     public void deleteAuthor(String authorName){
 
+        //verify that Author with authorName specified exists
         Optional<Author> resultAuthor = authorRepository.findById(authorName);
         if(!resultAuthor.isPresent())
             throw new AuthorNotFoundException();
         
-        authorRepository.delete(resultAuthor.get());
-        //con cascade type remove rimuovo anche le relazioni
+        Author target = resultAuthor.get();
+
+        authorRepository.delete(target);
+
+        //unbind the bidirectional relations
+        for(Comic c : target.getWorks())
+            c.getAuthors().remove(target);
 
     }//deleteAuthor
 
+
     public void updateAuthor(Author author){
 
+        //verify that Author specified exists
         if(!authorRepository.existsById(author.getName()))
             throw new AuthorNotFoundException();
         
@@ -61,5 +73,6 @@ public class AuthorService {
         authorRepository.save(author);
 
     }//updateAuthor
+
 
 }//AuthorService
