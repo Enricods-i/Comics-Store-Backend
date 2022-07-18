@@ -30,7 +30,7 @@ public class ComicController {
     private ComicService comicService;
 
     @GetMapping(path = "/inCollection")
-    public ResponseEntity<?> getComicsInCollections(@RequestParam(value = "collection") String collectionName, @RequestParam(value = "pageNumber", defaultValue = "0") int pageNumber, @RequestParam(value = "pageSize", defaultValue = "10") int pageSize, @RequestParam(value = "sortBy", defaultValue = "number") String sortBy){
+    public ResponseEntity<?> getComicsInCollections(@RequestParam(value = "cllctn") String collectionName, @RequestParam(value = "pageNumber", defaultValue = "0") int pageNumber, @RequestParam(value = "pageSize", defaultValue = "10") int pageSize, @RequestParam(value = "sortBy", defaultValue = "number") String sortBy){
         try{
             List<Comic> result = comicService.showComicsInCollection(collectionName, pageNumber, pageSize, sortBy);
             return new ResponseEntity<List<Comic>>(result, HttpStatus.OK);
@@ -41,7 +41,7 @@ public class ComicController {
     }//getComicsInCollections
 
     @GetMapping(path = "/inCollection/byAuthor")
-    public ResponseEntity<?> getComicsInCollectionsCreatedByAuthor(@RequestParam(value = "collection") String collectionName,@RequestParam(value = "author") String authorName, @RequestParam(value = "pageNumber", defaultValue = "0") int pageNumber, @RequestParam(value = "pageSize", defaultValue = "10") int pageSize, @RequestParam(value = "sortBy", defaultValue = "number") String sortBy){
+    public ResponseEntity<?> getComicsInCollectionsCreatedByAuthor(@RequestParam(value = "cllctn") String collectionName,@RequestParam(value = "autr") String authorName, @RequestParam(value = "pageNumber", defaultValue = "0") int pageNumber, @RequestParam(value = "pageSize", defaultValue = "10") int pageSize, @RequestParam(value = "sortBy", defaultValue = "number") String sortBy){
         try{
             List<Comic> result = comicService.showComicsInCollectionCreatedByAuthor(collectionName, authorName, pageNumber, pageSize, sortBy);
             return new ResponseEntity<List<Comic>>(result, HttpStatus.OK);
@@ -55,7 +55,7 @@ public class ComicController {
     }//getComicsInCollectionsCreatedByAuthor
 
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody @Valid Comic comic, @RequestParam(value = "collection") String collectionName){
+    public ResponseEntity<?> create(@RequestBody @Valid Comic comic, @RequestParam(value = "cllctn") String collectionName){
         try{
             Comic result = comicService.addComic(comic, collectionName);
             return new ResponseEntity<Comic>(result,HttpStatus.OK);
@@ -80,7 +80,7 @@ public class ComicController {
     }//update
 
     @PutMapping(path = "addAuthor")
-    public ResponseEntity<String> addAuthor(@RequestParam(value = "comic") long comicId, @RequestParam(value = "author") String authorName){
+    public ResponseEntity<String> addAuthor(@RequestParam(value = "cmc") long comicId, @RequestParam(value = "autr") String authorName){
         try{
             comicService.addAuthorToComic(authorName, comicId);
             return new ResponseEntity<String>("Author \""+authorName+"\" added successful to comic \""+comicId+"\" !",HttpStatus.OK);

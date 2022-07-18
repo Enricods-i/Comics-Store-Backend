@@ -26,17 +26,17 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @GetMapping(path = "firstName&lastName")
+    @GetMapping(path = "/searchByFirstName&LastName")
     public List<User> getByFirstNameAndLastName(@RequestParam(value = "fName") String firstName, @RequestParam(value = "lName") String lastName){
         return userService.getUsersByName(firstName, lastName);
     }//getByFirstNameAndLastName
 
-    @GetMapping(path = "city")
+    @GetMapping(path = "/searchByCity")
     public List<User> getByCity(@RequestParam(value = "city") String city){
         return userService.getUsersByCity(city);
     }//getByCity
 
-    @GetMapping(path = "email")
+    @GetMapping(path = "/getByEmail")
     public ResponseEntity<?> getByEmail(@RequestParam(value = "email") String email){
         try{
             User result = userService.getUserByEmail(email);
@@ -61,6 +61,6 @@ public class UserController {
         catch(UserNotFoundException e){
             return new ResponseEntity<String>("User \""+user.getId()+"\" not found", HttpStatus.BAD_REQUEST);
         }
-    }//getByEmail
+    }//update
 
 }//UserController

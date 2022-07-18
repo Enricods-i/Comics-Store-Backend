@@ -85,7 +85,7 @@ public class CartController {
     }//updateComicQuantity
 
     @DeleteMapping(path = "/{userId}")
-    public ResponseEntity<String> removeComic(@PathVariable long userId, @RequestParam(value = "cmcId") long comicId){
+    public ResponseEntity<String> deleteComic(@PathVariable long userId, @RequestParam(value = "cmcId") long comicId){
         try{
             cartService.deleteComicFromUsersCart(userId, comicId);
         }

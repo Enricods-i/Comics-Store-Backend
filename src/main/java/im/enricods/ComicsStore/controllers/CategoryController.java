@@ -30,7 +30,7 @@ public class CategoryController {
     }//getAll
 
     @PostMapping
-    public ResponseEntity<String> create(@RequestParam(value = "name") String categoryName){
+    public ResponseEntity<String> create(@RequestParam(value = "cName") String categoryName){
         try{
             categoryService.createCategory(categoryName);
             return new ResponseEntity<String>("Category \""+ categoryName +"\" added succesful!", HttpStatus.OK);
@@ -41,7 +41,7 @@ public class CategoryController {
     }//create
 
     @DeleteMapping
-    public ResponseEntity<String> delete(@RequestParam(value = "name") String categoryName){
+    public ResponseEntity<String> delete(@RequestParam(value = "cName") String categoryName){
         try{
             categoryService.deleteCategory(categoryName);
             return new ResponseEntity<String>("Category \""+ categoryName +"\" deleted succesful!", HttpStatus.OK);
@@ -49,6 +49,6 @@ public class CategoryController {
         catch(CategoryNotFoundException e){
             return new ResponseEntity<String>("Category \"" + categoryName + "\" not found!", HttpStatus.BAD_REQUEST);
         }
-    }//create
+    }//delete
 
 }//CategoryController

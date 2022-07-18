@@ -30,12 +30,12 @@ public class CollectionController {
     private CollectionService collectionService;
 
     @GetMapping(path = "/byName")
-    public List<Collection> getByName(@RequestParam(value = "collection") String collectionName, @RequestParam(value = "pageNumber", defaultValue = "0") int pageNumber, @RequestParam(value = "pageSize", defaultValue = "10") int pageSize, @RequestParam(value = "sortBy", defaultValue = "id") String sortBy){
+    public List<Collection> getByName(@RequestParam(value = "search") String collectionName, @RequestParam(value = "pageNumber", defaultValue = "0") int pageNumber, @RequestParam(value = "pageSize", defaultValue = "10") int pageSize, @RequestParam(value = "sortBy", defaultValue = "name") String sortBy){
         return collectionService.showCollectionsByName(collectionName, pageNumber, pageSize, sortBy);
     }//getByName
 
     @GetMapping(path = "/byCategory")
-    public ResponseEntity<?>  getByCategory(@RequestParam(value = "ctgy") String categoryName, @RequestParam(value = "pageNumber", defaultValue = "0") int pageNumber, @RequestParam(value = "pageSize", defaultValue = "10") int pageSize, @RequestParam(value = "sortBy", defaultValue = "id") String sortBy){
+    public ResponseEntity<?>  getByCategory(@RequestParam(value = "ctgr") String categoryName, @RequestParam(value = "pageNumber", defaultValue = "0") int pageNumber, @RequestParam(value = "pageSize", defaultValue = "10") int pageSize, @RequestParam(value = "sortBy", defaultValue = "name") String sortBy){
         try{
             List<Collection> result = collectionService.showCollectionsByCategory(categoryName, pageNumber, pageSize, sortBy);
             return new ResponseEntity<List<Collection>>(result, HttpStatus.OK);
@@ -46,7 +46,7 @@ public class CollectionController {
     }//getByCategory
 
     @GetMapping(path = "/byAuthor")
-    public ResponseEntity<?> getByAuthor(@RequestParam(value = "authName") String authorName, @RequestParam(value = "pageNumber", defaultValue = "0") int pageNumber, @RequestParam(value = "pageSize", defaultValue = "10") int pageSize, @RequestParam(value = "sortBy", defaultValue = "id") String sortBy){
+    public ResponseEntity<?> getByAuthor(@RequestParam(value = "autr") String authorName, @RequestParam(value = "pageNumber", defaultValue = "0") int pageNumber, @RequestParam(value = "pageSize", defaultValue = "10") int pageSize, @RequestParam(value = "sortBy", defaultValue = "name") String sortBy){
         try{
             List<Collection> result = collectionService.showCollectionsByAuthor(authorName, pageNumber, pageSize, sortBy);
             return new ResponseEntity<List<Collection>>(result, HttpStatus.OK);
@@ -79,7 +79,7 @@ public class CollectionController {
     }//update
 
     @PutMapping(path = "/bindCategory")
-    public ResponseEntity<String> bindCategory(@RequestParam(value = "col") String collectionName, @RequestParam(value = "cat") String categoryName){
+    public ResponseEntity<String> bindCategory(@RequestParam(value = "cllctn") String collectionName, @RequestParam(value = "ctgr") String categoryName){
         try{
             collectionService.bindCategoryToCollection(categoryName, collectionName);
             return new ResponseEntity<String>("Collection "+ collectionName  +" binded to "+ categoryName, HttpStatus.OK);

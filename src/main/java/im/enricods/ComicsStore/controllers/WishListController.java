@@ -31,7 +31,7 @@ public class WishListController {
     private WishListService wishListService;
 
     @GetMapping(path = "/searchByName")
-    public ResponseEntity<?> getByName(@RequestParam(value = "lName") String listName, @RequestParam("user") long userId){
+    public ResponseEntity<?> getByName(@RequestParam(value = "lName") String listName, @RequestParam("usr") long userId){
         try{
             List<WishList> result = wishListService.showUsersListsByName(userId, listName);
             return new ResponseEntity<List<WishList>>(result, HttpStatus.OK);
@@ -41,8 +41,8 @@ public class WishListController {
         }
     }//getByName
 
-    @GetMapping(path = "/user")
-    public ResponseEntity<?> getByUser(@RequestParam("user") long userId){
+    @GetMapping(path = "/byUser")
+    public ResponseEntity<?> getByUser(@RequestParam("usr") long userId){
         try{
             List<WishList> result = wishListService.showAllUsersLists(userId);
             return new ResponseEntity<List<WishList>>(result, HttpStatus.OK);
@@ -53,7 +53,7 @@ public class WishListController {
     }//getByUser
 
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody @Valid WishList wishList, @RequestParam("user") long userId){
+    public ResponseEntity<?> create(@RequestBody @Valid WishList wishList, @RequestParam("usr") long userId){
         try{
             WishList result = wishListService.createUsersList(userId, wishList);
             return new ResponseEntity<WishList>(result, HttpStatus.OK);
@@ -67,7 +67,7 @@ public class WishListController {
     }//create
 
     @PutMapping
-    public ResponseEntity<String> update(@RequestBody @Valid WishList wishList, @RequestParam("user") long userId){
+    public ResponseEntity<String> update(@RequestBody @Valid WishList wishList, @RequestParam("usr") long userId){
         try{
             wishListService.updateWishList(userId, wishList);
             return new ResponseEntity<String>("WishList "+wishList.getName()+" updated successful!", HttpStatus.OK);
@@ -84,7 +84,7 @@ public class WishListController {
     }//update
 
     @PutMapping(path = "/addComic")
-    public ResponseEntity<String> addComicToList(@RequestParam("user") long userId, @RequestParam("comic") long comicId, @RequestParam("list") long wishListId){
+    public ResponseEntity<String> addComicToList(@RequestParam("usr") long userId, @RequestParam("cmc") long comicId, @RequestParam("list") long wishListId){
         try{
             wishListService.addComicToList(userId, comicId, wishListId);
             return new ResponseEntity<String>("Comic "+comicId+" added successful to wish list "+wishListId+" .", HttpStatus.OK);
@@ -104,7 +104,7 @@ public class WishListController {
     }//addComicToList
 
     @PutMapping(path = "/deleteComic")
-    public ResponseEntity<String> deleteComicToList(@RequestParam("user") long userId, @RequestParam("comic") long comicId, @RequestParam("list") long wishListId){
+    public ResponseEntity<String> deleteComicToList(@RequestParam("usr") long userId, @RequestParam("cmc") long comicId, @RequestParam("list") long wishListId){
         try{
             wishListService.deleteComicToList(userId, comicId, wishListId);
             return new ResponseEntity<String>("Comic "+comicId+" deleted successful to wish list "+wishListId+" .", HttpStatus.OK);

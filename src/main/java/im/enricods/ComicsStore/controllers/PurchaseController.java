@@ -32,7 +32,7 @@ public class PurchaseController {
     }//getAll
 
     @GetMapping(path = "/user")
-    public ResponseEntity<?> getUsersPurchases(@RequestParam(value = "user") long userId, @RequestParam(value = "pageNumber", defaultValue = "0") int pageNumber, @RequestParam(value = "pageSize", defaultValue = "10") int pageSize, @RequestParam(value = "sortBy", defaultValue = "purchaseTime") String sortBy){
+    public ResponseEntity<?> getUsersPurchases(@RequestParam(value = "usr") long userId, @RequestParam(value = "pageNumber", defaultValue = "0") int pageNumber, @RequestParam(value = "pageSize", defaultValue = "10") int pageSize, @RequestParam(value = "sortBy", defaultValue = "purchaseTime") String sortBy){
         try{
             List<Purchase> result = purchaseService.getAllUsersPurchases(userId);
             return new ResponseEntity<List<Purchase>>(result, HttpStatus.OK);
@@ -54,7 +54,7 @@ public class PurchaseController {
     }//getUsersPurchases
 
     @PostMapping
-    public ResponseEntity<?> create(@RequestParam(value = "user") long userId){
+    public ResponseEntity<?> create(@RequestParam(value = "usr") long userId){
         try{
             Purchase result = purchaseService.addPurchase(userId);
             return new ResponseEntity<Purchase>(result, HttpStatus.OK);

@@ -44,7 +44,7 @@ public class DiscountController {
     }//create
 
     @PutMapping(path = "/addPromotion")
-    public ResponseEntity<String> createPromotion(@RequestParam(value = "discount") long discountId, @RequestParam(value = "comic") long comicId){
+    public ResponseEntity<String> createPromotion(@RequestParam(value = "dsnt") long discountId, @RequestParam(value = "cmc") long comicId){
         try{
             discountService.addPromotion(discountId, comicId);
             return new ResponseEntity<String>("Comic \""+comicId+"\" is now in discount \""+discountId+"\".",HttpStatus.OK);
