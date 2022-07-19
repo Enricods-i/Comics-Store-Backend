@@ -3,6 +3,8 @@ package im.enricods.ComicsStore.services;
 import java.util.List;
 import java.util.Optional;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -57,7 +59,7 @@ public class UserService {
     }//getUsersByPhoneNumber
 
     
-    public User createUser(User user){
+    public User createUser(@Valid User user){
 
         //verify that User specified doesn't already exists
         if(userRepository.existsByEmail(user.getEmail()))
@@ -73,7 +75,7 @@ public class UserService {
     }//createUser
 
     
-    public void updateUser(User user){
+    public void updateUser(@Valid User user){
 
         //verify that User specified exists
         Optional<User> resultUser = userRepository.findById(user.getId());

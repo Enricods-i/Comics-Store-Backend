@@ -1,6 +1,10 @@
 package im.enricods.ComicsStore.controllers;
 
+import java.util.LinkedList;
 import java.util.List;
+
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,6 +20,7 @@ import im.enricods.ComicsStore.entities.Category;
 import im.enricods.ComicsStore.exceptions.CategoryAlreadyExistsException;
 import im.enricods.ComicsStore.exceptions.CategoryNotFoundException;
 import im.enricods.ComicsStore.services.CategoryService;
+import im.enricods.ComicsStore.utils.InvalidField;
 
 @RestController
 @RequestMapping(path = "/categories")
@@ -30,10 +35,17 @@ public class CategoryController {
     }//getAll
 
     @PostMapping
-    public ResponseEntity<String> create(@RequestParam(value = "cName") String categoryName){
+    public ResponseEntity<?> create(@RequestParam(value = "cName") String categoryName){
         try{
             categoryService.createCategory(categoryName);
             return new ResponseEntity<String>("Category \""+ categoryName +"\" added succesful!", HttpStatus.OK);
+        }
+        catch(ConstraintViolationException e){
+            List<InvalidField> fieldsViolated = new LinkedList<>();
+            for(ConstraintViolation<?> cv : e.getConstraintViolations()){
+                fieldsViolated.add(new InvalidField(cv.getInvalidValue(), cv.getMessage()));
+            }
+            return new ResponseEntity<List<InvalidField>>(fieldsViolated, HttpStatus.BAD_REQUEST);
         }
         catch(CategoryAlreadyExistsException e){
             return new ResponseEntity<String>("Category \"" + categoryName + "\" already exists!", HttpStatus.BAD_REQUEST);
@@ -41,10 +53,17 @@ public class CategoryController {
     }//create
 
     @DeleteMapping
-    public ResponseEntity<String> delete(@RequestParam(value = "cName") String categoryName){
+    public ResponseEntity<?> delete(@RequestParam(value = "cName") String categoryName){
         try{
             categoryService.deleteCategory(categoryName);
             return new ResponseEntity<String>("Category \""+ categoryName +"\" deleted succesful!", HttpStatus.OK);
+        }
+        catch(ConstraintViolationException e){
+            List<InvalidField> fieldsViolated = new LinkedList<>();
+            for(ConstraintViolation<?> cv : e.getConstraintViolations()){
+                fieldsViolated.add(new InvalidField(cv.getInvalidValue(), cv.getMessage()));
+            }
+            return new ResponseEntity<List<InvalidField>>(fieldsViolated, HttpStatus.BAD_REQUEST);
         }
         catch(CategoryNotFoundException e){
             return new ResponseEntity<String>("Category \"" + categoryName + "\" not found!", HttpStatus.BAD_REQUEST);

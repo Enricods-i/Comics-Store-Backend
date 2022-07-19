@@ -1,8 +1,10 @@
 package im.enricods.ComicsStore.controllers;
 
+import java.util.LinkedList;
 import java.util.List;
 
-import javax.validation.Valid;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,6 +23,7 @@ import im.enricods.ComicsStore.exceptions.CategoryNotFoundException;
 import im.enricods.ComicsStore.exceptions.CollectionAlreadyExistsException;
 import im.enricods.ComicsStore.exceptions.CollectionNotFoundException;
 import im.enricods.ComicsStore.services.CollectionService;
+import im.enricods.ComicsStore.utils.InvalidField;
 
 @RestController
 @RequestMapping(path = "/collections")
@@ -30,8 +33,18 @@ public class CollectionController {
     private CollectionService collectionService;
 
     @GetMapping(path = "/byName")
-    public List<Collection> getByName(@RequestParam(value = "search") String collectionName, @RequestParam(value = "pageNumber", defaultValue = "0") int pageNumber, @RequestParam(value = "pageSize", defaultValue = "10") int pageSize, @RequestParam(value = "sortBy", defaultValue = "name") String sortBy){
-        return collectionService.showCollectionsByName(collectionName, pageNumber, pageSize, sortBy);
+    public ResponseEntity<?> getByName(@RequestParam(value = "search") String collectionName, @RequestParam(value = "pageNumber", defaultValue = "0") int pageNumber, @RequestParam(value = "pageSize", defaultValue = "10") int pageSize, @RequestParam(value = "sortBy", defaultValue = "name") String sortBy){
+        try{
+            List<Collection> result = collectionService.showCollectionsByName(collectionName, pageNumber, pageSize, sortBy);
+            return new ResponseEntity<List<Collection>>(result, HttpStatus.OK);
+        }
+        catch(ConstraintViolationException e){
+            List<InvalidField> fieldsViolated = new LinkedList<>();
+            for(ConstraintViolation<?> cv : e.getConstraintViolations()){
+                fieldsViolated.add(new InvalidField(cv.getInvalidValue(), cv.getMessage()));
+            }
+            return new ResponseEntity<List<InvalidField>>(fieldsViolated, HttpStatus.BAD_REQUEST);
+        }
     }//getByName
 
     @GetMapping(path = "/byCategory")
@@ -39,6 +52,13 @@ public class CollectionController {
         try{
             List<Collection> result = collectionService.showCollectionsByCategory(categoryName, pageNumber, pageSize, sortBy);
             return new ResponseEntity<List<Collection>>(result, HttpStatus.OK);
+        }
+        catch(ConstraintViolationException e){
+            List<InvalidField> fieldsViolated = new LinkedList<>();
+            for(ConstraintViolation<?> cv : e.getConstraintViolations()){
+                fieldsViolated.add(new InvalidField(cv.getInvalidValue(), cv.getMessage()));
+            }
+            return new ResponseEntity<List<InvalidField>>(fieldsViolated, HttpStatus.BAD_REQUEST);
         }
         catch(CategoryNotFoundException e){
             return new ResponseEntity<String>("Category \""+categoryName+"\" not found!",HttpStatus.BAD_REQUEST);
@@ -51,16 +71,30 @@ public class CollectionController {
             List<Collection> result = collectionService.showCollectionsByAuthor(authorName, pageNumber, pageSize, sortBy);
             return new ResponseEntity<List<Collection>>(result, HttpStatus.OK);
         }
+        catch(ConstraintViolationException e){
+            List<InvalidField> fieldsViolated = new LinkedList<>();
+            for(ConstraintViolation<?> cv : e.getConstraintViolations()){
+                fieldsViolated.add(new InvalidField(cv.getInvalidValue(), cv.getMessage()));
+            }
+            return new ResponseEntity<List<InvalidField>>(fieldsViolated, HttpStatus.BAD_REQUEST);
+        }
         catch(AuthorNotFoundException e){
             return new ResponseEntity<String>("Author \""+authorName+"\" not found!",HttpStatus.BAD_REQUEST);
         }
     }//getByAuthor
 
     @PostMapping
-    public ResponseEntity<String> create(@RequestBody @Valid Collection collection){
+    public ResponseEntity<?> create(@RequestBody Collection collection){
         try{
             collectionService.addCollection(collection);
             return new ResponseEntity<String>("Collection \""+collection.getName()+"\" added successful!", HttpStatus.OK);
+        }
+        catch(ConstraintViolationException e){
+            List<InvalidField> fieldsViolated = new LinkedList<>();
+            for(ConstraintViolation<?> cv : e.getConstraintViolations()){
+                fieldsViolated.add(new InvalidField(cv.getInvalidValue(), cv.getMessage()));
+            }
+            return new ResponseEntity<List<InvalidField>>(fieldsViolated, HttpStatus.BAD_REQUEST);
         }
         catch(CollectionAlreadyExistsException e){
             return new ResponseEntity<String>("Collection \"" + collection.getName() + "\" already exists!",HttpStatus.BAD_REQUEST);
@@ -68,10 +102,17 @@ public class CollectionController {
     }//create
 
     @PutMapping
-    public ResponseEntity<String> update(@RequestBody @Valid Collection collection){
+    public ResponseEntity<?> update(@RequestBody Collection collection){
         try{
             collectionService.updateCollection(collection);
             return new ResponseEntity<String>("Collection "+ collection.getName()  +" updated successful!", HttpStatus.OK);
+        }
+        catch(ConstraintViolationException e){
+            List<InvalidField> fieldsViolated = new LinkedList<>();
+            for(ConstraintViolation<?> cv : e.getConstraintViolations()){
+                fieldsViolated.add(new InvalidField(cv.getInvalidValue(), cv.getMessage()));
+            }
+            return new ResponseEntity<List<InvalidField>>(fieldsViolated, HttpStatus.BAD_REQUEST);
         }
         catch(CollectionNotFoundException e){
             return new ResponseEntity<String>("Collection "+ collection.getName()  +" not found!", HttpStatus.BAD_REQUEST);
@@ -79,10 +120,17 @@ public class CollectionController {
     }//update
 
     @PutMapping(path = "/bindCategory")
-    public ResponseEntity<String> bindCategory(@RequestParam(value = "cllctn") String collectionName, @RequestParam(value = "ctgr") String categoryName){
+    public ResponseEntity<?> bindCategory(@RequestParam(value = "cllctn") String collectionName, @RequestParam(value = "ctgr") String categoryName){
         try{
             collectionService.bindCategoryToCollection(categoryName, collectionName);
             return new ResponseEntity<String>("Collection "+ collectionName  +" binded to "+ categoryName, HttpStatus.OK);
+        }
+        catch(ConstraintViolationException e){
+            List<InvalidField> fieldsViolated = new LinkedList<>();
+            for(ConstraintViolation<?> cv : e.getConstraintViolations()){
+                fieldsViolated.add(new InvalidField(cv.getInvalidValue(), cv.getMessage()));
+            }
+            return new ResponseEntity<List<InvalidField>>(fieldsViolated, HttpStatus.BAD_REQUEST);
         }
         catch(CategoryNotFoundException e){
             return new ResponseEntity<String>("Category \"" + categoryName + "\" not found!", HttpStatus.BAD_REQUEST);

@@ -12,31 +12,29 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PositiveOrZero;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-@Data
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@Entity
-@Table(name = "comic_in_purchase")
+@Data @EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@Entity @Table(name = "comic_in_purchase")
 public class ComicInPurchase {
     
+    @NotNull @Min(value = 0)
     @EqualsAndHashCode.Include
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY) @Column(name = "id")
     private long id;
 
     @JsonIgnore
-    @ManyToOne
-    @JoinColumn(name = "purchase_id")
+    @ManyToOne @JoinColumn(name = "purchase_id")
     private Purchase purchase;
 
-    @ManyToOne
-    @JoinColumn(name = "comic_id")
+    @ManyToOne @JoinColumn(name = "comic_id")
     private Comic comic;
 
     @ManyToMany
@@ -47,9 +45,11 @@ public class ComicInPurchase {
     )
     private Set<Discount> discountsApplied;
 
+    @NotNull @PositiveOrZero
     @Column(name = "price", nullable = false)
-    private float price;
+    private float purchasePrice;
 
+    @NotNull @Min(value = 1)
     @Column(name = "quantity", nullable = false)
     private int quantity;
 

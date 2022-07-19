@@ -15,6 +15,11 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Past;
+import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -24,45 +29,42 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-@Data
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@Entity
-@Table(name = "personal_data")
+@Data @EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@Entity @Table(name = "personal_data")
 public class User {
 
+    @NotNull @Min(value = 0)
     @EqualsAndHashCode.Include
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY) @Column(name = "id", nullable = false)
     private long id;
-
     
+    @NotNull @Size(min = 2, max = 20)
     @Column(name = "first_name", nullable = false, length = 20)
     private String firstName;
 
-    
+    @NotNull @Size(min = 2, max = 20)
     @Column(name = "last_name", nullable = false, length = 20)    
     private String lastName;
 
+    @NotNull @Past
     @Temporal(TemporalType.DATE)
     @Column(name = "birth_date", nullable = false)
     private Date birthDate;
 
-    
+    @NotNull @Email
     @Column(name = "email", nullable = false, unique = true, length = 50)
     private String email;
 
-    
+    @Size(max = 20)
     @Column(name = "phone_number", length = 20)
     private String phoneNumber;
 
-    
+    @Size(max = 20)
     @Column(name = "city", length = 20)
     private String city;
 
     @JsonIgnore
-    @OneToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "cart_id")
+    @OneToOne(cascade = CascadeType.PERSIST) @JoinColumn(name = "cart_id")
     private Cart cart;
 
     public void addCart(Cart cart){
@@ -84,15 +86,11 @@ public class User {
     private Set<Purchase> purchases;
 
     @JsonIgnore
-    @CreationTimestamp
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "created_at", nullable = false)
+    @CreationTimestamp @Temporal(TemporalType.TIMESTAMP) @Column(name = "created_at", nullable = false)
     private Date creationDate;
 
     @JsonIgnore
-    @UpdateTimestamp
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "modified_at", nullable = false)
+    @UpdateTimestamp @Temporal(TemporalType.TIMESTAMP) @Column(name = "modified_at", nullable = false)
     private Date dateOfLastModification;
 
 }//User

@@ -3,9 +3,13 @@ package im.enricods.ComicsStore.services;
 import java.util.List;
 import java.util.Optional;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 
 import im.enricods.ComicsStore.entities.Category;
 import im.enricods.ComicsStore.entities.Collection;
@@ -15,6 +19,7 @@ import im.enricods.ComicsStore.repositories.CategoryRepository;
 
 @Service
 @Transactional
+@Validated
 public class CategoryService {
     
     @Autowired
@@ -28,7 +33,7 @@ public class CategoryService {
     }//showAllCategories
 
 
-    public void createCategory(String categoryName){
+    public void createCategory(@NotNull @Size(min = 1, max = 30) String categoryName){
 
         //verify that Category with the name specified doesn't already exists
         if(categoryRepository.existsById(categoryName))
@@ -42,7 +47,7 @@ public class CategoryService {
     }//createCategory
 
 
-    public void deleteCategory(String categoryName){
+    public void deleteCategory(@NotNull @Size(min = 1, max = 30) String categoryName){
 
         //verify that Category with the name specified already exists
         Optional<Category> resultCategory = categoryRepository.findById(categoryName);

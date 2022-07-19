@@ -15,37 +15,36 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PositiveOrZero;
 
 import org.hibernate.annotations.CreationTimestamp;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-@Data
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@Entity
-@Table(name = "purchase")
+@Data @EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@Entity @Table(name = "purchase")
 public class Purchase {
     
+    @NotNull @Min(value = 0)
     @EqualsAndHashCode.Include
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY) @Column(name = "id")
     private long id;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User buyer; 
 
+    @NotNull @PositiveOrZero
     @Column(name = "total", nullable = false)
     private float total;
 
     @OneToMany(mappedBy = "purchase", cascade = CascadeType.MERGE)
     private Set<ComicInPurchase> purchasedComics;
 
-    @CreationTimestamp
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "created_at", nullable = false)
+    @CreationTimestamp @Temporal(TemporalType.TIMESTAMP) @Column(name = "created_at", nullable = false)
     private Date purchaseTime;
 
 }//Purchase

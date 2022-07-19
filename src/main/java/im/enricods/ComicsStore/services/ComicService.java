@@ -3,6 +3,8 @@ package im.enricods.ComicsStore.services;
 import java.util.List;
 import java.util.Optional;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -71,7 +73,7 @@ public class ComicService {
     }//showComicsInCollectionCreatedByAuthor
 
 
-    public Comic addComic(Comic comic, String collectionName){
+    public Comic addComic(@Valid Comic comic, String collectionName){
 
         //verify that a Collection with collectionName exists
         Optional<Collection> resultCollection = collectionRepository.findById(collectionName);
@@ -98,7 +100,7 @@ public class ComicService {
     }//addComic
 
 
-    public void updateComic(Comic comic){
+    public void updateComic(@Valid Comic comic){
 
         //verify that the Comic exists
         Optional<Comic> resultComic = comicRepository.findById(comic.getId());

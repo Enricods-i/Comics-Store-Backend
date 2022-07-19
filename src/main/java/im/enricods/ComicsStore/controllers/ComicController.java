@@ -1,12 +1,15 @@
 package im.enricods.ComicsStore.controllers;
 
+import java.util.LinkedList;
 import java.util.List;
 
-import javax.validation.Valid;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.TransactionSystemException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -21,6 +24,7 @@ import im.enricods.ComicsStore.exceptions.CollectionNotFoundException;
 import im.enricods.ComicsStore.exceptions.ComicAlreadyExistsException;
 import im.enricods.ComicsStore.exceptions.ComicNotFoundException;
 import im.enricods.ComicsStore.services.ComicService;
+import im.enricods.ComicsStore.utils.InvalidField;
 
 @RestController
 @RequestMapping(path = "/comics")
@@ -55,7 +59,7 @@ public class ComicController {
     }//getComicsInCollectionsCreatedByAuthor
 
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody @Valid Comic comic, @RequestParam(value = "cllctn") String collectionName){
+    public ResponseEntity<?> create(@RequestBody Comic comic, @RequestParam(value = "cllctn") String collectionName){
         try{
             Comic result = comicService.addComic(comic, collectionName);
             return new ResponseEntity<Comic>(result,HttpStatus.OK);
@@ -63,16 +67,35 @@ public class ComicController {
         catch(CollectionNotFoundException e){
             return new ResponseEntity<String>("Collection \""+collectionName+"\" not found!", HttpStatus.BAD_REQUEST);
         }
+        catch(ConstraintViolationException e){
+            List<InvalidField> fieldsViolated = new LinkedList<>();
+            for(ConstraintViolation<?> cv : e.getConstraintViolations()){
+                fieldsViolated.add(new InvalidField(cv.getInvalidValue(), cv.getMessage()));
+            }
+            return new ResponseEntity<List<InvalidField>>(fieldsViolated, HttpStatus.BAD_REQUEST);
+        }
         catch(ComicAlreadyExistsException e){
             return new ResponseEntity<String>("Comic \""+comic.getNumber()+"\" already exists in collection \""+collectionName+"\" !", HttpStatus.BAD_REQUEST);
         }
     }//create
 
     @PutMapping
-    public ResponseEntity<String> update(@RequestBody @Valid Comic comic){
+    public ResponseEntity<?> update(@RequestBody Comic comic){
         try{
             comicService.updateComic(comic);
             return new ResponseEntity<String>("Comic updated successful!",HttpStatus.OK);
+        }
+        catch(TransactionSystemException e){
+            if(e.getRootCause() instanceof ConstraintViolationException){
+                ConstraintViolationException cve = (ConstraintViolationException)e.getRootCause();
+                List<InvalidField> fieldsViolated = new LinkedList<>();
+                for(ConstraintViolation<?> cv : cve.getConstraintViolations()){
+                    fieldsViolated.add(new InvalidField(cv.getInvalidValue(), cv.getMessage()));
+                }
+                return new ResponseEntity<List<InvalidField>>(fieldsViolated, HttpStatus.BAD_REQUEST);
+            }//if
+            else
+                return new ResponseEntity<String>("SERVER ERROR", HttpStatus.INTERNAL_SERVER_ERROR);
         }
         catch(ComicNotFoundException e){
             return new ResponseEntity<String>("Comic \""+comic.getId()+"\" not found!", HttpStatus.BAD_REQUEST);

@@ -2,9 +2,12 @@ package im.enricods.ComicsStore.services;
 
 import java.util.Optional;
 
+import javax.validation.constraints.Min;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 
 import im.enricods.ComicsStore.entities.Cart;
 import im.enricods.ComicsStore.entities.CartContent;
@@ -24,6 +27,7 @@ import im.enricods.ComicsStore.repositories.UserRepository;
 
 @Service
 @Transactional
+@Validated
 public class CartService {
     
     @Autowired
@@ -40,7 +44,7 @@ public class CartService {
 
 
     @Transactional(readOnly = true)
-    public Cart getCartByUser(long userId){
+    public Cart getCartByUser(@Min(1) long userId){
 
         //verify that User with Id specified exists
         Optional<User> resultUser = userRepository.findById(userId);
@@ -57,7 +61,7 @@ public class CartService {
     }//getUsersCart
 
 
-    public void addComicToUsersCart(long userId, long comicId, int quantity){
+    public void addComicToUsersCart(@Min(1) long userId, @Min(1) long comicId, @Min(1) int quantity){
 
         //verify that a User with userId exists
         Optional<User> resultUser = userRepository.findById(userId);
@@ -95,7 +99,7 @@ public class CartService {
     }//addComicToUsersCart
 
 
-    public void deleteComicFromUsersCart(long userId, long comicId){
+    public void deleteComicFromUsersCart(@Min(1) long userId, @Min(1) long comicId){
 
         //verify that User with userId exists
         Optional<User> resultUser = userRepository.findById(userId);
@@ -124,7 +128,7 @@ public class CartService {
     }//deleteComicFromUsersCart
 
 
-    public void updateComicQuantity(long userId, long comicId, int newQuantity){
+    public void updateComicQuantity(@Min(1) long userId, @Min(1) long comicId, @Min(1) int newQuantity){
 
         //verify that User with userId exists
         Optional<User> resultUser = userRepository.findById(userId);

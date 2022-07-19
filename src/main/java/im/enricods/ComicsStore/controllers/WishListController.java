@@ -1,12 +1,15 @@
 package im.enricods.ComicsStore.controllers;
 
+import java.util.LinkedList;
 import java.util.List;
 
-import javax.validation.Valid;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.TransactionSystemException;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,6 +26,7 @@ import im.enricods.ComicsStore.exceptions.UserNotFoundException;
 import im.enricods.ComicsStore.exceptions.WishListAlreadyExistsException;
 import im.enricods.ComicsStore.exceptions.WishListNotFoundException;
 import im.enricods.ComicsStore.services.WishListService;
+import im.enricods.ComicsStore.utils.InvalidField;
 
 @RestController
 @RequestMapping(path = "/wishLists")
@@ -54,13 +58,20 @@ public class WishListController {
     }//getByUser
 
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody @Valid WishList wishList, @RequestParam("usr") long userId){
+    public ResponseEntity<?> create(@RequestBody WishList wishList, @RequestParam("usr") long userId){
         try{
             WishList result = wishListService.createUsersList(userId, wishList);
             return new ResponseEntity<WishList>(result, HttpStatus.OK);
         }
         catch(UserNotFoundException e){
             return new ResponseEntity<String>("User "+userId+" not found!", HttpStatus.BAD_REQUEST);
+        }
+        catch(ConstraintViolationException e){
+            List<InvalidField> fieldsViolated = new LinkedList<>();
+            for(ConstraintViolation<?> cv : e.getConstraintViolations()){
+                fieldsViolated.add(new InvalidField(cv.getInvalidValue(), cv.getMessage()));
+            }
+            return new ResponseEntity<List<InvalidField>>(fieldsViolated, HttpStatus.BAD_REQUEST);
         }
         catch(WishListAlreadyExistsException e){
             return new ResponseEntity<String>("WishList "+wishList.getName()+" already exists!", HttpStatus.BAD_REQUEST);
@@ -85,13 +96,25 @@ public class WishListController {
     }//delete
 
     @PutMapping
-    public ResponseEntity<String> update(@RequestBody @Valid WishList wishList, @RequestParam("usr") long userId){
+    public ResponseEntity<?> update(@RequestBody WishList wishList, @RequestParam("usr") long userId){
         try{
             wishListService.updateWishList(userId, wishList);
             return new ResponseEntity<String>("WishList "+wishList.getName()+" updated successful!", HttpStatus.OK);
         }
         catch(UserNotFoundException e){
             return new ResponseEntity<String>("User "+userId+" not found!", HttpStatus.BAD_REQUEST);
+        }
+        catch(TransactionSystemException e){
+            if(e.getRootCause() instanceof ConstraintViolationException){
+                ConstraintViolationException cve = (ConstraintViolationException)e.getRootCause();
+                List<InvalidField> fieldsViolated = new LinkedList<>();
+                for(ConstraintViolation<?> cv : cve.getConstraintViolations()){
+                    fieldsViolated.add(new InvalidField(cv.getInvalidValue(), cv.getMessage()));
+                }
+                return new ResponseEntity<List<InvalidField>>(fieldsViolated, HttpStatus.BAD_REQUEST);
+            }//if
+            else
+                return new ResponseEntity<String>("SERVER ERROR", HttpStatus.INTERNAL_SERVER_ERROR);
         }
         catch(WishListNotFoundException e){
             return new ResponseEntity<String>("WishList "+wishList.getName()+" not found!", HttpStatus.BAD_REQUEST);

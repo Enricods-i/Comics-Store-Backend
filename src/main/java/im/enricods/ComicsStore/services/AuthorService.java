@@ -3,12 +3,17 @@ package im.enricods.ComicsStore.services;
 import java.util.List;
 import java.util.Optional;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 
 import im.enricods.ComicsStore.entities.Author;
 import im.enricods.ComicsStore.entities.Comic;
@@ -18,6 +23,7 @@ import im.enricods.ComicsStore.repositories.AuthorRepository;
 
 @Service
 @Transactional
+@Validated
 public class AuthorService {
     
     @Autowired
@@ -33,7 +39,7 @@ public class AuthorService {
     }//showAllAuthors
 
 
-    public void addAuthor(Author author){
+    public void addAuthor(@Valid Author author){
 
         //verify that Author specified doesn't already exists
         if(authorRepository.existsById(author.getName()))
@@ -45,7 +51,7 @@ public class AuthorService {
     }//addAuthor
 
 
-    public void deleteAuthor(String authorName){
+    public void deleteAuthor(@NotNull @Size(min = 1, max= 20)String authorName){
 
         //verify that Author with authorName specified exists
         Optional<Author> resultAuthor = authorRepository.findById(authorName);
@@ -63,12 +69,15 @@ public class AuthorService {
     }//deleteAuthor
 
 
-    public void updateAuthor(Author author){
+    public void updateAuthor(@Valid Author author){
 
         //verify that Author specified exists
-        if(!authorRepository.existsById(author.getName()))
+        Optional<Author> resultAuthor = authorRepository.findById(author.getName());
+        if(!resultAuthor.isPresent())
             throw new AuthorNotFoundException();
         
+        author.setCreationDate(resultAuthor.get().getCreationDate());
+        System.out.println(author);
         //merge
         authorRepository.save(author);
 

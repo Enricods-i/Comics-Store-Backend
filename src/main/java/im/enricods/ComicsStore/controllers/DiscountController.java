@@ -1,8 +1,10 @@
 package im.enricods.ComicsStore.controllers;
 
+import java.util.LinkedList;
 import java.util.List;
 
-import javax.validation.Valid;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,6 +22,7 @@ import im.enricods.ComicsStore.exceptions.ComicNotFoundException;
 import im.enricods.ComicsStore.exceptions.DateWrongRangeException;
 import im.enricods.ComicsStore.exceptions.DiscountNotFoundException;
 import im.enricods.ComicsStore.services.DiscountService;
+import im.enricods.ComicsStore.utils.InvalidField;
 
 @RestController
 @RequestMapping(path = "/discounts")
@@ -39,10 +42,17 @@ public class DiscountController {
     }//getActives
 
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody @Valid Discount discount){
+    public ResponseEntity<?> create(@RequestBody Discount discount){
         try{
             Discount result = discountService.addDiscount(discount);
             return new ResponseEntity<Discount>(result,HttpStatus.OK);
+        }
+        catch(ConstraintViolationException e){
+            List<InvalidField> fieldsViolated = new LinkedList<>();
+            for(ConstraintViolation<?> cv : e.getConstraintViolations()){
+                fieldsViolated.add(new InvalidField(cv.getInvalidValue(), cv.getMessage()));
+            }
+            return new ResponseEntity<List<InvalidField>>(fieldsViolated, HttpStatus.BAD_REQUEST);
         }
         catch(DateWrongRangeException e){
             return new ResponseEntity<String>("Activation date must be previous Expiration date in discount",HttpStatus.BAD_REQUEST);

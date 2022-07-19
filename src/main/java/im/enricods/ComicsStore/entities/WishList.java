@@ -15,6 +15,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -23,24 +26,21 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-@Data
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@Entity
-@Table(name = "wish_list")
+@Data @EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@Entity @Table(name = "wish_list")
 public class WishList {
     
+    @NotNull @Min(value = 0)
     @EqualsAndHashCode.Include
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY) @Column(name = "id")
     private long id;
 
+    @NotNull @Size(max = 50)
     @Column(name = "name", nullable = false, length = 50)
     private String name;
 
     @JsonIgnore
-    @ManyToOne
-    @JoinColumn(name = "user_id")
+    @ManyToOne @JoinColumn(name = "user_id")
     private User owner;
 
     @JsonIgnore
@@ -55,9 +55,7 @@ public class WishList {
     private boolean notifications;
 
     @JsonIgnore
-    @CreationTimestamp
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "created_at", nullable = false)
+    @CreationTimestamp @Temporal(TemporalType.TIMESTAMP) @Column(name = "created_at", nullable = false)
     private Date creationDate;
 
 }//WishList

@@ -3,6 +3,8 @@ package im.enricods.ComicsStore.services;
 import java.util.List;
 import java.util.Optional;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -59,7 +61,7 @@ public class WishListService {
     }//showAllUsersLists
 
 
-    public WishList createUsersList(long userId, WishList wishList){
+    public WishList createUsersList(long userId, @Valid WishList wishList){
 
         //verify that User specified by userId exists
         Optional<User> resultUser = userRepository.findById(userId);
@@ -159,7 +161,7 @@ public class WishListService {
     }//addComicToList
 
 
-    public void updateWishList(long userId, WishList wishList){
+    public void updateWishList(long userId, @Valid WishList wishList){
 
         //verify that User specified by userId exists
         Optional<User> resultUser = userRepository.findById(userId);

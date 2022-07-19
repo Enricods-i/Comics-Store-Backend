@@ -4,6 +4,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -49,7 +51,7 @@ public class DiscountService {
     }//getAllDiscounts
 
 
-    public Discount addDiscount(Discount discount){
+    public Discount addDiscount(@Valid Discount discount){
 
         //verify that discount's ActivationDate is previous discount's ExpirationDate
         if ( discount.getActivationDate().compareTo(discount.getExpirationDate()) >= 0 )

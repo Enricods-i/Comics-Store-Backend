@@ -13,6 +13,8 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -21,16 +23,13 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-@Data
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@Entity
-@Table(name = "cart_data")
+@Data @EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@Entity @Table(name = "cart_data")
 public class Cart {
 
+    @NotNull @Min(value = 0)
     @EqualsAndHashCode.Include
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY) @Column(name = "id")
     private long id;
 
     @JsonIgnore
@@ -40,13 +39,12 @@ public class Cart {
     @OneToMany(mappedBy = "cart")
     private Set<CartContent> content;
     
+    @NotNull @Min(value = 0)
     @Column(name = "size", nullable = false)
     private int size;
     
     @JsonIgnore
-    @UpdateTimestamp
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "modified_at", nullable = false)
+    @UpdateTimestamp @Temporal(TemporalType.TIMESTAMP) @Column(name = "modified_at", nullable = false)
     private Date dateOfLastModification;
 
 }//Cart

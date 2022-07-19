@@ -3,6 +3,10 @@ package im.enricods.ComicsStore.services;
 import java.util.List;
 import java.util.Optional;
 
+import javax.validation.Valid;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Size;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -10,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 
 import im.enricods.ComicsStore.entities.Author;
 import im.enricods.ComicsStore.entities.Category;
@@ -24,6 +29,7 @@ import im.enricods.ComicsStore.repositories.CollectionRepository;
 
 @Service
 @Transactional
+@Validated
 public class CollectionService {
 
     @Autowired
@@ -36,7 +42,7 @@ public class CollectionService {
     private AuthorRepository authorRepository;
     
     @Transactional(readOnly = true)
-    public List<Collection> showCollectionsByName(String name, int pageNumber, int pageSize, String sortBy){
+    public List<Collection> showCollectionsByName(@Size(min = 1, max = 50) String name, @Min(0) int pageNumber, @Min(0) int pageSize, String sortBy){
 
         Pageable paging = PageRequest.of(pageNumber, pageSize, Sort.by(sortBy));
         Page<Collection> pagedResult = collectionRepository.findByNameContaining(name,paging);
@@ -46,7 +52,7 @@ public class CollectionService {
 
 
     @Transactional(readOnly = true)
-    public List<Collection> showCollectionsByCategory(String categoryName, int pageNumber, int pageSize, String sortBy){
+    public List<Collection> showCollectionsByCategory(@Size(min = 1, max = 30) String categoryName, @Min(0) int pageNumber, @Min(0) int pageSize, String sortBy){
 
         //verify that Category specified by categoryName exists
         Optional<Category> result = categoryRepository.findById(categoryName);
@@ -61,7 +67,7 @@ public class CollectionService {
 
 
     @Transactional(readOnly = true)
-    public List<Collection> showCollectionsByAuthor(String authorName, int pageNumber, int pageSize, String sortBy){
+    public List<Collection> showCollectionsByAuthor(@Size(min = 1, max = 20) String authorName, @Min(0) int pageNumber, @Min(0) int pageSize, String sortBy){
 
         //verify that Author specified by authorName exists
         Optional<Author> resultAuthor = authorRepository.findById(authorName);
@@ -74,7 +80,7 @@ public class CollectionService {
         
     }//showCollectionsByAuthor
 
-    public void addCollection(Collection collection){
+    public void addCollection(@Valid Collection collection){
 
         //verify that Collection specified doesn't already exists
         if(collectionRepository.existsById(collection.getName()))
@@ -85,7 +91,7 @@ public class CollectionService {
     }//addCollection
 
 
-    public void updateCollection(Collection collection){
+    public void updateCollection(@Valid Collection collection){
 
         //verify that Collection specified already exists
         Optional<Collection> resultCollection = collectionRepository.findById(collection.getName());
@@ -101,7 +107,7 @@ public class CollectionService {
     }//updateCollection
 
     
-    public void bindCategoryToCollection(String categoryName, String collectionName){
+    public void bindCategoryToCollection( @Size(min = 1, max = 30) String categoryName,  @Size(min = 1, max = 50) String collectionName){
 
         //verify that Category specified by categoryName exists
         Optional<Category> resultCategory = categoryRepository.findById(categoryName);

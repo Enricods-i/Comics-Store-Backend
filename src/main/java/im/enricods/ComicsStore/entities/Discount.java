@@ -12,6 +12,9 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -22,44 +25,45 @@ import lombok.Getter;
 import lombok.Setter;
 
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@Entity
-@Table(name = "discount")
+@Entity @Table(name = "discount")
 public class Discount {
     
-    @EqualsAndHashCode.Include
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    @Getter private long id;
+    @NotNull @Min(value = 0)
+    @Getter @EqualsAndHashCode.Include  
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY) @Column(name = "id", nullable = false)
+    private long id;
 
+    @NotNull @Min(value = 1) @Max(value = 100)
+    @Getter
     @Column(name = "percentage", nullable = false)
-    @Getter private int percentage;
+    private int percentage;
 
-    @Temporal(TemporalType.DATE)
-    @Column(name = "activation_date", nullable = false)
-    @Getter private Date activationDate;
+    @Getter
+    @Temporal(TemporalType.DATE) @Column(name = "activation_date", nullable = false)
+    private Date activationDate;
 
-    @Temporal(TemporalType.DATE)
-    @Column(name = "expiration_date", nullable = false)
-    @Getter private Date expirationDate;
+    @Getter
+    @Temporal(TemporalType.DATE) @Column(name = "expiration_date", nullable = false)
+    private Date expirationDate;
 
+    @Getter @Setter 
     @JsonIgnore
     @ManyToMany(mappedBy = "discounts")
-    @Getter @Setter private Set<Comic> comicsInPromotion;
+    private Set<Comic> comicsInPromotion;
 
     public void addPromotion(Comic comic){
         comic.getDiscounts().add(this);
         comicsInPromotion.add(comic);
     }//addPromotion
     
+    @Getter @Setter 
     @JsonIgnore
     @ManyToMany(mappedBy = "discountsApplied")
-    @Getter @Setter private Set<ComicInPurchase> discountedComics;
+    private Set<ComicInPurchase> discountedComics;
 
+    @Getter
     @JsonIgnore
-    @CreationTimestamp
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "created_at", nullable = false)
-    @Getter private Date creationDate;
+    @CreationTimestamp @Temporal(TemporalType.TIMESTAMP) @Column(name = "created_at", nullable = false)
+    private Date creationDate;
 
 }//Discount

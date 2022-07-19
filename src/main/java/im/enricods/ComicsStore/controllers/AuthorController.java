@@ -1,8 +1,10 @@
 package im.enricods.ComicsStore.controllers;
 
+import java.util.LinkedList;
 import java.util.List;
 
-import javax.validation.Valid;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,6 +22,7 @@ import im.enricods.ComicsStore.entities.Author;
 import im.enricods.ComicsStore.exceptions.AuthorAlreadyExistsException;
 import im.enricods.ComicsStore.exceptions.AuthorNotFoundException;
 import im.enricods.ComicsStore.services.AuthorService;
+import im.enricods.ComicsStore.utils.InvalidField;
 
 @RestController
 @RequestMapping(path = "/authors")
@@ -34,10 +37,17 @@ public class AuthorController {
     }//getAll
 
     @PostMapping
-    public ResponseEntity<String> create(@RequestBody @Valid Author author){
+    public ResponseEntity<?> create(@RequestBody Author author){
         try{
             authorService.addAuthor(author);
             return new ResponseEntity<String>("Author \""+ author.getName()  +"\" added succesful!", HttpStatus.OK);
+        }
+        catch(ConstraintViolationException e){
+            List<InvalidField> fieldsViolated = new LinkedList<>();
+            for(ConstraintViolation<?> cv : e.getConstraintViolations()){
+                fieldsViolated.add(new InvalidField(cv.getInvalidValue(), cv.getMessage()));
+            }
+            return new ResponseEntity<List<InvalidField>>(fieldsViolated, HttpStatus.BAD_REQUEST);
         }
         catch(AuthorAlreadyExistsException e){
             return new ResponseEntity<String>("Author with name \"" + author.getName() + "\" already exist!", HttpStatus.BAD_REQUEST);
@@ -45,10 +55,17 @@ public class AuthorController {
     }//create
 
     @PutMapping
-    public ResponseEntity<String> update(@RequestBody @Valid Author author){
+    public ResponseEntity<?> update(@RequestBody Author author){
         try{
             authorService.updateAuthor(author);
             return new ResponseEntity<String>("Author with name \""+ author.getName()  +"\" updated succesful!", HttpStatus.OK);
+        }
+        catch(ConstraintViolationException e){
+            List<InvalidField> fieldsViolated = new LinkedList<>();
+            for(ConstraintViolation<?> cv : e.getConstraintViolations()){
+                fieldsViolated.add(new InvalidField(cv.getInvalidValue(), cv.getMessage()));
+            }
+            return new ResponseEntity<List<InvalidField>>(fieldsViolated, HttpStatus.BAD_REQUEST);
         }
         catch(AuthorNotFoundException e){
             return new ResponseEntity<String>("Author with name \"" + author.getName() + "\" not found!", HttpStatus.BAD_REQUEST);
@@ -56,10 +73,17 @@ public class AuthorController {
     }//update
 
     @DeleteMapping
-    public ResponseEntity<String> delete(@RequestParam(value = "authName") String authorName){
+    public ResponseEntity<?> delete(@RequestParam(value = "auth") String authorName){
         try{
             authorService.deleteAuthor(authorName);
             return new ResponseEntity<String>("Author \""+ authorName + "\" deleted succesful!", HttpStatus.OK);
+        }
+        catch(ConstraintViolationException e){
+            List<InvalidField> fieldsViolated = new LinkedList<>();
+            for(ConstraintViolation<?> cv : e.getConstraintViolations()){
+                fieldsViolated.add(new InvalidField(cv.getInvalidValue(), cv.getMessage()));
+            }
+            return new ResponseEntity<List<InvalidField>>(fieldsViolated, HttpStatus.BAD_REQUEST);
         }
         catch(AuthorNotFoundException e){
             return new ResponseEntity<String>("Author with name \"" + authorName + "\" not found!", HttpStatus.BAD_REQUEST);

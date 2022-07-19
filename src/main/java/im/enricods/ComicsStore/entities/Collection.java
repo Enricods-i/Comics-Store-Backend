@@ -16,6 +16,9 @@ import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -24,20 +27,20 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-@Data
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@Entity
-@Table(name = "collection")
+@Data @EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@Entity @Table(name = "collection")
 public class Collection {
     
+    @NotNull @Size(min = 1, max = 50)
     @EqualsAndHashCode.Include
-    @Id
-    @Column(name = "name", length = 50)
+    @Id @Column(name = "name", length = 50)
     private String name;
 
+    @Size(min = 1, max = 20)
     @Column(name = "image", length = 20)
     private String image;
 
+    @NotNull @Positive
     @Column(name = "price", nullable = false)
     private float price;
 
@@ -47,6 +50,7 @@ public class Collection {
     @Column(name = "color")
     private boolean color;
    
+    @Size(max = 1000)
     @Column(name = "description", length = 1000)
     private String description;
 
@@ -75,9 +79,7 @@ public class Collection {
     }//bindCategory
 
     @JsonIgnore
-    @CreationTimestamp
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "created_at", nullable = false)
+    @CreationTimestamp @Temporal(TemporalType.TIMESTAMP) @Column(name = "created_at", nullable = false)
     private Date creationDate;
 
 }//Collection
