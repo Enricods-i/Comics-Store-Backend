@@ -32,8 +32,18 @@ public class DiscountController {
     private DiscountService discountService;
 
     @GetMapping
-    public List<Discount> getAll(@RequestParam(value = "pageNumber", defaultValue = "0") int pageNumber, @RequestParam(value = "pageSize", defaultValue = "10") int pageSize, @RequestParam(value = "sortBy", defaultValue = "activationDate") String sortBy){
-        return discountService.getAllDiscounts(pageNumber, pageSize, sortBy);
+    public ResponseEntity<?> getAll(@RequestParam(value = "pageNumber", defaultValue = "0") int pageNumber, @RequestParam(value = "pageSize", defaultValue = "10") int pageSize, @RequestParam(value = "sortBy", defaultValue = "activationDate") String sortBy){
+        try{
+            List<Discount> result = discountService.getAllDiscounts(pageNumber, pageSize, sortBy);
+            return new ResponseEntity<List<Discount>>(result, HttpStatus.OK);
+        }
+        catch(ConstraintViolationException e){
+            List<InvalidField> fieldsViolated = new LinkedList<>();
+            for(ConstraintViolation<?> cv : e.getConstraintViolations()){
+                fieldsViolated.add(new InvalidField(cv.getInvalidValue(), cv.getMessage()));
+            }
+            return new ResponseEntity<List<InvalidField>>(fieldsViolated, HttpStatus.BAD_REQUEST);
+        }
     }//getAll
 
     @GetMapping(path = "/actives")
@@ -60,10 +70,17 @@ public class DiscountController {
     }//create
 
     @PutMapping(path = "/addPromotion")
-    public ResponseEntity<String> createPromotion(@RequestParam(value = "dsnt") long discountId, @RequestParam(value = "cmc") long comicId){
+    public ResponseEntity<?> createPromotion(@RequestParam(value = "dsnt") long discountId, @RequestParam(value = "cmc") long comicId){
         try{
             discountService.addPromotion(discountId, comicId);
             return new ResponseEntity<String>("Comic \""+comicId+"\" is now in discount \""+discountId+"\".",HttpStatus.OK);
+        }
+        catch(ConstraintViolationException e){
+            List<InvalidField> fieldsViolated = new LinkedList<>();
+            for(ConstraintViolation<?> cv : e.getConstraintViolations()){
+                fieldsViolated.add(new InvalidField(cv.getInvalidValue(), cv.getMessage()));
+            }
+            return new ResponseEntity<List<InvalidField>>(fieldsViolated, HttpStatus.BAD_REQUEST);
         }
         catch(DiscountNotFoundException e){
             return new ResponseEntity<String>("Discount \""+discountId+"\" not found", HttpStatus.BAD_REQUEST);

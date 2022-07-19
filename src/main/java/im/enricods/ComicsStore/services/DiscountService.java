@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -13,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 
 import im.enricods.ComicsStore.entities.Comic;
 import im.enricods.ComicsStore.entities.Discount;
@@ -24,6 +26,7 @@ import im.enricods.ComicsStore.repositories.DiscountRepository;
 
 @Service
 @Transactional
+@Validated
 public class DiscountService {
     
     @Autowired
@@ -42,7 +45,7 @@ public class DiscountService {
 
 
     @Transactional(readOnly = true)
-    public List<Discount> getAllDiscounts(int pageNumber, int pageSize, String sortBy){
+    public List<Discount> getAllDiscounts(@Min(0) int pageNumber, @Min(0) int pageSize, String sortBy){
 
         Pageable paging = PageRequest.of(pageNumber, pageSize, Sort.by(sortBy));
         Page<Discount> pagedResult = discountRepository.findAll(paging);
@@ -62,7 +65,7 @@ public class DiscountService {
     }//addDiscount
 
 
-    public void addPromotion(long discountId, long comicId){
+    public void addPromotion(@Min(1) long discountId, @Min(1) long comicId){
 
         //verify that Discount specified by discountId exists
         Optional<Discount> resultDiscount = discountRepository.findById(discountId);

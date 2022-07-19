@@ -18,6 +18,7 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.UpdateTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
@@ -32,7 +33,7 @@ public class Cart {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY) @Column(name = "id")
     private long id;
 
-    @JsonIgnore
+    @JsonIdentityReference(alwaysAsId = true)
     @OneToOne(mappedBy = "cart")
     private User user;
 

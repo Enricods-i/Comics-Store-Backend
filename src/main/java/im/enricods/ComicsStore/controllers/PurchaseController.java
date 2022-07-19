@@ -1,7 +1,11 @@
 package im.enricods.ComicsStore.controllers;
 
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
+
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -19,6 +23,7 @@ import im.enricods.ComicsStore.exceptions.ComicsQuantityUnavaiableException;
 import im.enricods.ComicsStore.exceptions.DateWrongRangeException;
 import im.enricods.ComicsStore.exceptions.UserNotFoundException;
 import im.enricods.ComicsStore.services.PurchaseService;
+import im.enricods.ComicsStore.utils.InvalidField;
 
 @RestController
 @RequestMapping(path = "/purchases")
@@ -28,8 +33,18 @@ public class PurchaseController {
     private PurchaseService purchaseService;
 
     @GetMapping
-    public List<Purchase> getAll(@RequestParam(value = "pageNumber", defaultValue = "0") int pageNumber, @RequestParam(value = "pageSize", defaultValue = "10") int pageSize, @RequestParam(value = "sortBy", defaultValue = "purchaseTime") String sortBy){
-        return purchaseService.getAllPurchases(pageNumber, pageSize, sortBy);
+    public ResponseEntity<?> getAll(@RequestParam(value = "pageNumber", defaultValue = "0") int pageNumber, @RequestParam(value = "pageSize", defaultValue = "10") int pageSize, @RequestParam(value = "sortBy", defaultValue = "purchaseTime") String sortBy){
+        try{
+            List<Purchase> result = purchaseService.getAllPurchases(pageNumber, pageSize, sortBy);
+            return new ResponseEntity<List<Purchase>>(result, HttpStatus.OK);
+        }
+        catch(ConstraintViolationException e){
+            List<InvalidField> fieldsViolated = new LinkedList<>();
+            for(ConstraintViolation<?> cv : e.getConstraintViolations()){
+                fieldsViolated.add(new InvalidField(cv.getInvalidValue(), cv.getMessage()));
+            }
+            return new ResponseEntity<List<InvalidField>>(fieldsViolated, HttpStatus.BAD_REQUEST);
+        }
     }//getAll
 
     @GetMapping(path = "/user")
@@ -37,6 +52,13 @@ public class PurchaseController {
         try{
             List<Purchase> result = purchaseService.getAllUsersPurchases(userId);
             return new ResponseEntity<List<Purchase>>(result, HttpStatus.OK);
+        }
+        catch(ConstraintViolationException e){
+            List<InvalidField> fieldsViolated = new LinkedList<>();
+            for(ConstraintViolation<?> cv : e.getConstraintViolations()){
+                fieldsViolated.add(new InvalidField(cv.getInvalidValue(), cv.getMessage()));
+            }
+            return new ResponseEntity<List<InvalidField>>(fieldsViolated, HttpStatus.BAD_REQUEST);
         }
         catch(UserNotFoundException e){
             return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
@@ -59,6 +81,13 @@ public class PurchaseController {
         try{
             Purchase result = purchaseService.addPurchase(userId);
             return new ResponseEntity<Purchase>(result, HttpStatus.OK);
+        }
+        catch(ConstraintViolationException e){
+            List<InvalidField> fieldsViolated = new LinkedList<>();
+            for(ConstraintViolation<?> cv : e.getConstraintViolations()){
+                fieldsViolated.add(new InvalidField(cv.getInvalidValue(), cv.getMessage()));
+            }
+            return new ResponseEntity<List<InvalidField>>(fieldsViolated, HttpStatus.BAD_REQUEST);
         }
         catch(UserNotFoundException e){
             return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);

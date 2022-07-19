@@ -9,7 +9,6 @@ import javax.validation.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.TransactionSystemException;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -41,6 +40,13 @@ public class WishListController {
             List<WishList> result = wishListService.showUsersListsByName(userId, listName);
             return new ResponseEntity<List<WishList>>(result, HttpStatus.OK);
         }
+        catch(ConstraintViolationException e){
+            List<InvalidField> fieldsViolated = new LinkedList<>();
+            for(ConstraintViolation<?> cv : e.getConstraintViolations()){
+                fieldsViolated.add(new InvalidField(cv.getInvalidValue(), cv.getMessage()));
+            }
+            return new ResponseEntity<List<InvalidField>>(fieldsViolated, HttpStatus.BAD_REQUEST);
+        }
         catch(UserNotFoundException e){
             return new ResponseEntity<String>("User "+userId+" not found!", HttpStatus.BAD_REQUEST);
         }
@@ -51,6 +57,13 @@ public class WishListController {
         try{
             List<WishList> result = wishListService.showAllUsersLists(userId);
             return new ResponseEntity<List<WishList>>(result, HttpStatus.OK);
+        }
+        catch(ConstraintViolationException e){
+            List<InvalidField> fieldsViolated = new LinkedList<>();
+            for(ConstraintViolation<?> cv : e.getConstraintViolations()){
+                fieldsViolated.add(new InvalidField(cv.getInvalidValue(), cv.getMessage()));
+            }
+            return new ResponseEntity<List<InvalidField>>(fieldsViolated, HttpStatus.BAD_REQUEST);
         }
         catch(UserNotFoundException e){
             return new ResponseEntity<String>("User "+userId+" not found!", HttpStatus.BAD_REQUEST);
@@ -84,6 +97,13 @@ public class WishListController {
             wishListService.deleteUsersList(userId, wishListId);
             return new ResponseEntity<String>("Wish list \""+wishListId+"\" deleted successful!", HttpStatus.OK);
         }
+        catch(ConstraintViolationException e){
+            List<InvalidField> fieldsViolated = new LinkedList<>();
+            for(ConstraintViolation<?> cv : e.getConstraintViolations()){
+                fieldsViolated.add(new InvalidField(cv.getInvalidValue(), cv.getMessage()));
+            }
+            return new ResponseEntity<List<InvalidField>>(fieldsViolated, HttpStatus.BAD_REQUEST);
+        }
         catch(UserNotFoundException e){
             return new ResponseEntity<String>("User "+userId+" not found!", HttpStatus.BAD_REQUEST);
         }
@@ -104,17 +124,12 @@ public class WishListController {
         catch(UserNotFoundException e){
             return new ResponseEntity<String>("User "+userId+" not found!", HttpStatus.BAD_REQUEST);
         }
-        catch(TransactionSystemException e){
-            if(e.getRootCause() instanceof ConstraintViolationException){
-                ConstraintViolationException cve = (ConstraintViolationException)e.getRootCause();
-                List<InvalidField> fieldsViolated = new LinkedList<>();
-                for(ConstraintViolation<?> cv : cve.getConstraintViolations()){
-                    fieldsViolated.add(new InvalidField(cv.getInvalidValue(), cv.getMessage()));
-                }
-                return new ResponseEntity<List<InvalidField>>(fieldsViolated, HttpStatus.BAD_REQUEST);
-            }//if
-            else
-                return new ResponseEntity<String>("SERVER ERROR", HttpStatus.INTERNAL_SERVER_ERROR);
+        catch(ConstraintViolationException e){
+            List<InvalidField> fieldsViolated = new LinkedList<>();
+            for(ConstraintViolation<?> cv : e.getConstraintViolations()){
+                fieldsViolated.add(new InvalidField(cv.getInvalidValue(), cv.getMessage()));
+            }
+            return new ResponseEntity<List<InvalidField>>(fieldsViolated, HttpStatus.BAD_REQUEST);
         }
         catch(WishListNotFoundException e){
             return new ResponseEntity<String>("WishList "+wishList.getName()+" not found!", HttpStatus.BAD_REQUEST);
@@ -125,10 +140,17 @@ public class WishListController {
     }//update
 
     @PutMapping(path = "/addComic")
-    public ResponseEntity<String> addComicToList(@RequestParam("usr") long userId, @RequestParam("cmc") long comicId, @RequestParam("list") long wishListId){
+    public ResponseEntity<?> addComicToList(@RequestParam("usr") long userId, @RequestParam("cmc") long comicId, @RequestParam("list") long wishListId){
         try{
             wishListService.addComicToList(userId, comicId, wishListId);
             return new ResponseEntity<String>("Comic "+comicId+" added successful to wish list "+wishListId+" .", HttpStatus.OK);
+        }
+        catch(ConstraintViolationException e){
+            List<InvalidField> fieldsViolated = new LinkedList<>();
+            for(ConstraintViolation<?> cv : e.getConstraintViolations()){
+                fieldsViolated.add(new InvalidField(cv.getInvalidValue(), cv.getMessage()));
+            }
+            return new ResponseEntity<List<InvalidField>>(fieldsViolated, HttpStatus.BAD_REQUEST);
         }
         catch(UserNotFoundException e){
             return new ResponseEntity<String>("User "+userId+" not found!", HttpStatus.BAD_REQUEST);
@@ -145,10 +167,17 @@ public class WishListController {
     }//addComicToList
 
     @DeleteMapping(path = "/deleteComic")
-    public ResponseEntity<String> deleteComicToList(@RequestParam("usr") long userId, @RequestParam("cmc") long comicId, @RequestParam("list") long wishListId){
+    public ResponseEntity<?> deleteComicToList(@RequestParam("usr") long userId, @RequestParam("cmc") long comicId, @RequestParam("list") long wishListId){
         try{
             wishListService.deleteComicToList(userId, comicId, wishListId);
             return new ResponseEntity<String>("Comic "+comicId+" deleted successful to wish list "+wishListId+" .", HttpStatus.OK);
+        }
+        catch(ConstraintViolationException e){
+            List<InvalidField> fieldsViolated = new LinkedList<>();
+            for(ConstraintViolation<?> cv : e.getConstraintViolations()){
+                fieldsViolated.add(new InvalidField(cv.getInvalidValue(), cv.getMessage()));
+            }
+            return new ResponseEntity<List<InvalidField>>(fieldsViolated, HttpStatus.BAD_REQUEST);
         }
         catch(UserNotFoundException e){
             return new ResponseEntity<String>("User "+userId+" not found!", HttpStatus.BAD_REQUEST);

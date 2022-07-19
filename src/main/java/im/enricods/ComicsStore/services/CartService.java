@@ -94,7 +94,7 @@ public class CartService {
         
         //bind bidirectional relation and update cart's Size
         usersCart.getContent().add(newComicInCart);
-        usersCart.setSize(usersCart.getSize()+1);
+        usersCart.setSize(usersCart.getSize()+quantity);
 
     }//addComicToUsersCart
 
@@ -123,7 +123,7 @@ public class CartService {
         //unbind bidirectional relation
         usersCart.getContent().remove(target.get());
         //update cart's Size
-        usersCart.setSize(usersCart.getSize()-1);
+        usersCart.setSize(usersCart.getSize()-target.get().getQuantity());
 
     }//deleteComicFromUsersCart
 
@@ -140,10 +140,10 @@ public class CartService {
         if(!resultComic.isPresent())
             throw new ComicNotFoundException();
 
-        long cartId = resultUser.get().getCart().getId();
+        Cart usersCart = resultUser.get().getCart();
 
         //verify that user's Cart contains Comic specified by comicId 
-        Optional<CartContent> comicInCart = cartContentRepository.findById(new CartContentId(cartId, comicId));
+        Optional<CartContent> comicInCart = cartContentRepository.findById(new CartContentId(usersCart.getId(), comicId));
         if(!comicInCart.isPresent())
             throw new ComicNotInCartException();
 
@@ -152,6 +152,10 @@ public class CartService {
             throw new ComicsQuantityUnavaiableException();
         
         comicInCart.get().setQuantity(newQuantity);
+
+        //update the cart's size
+        int bias = usersCart.getSize() - newQuantity;
+        usersCart.setSize(usersCart.getSize() - bias);
 
     }//updateComicsQuantity
 

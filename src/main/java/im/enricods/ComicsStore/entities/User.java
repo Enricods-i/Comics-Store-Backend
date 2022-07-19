@@ -24,11 +24,15 @@ import javax.validation.constraints.Size;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 @Data @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity @Table(name = "personal_data")
 public class User {
@@ -55,11 +59,11 @@ public class User {
     @Column(name = "email", nullable = false, unique = true, length = 50)
     private String email;
 
-    @Size(max = 20)
+    @Size(min=6, max = 20)
     @Column(name = "phone_number", length = 20)
     private String phoneNumber;
 
-    @Size(max = 20)
+    @Size(min=2, max = 20)
     @Column(name = "city", length = 20)
     private String city;
 
@@ -72,7 +76,7 @@ public class User {
         cart.setUser(this);
     }//addCart
     
-    @JsonIgnore
+    @JsonIdentityReference(alwaysAsId = true)
     @OneToMany(mappedBy = "owner")
     private Set<WishList> wishLists;
 

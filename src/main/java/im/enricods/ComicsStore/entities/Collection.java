@@ -22,11 +22,14 @@ import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.CreationTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "name")
 @Data @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity @Table(name = "collection")
 public class Collection {
@@ -64,7 +67,6 @@ public class Collection {
         comic.setCollection(this);
     }//addComic
 
-    @JsonIgnore
     @ManyToMany
     @JoinTable(
         name = "classification",

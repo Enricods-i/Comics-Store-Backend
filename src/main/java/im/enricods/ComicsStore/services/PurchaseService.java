@@ -5,6 +5,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
+import javax.validation.constraints.Min;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -12,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 
 import im.enricods.ComicsStore.repositories.CartContentRepository;
 import im.enricods.ComicsStore.repositories.ComicInPurchaseRepository;
@@ -32,6 +35,7 @@ import im.enricods.ComicsStore.exceptions.UserNotFoundException;
 
 @Service
 @Transactional
+@Validated
 public class PurchaseService {
     
     @Autowired
@@ -51,7 +55,7 @@ public class PurchaseService {
 
 
     @Transactional(readOnly = true)
-    public List<Purchase> getAllPurchases(int pageNumber, int pageSize, String sortBy){
+    public List<Purchase> getAllPurchases(@Min(0) int pageNumber, @Min(0) int pageSize, String sortBy){
 
         Pageable paging = PageRequest.of(pageNumber, pageSize, Sort.by(sortBy));
         Page<Purchase> pagedResult = purchaseRepository.findAll(paging);
@@ -61,7 +65,7 @@ public class PurchaseService {
 
 
     @Transactional(readOnly = true)
-    public List<Purchase> getAllUsersPurchases(long userId){
+    public List<Purchase> getAllUsersPurchases(@Min(1) long userId){
         
         //verify that User specified by userId exists
         Optional<User> resultUser = userRepository.findById(userId);
@@ -85,7 +89,7 @@ public class PurchaseService {
     }//getUsersPurchasesInPeriod
 
 
-    public Purchase addPurchase(long userId){
+    public Purchase addPurchase(@Min(1) long userId){
 
         //verify that User specified by userId exists
         Optional<User> resultUser = userRepository.findById(userId);

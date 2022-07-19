@@ -47,7 +47,6 @@ public class Discount {
     private Date expirationDate;
 
     @Getter @Setter 
-    @JsonIgnore
     @ManyToMany(mappedBy = "discounts")
     private Set<Comic> comicsInPromotion;
 

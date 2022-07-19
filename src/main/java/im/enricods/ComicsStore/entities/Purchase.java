@@ -21,6 +21,8 @@ import javax.validation.constraints.PositiveOrZero;
 
 import org.hibernate.annotations.CreationTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -33,8 +35,8 @@ public class Purchase {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY) @Column(name = "id")
     private long id;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JsonIdentityReference
+    @ManyToOne @JoinColumn(name = "user_id")
     private User buyer; 
 
     @NotNull @PositiveOrZero

@@ -26,6 +26,7 @@ import javax.validation.constraints.Size;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
@@ -44,11 +45,11 @@ public class Comic {
     @Column(name = "number", nullable = false)
     private int number;
 
-    @JsonIgnore
+    @JsonIdentityReference
     @ManyToOne @JoinColumn(name = "collection_id")
     private Collection collection;
 
-    @JsonIgnore
+    @JsonIdentityReference(alwaysAsId = true)
     @ManyToMany(mappedBy = "works", cascade = CascadeType.MERGE)
     private Set<Author> authors;
 

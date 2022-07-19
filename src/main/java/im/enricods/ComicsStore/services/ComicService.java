@@ -4,6 +4,9 @@ import java.util.List;
 import java.util.Optional;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -12,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 
 import im.enricods.ComicsStore.entities.Author;
 import im.enricods.ComicsStore.entities.Collection;
@@ -26,6 +30,7 @@ import im.enricods.ComicsStore.repositories.ComicRepository;
 
 @Service
 @Transactional
+@Validated
 public class ComicService {
     
     @Autowired
@@ -39,7 +44,7 @@ public class ComicService {
 
 
     @Transactional(readOnly = true)
-    public List<Comic> showComicsInCollection(String collectionName, int pageNumber, int pageSize, String sortBy){
+    public List<Comic> showComicsInCollection(@NotNull @Size(min = 1, max = 50) String collectionName, @Min(0) int pageNumber, @Min(0) int pageSize, String sortBy){
 
         //verify that a Collection with collectionName exists
          Optional<Collection> result = collectionRepository.findById(collectionName);
@@ -54,7 +59,7 @@ public class ComicService {
 
 
     @Transactional(readOnly = true)
-    public List<Comic> showComicsInCollectionCreatedByAuthor(String collectionName, String authorName, int pageNumber, int pageSize, String sortBy){
+    public List<Comic> showComicsInCollectionCreatedByAuthor(@Size(min = 1, max = 50) String collectionName, @Size(min = 1, max = 20) String authorName, @Min(0) int pageNumber, @Min(0) int pageSize, String sortBy){
 
         //verify that a Collection with collectionName exists
         Optional<Collection> resultCollection = collectionRepository.findById(collectionName);
@@ -73,7 +78,7 @@ public class ComicService {
     }//showComicsInCollectionCreatedByAuthor
 
 
-    public Comic addComic(@Valid Comic comic, String collectionName){
+    public Comic addComic(@Valid Comic comic, @Size(min = 1, max = 50) String collectionName){
 
         //verify that a Collection with collectionName exists
         Optional<Collection> resultCollection = collectionRepository.findById(collectionName);
@@ -126,7 +131,7 @@ public class ComicService {
     }//updateComic
 
 
-    public void addAuthorToComic(String authorName, long comicId){
+    public void addAuthorToComic(@Size(min = 1, max = 20) String authorName, @Min(1) long comicId){
 
         //verify that a Author with authorName exists
         Optional<Author> resultAuthor = authorRepository.findById(authorName);

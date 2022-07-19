@@ -4,10 +4,13 @@ import java.util.List;
 import java.util.Optional;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Size;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 
 import im.enricods.ComicsStore.repositories.UserRepository;
 import im.enricods.ComicsStore.entities.Cart;
@@ -17,6 +20,7 @@ import im.enricods.ComicsStore.exceptions.UserNotFoundException;
 
 @Service
 @Transactional
+@Validated
 public class UserService {
     
     @Autowired
@@ -24,7 +28,7 @@ public class UserService {
 
 
     @Transactional(readOnly = true)
-    public User getUserByEmail(String email){
+    public User getUserByEmail(@Email String email){
 
         Optional<User> result = userRepository.findByEmail(email);
         if(result.isPresent())
@@ -36,7 +40,7 @@ public class UserService {
 
 
     @Transactional(readOnly = true)
-    public List<User> getUsersByName(String firstName, String lastName){
+    public List<User> getUsersByName(@Size(min=1, max=20) String firstName, @Size(min=1, max=20) String lastName){
 
         return userRepository.findByFirstNameOrLastNameAllIgnoreCase(firstName, lastName);
 
@@ -44,7 +48,7 @@ public class UserService {
 
     
     @Transactional(readOnly = true)
-    public List<User> getUsersByCity(String city){
+    public List<User> getUsersByCity(@Size(min=2, max=20) String city){
 
         return userRepository.findByCity(city);
 
@@ -52,7 +56,7 @@ public class UserService {
 
     
     @Transactional(readOnly = true)
-    public List<User> getUsersByPhoneNumber(String phoneNumber){
+    public List<User> getUsersByPhoneNumber(@Size(min=6, max=20)String phoneNumber){
 
         return userRepository.findByPhoneNumber(phoneNumber);
 

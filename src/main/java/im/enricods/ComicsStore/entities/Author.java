@@ -17,11 +17,14 @@ import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.CreationTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "name")
 @Data @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity @Table(name = "author")
 public class Author {
@@ -32,7 +35,6 @@ public class Author {
     private String name;
 
     @Size(max = 500)
-    @JsonIgnore
     @Column(name = "bio", length = 500)
     private String biography;
 

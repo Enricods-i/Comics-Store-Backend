@@ -4,10 +4,14 @@ import java.util.List;
 import java.util.Optional;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 
 import im.enricods.ComicsStore.entities.Comic;
 import im.enricods.ComicsStore.entities.User;
@@ -23,6 +27,7 @@ import im.enricods.ComicsStore.repositories.WishListRepository;
 
 @Service
 @Transactional
+@Validated
 public class WishListService {
     
     @Autowired
@@ -36,7 +41,7 @@ public class WishListService {
 
 
     @Transactional(readOnly = true)
-    public List<WishList> showUsersListsByName(long userId, String name){
+    public List<WishList> showUsersListsByName(@Min(1) long userId, @NotNull @Size(max = 50) String name){
         
         //verify that User specified by userId exists
         Optional<User> resultUser = userRepository.findById(userId);
@@ -49,7 +54,7 @@ public class WishListService {
 
 
     @Transactional(readOnly = true)
-    public List<WishList> showAllUsersLists(long userId){
+    public List<WishList> showAllUsersLists(@Min(1) long userId){
 
         //verify that User specified by userId exists
         Optional<User> resultUser = userRepository.findById(userId);
@@ -61,7 +66,7 @@ public class WishListService {
     }//showAllUsersLists
 
 
-    public WishList createUsersList(long userId, @Valid WishList wishList){
+    public WishList createUsersList(@Min(1) long userId, @Valid WishList wishList){
 
         //verify that User specified by userId exists
         Optional<User> resultUser = userRepository.findById(userId);
@@ -83,7 +88,7 @@ public class WishListService {
     }//createList
 
 
-    public void deleteUsersList(long userId, long wishListId){
+    public void deleteUsersList(@Min(1) long userId, @Min(1) long wishListId){
 
         //verify that User specified by userId exists
         Optional<User> resultUser = userRepository.findById(userId);
@@ -109,7 +114,7 @@ public class WishListService {
     }//deleteList
 
 
-    public void addComicToList(long userId, long comicId, long wishListId){
+    public void addComicToList(@Min(1) long userId, @Min(1) long comicId, @Min(1) long wishListId){
         
         //verify that User specified by userId exists
         Optional<User> resultUser = userRepository.findById(userId);
@@ -135,7 +140,7 @@ public class WishListService {
     }//addComicToList
 
 
-    public void deleteComicToList(long userId, long comicId, long wishListId){
+    public void deleteComicToList(@Min(1) long userId, @Min(1) long comicId, @Min(1) long wishListId){
         
         //verify that User specified by userId exists
         Optional<User> resultUser = userRepository.findById(userId);
@@ -161,7 +166,7 @@ public class WishListService {
     }//addComicToList
 
 
-    public void updateWishList(long userId, @Valid WishList wishList){
+    public void updateWishList(@Min(1)long userId, @Valid WishList wishList){
 
         //verify that User specified by userId exists
         Optional<User> resultUser = userRepository.findById(userId);
