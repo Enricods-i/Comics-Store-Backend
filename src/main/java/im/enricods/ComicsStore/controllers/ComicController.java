@@ -7,6 +7,7 @@ import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mapping.PropertyReferenceException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -45,6 +46,9 @@ public class ComicController {
             }
             return new ResponseEntity<List<InvalidField>>(fieldsViolated, HttpStatus.BAD_REQUEST);
         }
+        catch(PropertyReferenceException e){
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
         catch(CollectionNotFoundException e){
             return new ResponseEntity<String>("Collection \""+collectionName+"\" not found!", HttpStatus.BAD_REQUEST);
         }
@@ -62,6 +66,9 @@ public class ComicController {
                 fieldsViolated.add(new InvalidField(cv.getInvalidValue(), cv.getMessage()));
             }
             return new ResponseEntity<List<InvalidField>>(fieldsViolated, HttpStatus.BAD_REQUEST);
+        }
+        catch(PropertyReferenceException e){
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
         catch(CollectionNotFoundException e){
             return new ResponseEntity<String>("Collection \""+collectionName+"\" not found!", HttpStatus.BAD_REQUEST);

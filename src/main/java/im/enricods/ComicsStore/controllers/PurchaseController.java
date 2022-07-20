@@ -8,6 +8,7 @@ import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mapping.PropertyReferenceException;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -45,12 +46,15 @@ public class PurchaseController {
             }
             return new ResponseEntity<List<InvalidField>>(fieldsViolated, HttpStatus.BAD_REQUEST);
         }
+        catch(PropertyReferenceException e){
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }//getAll
 
     @GetMapping(path = "/user")
     public ResponseEntity<?> getUsersPurchases(@RequestParam(value = "usr") long userId, @RequestParam(value = "pageNumber", defaultValue = "0") int pageNumber, @RequestParam(value = "pageSize", defaultValue = "10") int pageSize, @RequestParam(value = "sortBy", defaultValue = "purchaseTime") String sortBy){
         try{
-            List<Purchase> result = purchaseService.getAllUsersPurchases(userId);
+            List<Purchase> result = purchaseService.getAllUsersPurchases(userId, pageNumber, pageSize, sortBy);
             return new ResponseEntity<List<Purchase>>(result, HttpStatus.OK);
         }
         catch(ConstraintViolationException e){
@@ -60,19 +64,30 @@ public class PurchaseController {
             }
             return new ResponseEntity<List<InvalidField>>(fieldsViolated, HttpStatus.BAD_REQUEST);
         }
+        catch(PropertyReferenceException e){
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
         catch(UserNotFoundException e){
             return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
         }
     }//getUsersPurchases
 
     @GetMapping(path = "/inPeriod")
-    public ResponseEntity<?> getPurchasesInPeriod(@RequestParam(value = "start") @DateTimeFormat(pattern = "dd-MM-yyyy") Date startDate, @RequestParam(value = "end") @DateTimeFormat(pattern = "dd-MM-yyyy") Date endDate){
+    public ResponseEntity<?> getPurchasesInPeriod(  @RequestParam(value = "start") @DateTimeFormat(pattern = "dd-MM-yyyy") Date startDate,
+                                                    @RequestParam(value = "end") @DateTimeFormat(pattern = "dd-MM-yyyy") Date endDate,
+                                                    @RequestParam(value = "pageNumber", defaultValue = "0") int pageNumber, 
+                                                    @RequestParam(value = "pageSize", defaultValue = "10") int pageSize, 
+                                                    @RequestParam(value = "sortBy", defaultValue = "purchaseTime") String sortBy)
+    {
         try{
-            List<Purchase> result = purchaseService.getPurchasesInPeriod(startDate, endDate);
+            List<Purchase> result = purchaseService.getPurchasesInPeriod(startDate, endDate, pageNumber, pageSize, sortBy);
             return new ResponseEntity<List<Purchase>>(result, HttpStatus.OK);
         }
         catch(DateWrongRangeException e){
             return new ResponseEntity<String>("Start date must be previous end date!", HttpStatus.BAD_REQUEST);
+        }
+        catch(PropertyReferenceException e){
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }//getUsersPurchases
 

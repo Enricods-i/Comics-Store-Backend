@@ -65,26 +65,28 @@ public class PurchaseService {
 
 
     @Transactional(readOnly = true)
-    public List<Purchase> getAllUsersPurchases(@Min(1) long userId){
+    public List<Purchase> getAllUsersPurchases(@Min(1) long userId, @Min(0) int pageNumber, @Min(0) int pageSize, String sortBy){
         
         //verify that User specified by userId exists
         Optional<User> resultUser = userRepository.findById(userId);
         if(!resultUser.isPresent())
             throw new UserNotFoundException();
 
-        return purchaseRepository.findByBuyer(resultUser.get());
+        Pageable paging = PageRequest.of(pageNumber, pageSize, Sort.by(sortBy));
+        return purchaseRepository.findByBuyer(resultUser.get(), paging).getContent();
 
     }//getAllUsersPurchases
 
 
     @Transactional(readOnly = true)
-    public List<Purchase> getPurchasesInPeriod(Date startDate, Date endDate){
+    public List<Purchase> getPurchasesInPeriod(Date startDate, Date endDate, @Min(0) int pageNumber, @Min(0) int pageSize, String sortBy){
         
         //verify that startDate is previous endDate
         if ( startDate.compareTo(endDate) >= 0 )
             throw new DateWrongRangeException();
 
-        return purchaseRepository.findByPurchaseTimeBetween(startDate, endDate);
+        Pageable paging = PageRequest.of(pageNumber, pageSize, Sort.by(sortBy));
+        return purchaseRepository.findByPurchaseTimeBetween(startDate, endDate, paging).getContent();
 
     }//getUsersPurchasesInPeriod
 

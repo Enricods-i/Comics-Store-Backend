@@ -1,8 +1,9 @@
 package im.enricods.ComicsStore.repositories;
 
 import java.util.Date;
-import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -12,13 +13,13 @@ import im.enricods.ComicsStore.entities.User;
 @Repository
 public interface PurchaseRepository extends JpaRepository<Purchase,Long> {
     
-    List<Purchase> findByBuyer(User user);
+    Page<Purchase> findByBuyer(User user, Pageable pageable);
 
     /*
     @Query("select p from Purchase p where p.purchaseTime > :startDate and p.purchaseTime < :endDate and p.buyer = :user")
     List<Purchase> findByBuyerInPeriod(Date startDate, Date endDate, User user);
     */
 
-    List<Purchase> findByPurchaseTimeBetween(Date startDate, Date endDate);
+    Page<Purchase> findByPurchaseTimeBetween(Date startDate, Date endDate, Pageable pageable);
 
 }//PurchaseRepository
