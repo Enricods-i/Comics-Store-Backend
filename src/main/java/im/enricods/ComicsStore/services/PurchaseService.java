@@ -21,6 +21,10 @@ import im.enricods.ComicsStore.repositories.ComicInPurchaseRepository;
 import im.enricods.ComicsStore.repositories.DiscountRepository;
 import im.enricods.ComicsStore.repositories.PurchaseRepository;
 import im.enricods.ComicsStore.repositories.UserRepository;
+import im.enricods.ComicsStore.utils.exceptions.CartEmptyException;
+import im.enricods.ComicsStore.utils.exceptions.ComicsQuantityUnavaiableException;
+import im.enricods.ComicsStore.utils.exceptions.DateWrongRangeException;
+import im.enricods.ComicsStore.utils.exceptions.UserNotFoundException;
 import im.enricods.ComicsStore.entities.Cart;
 import im.enricods.ComicsStore.entities.CartContent;
 import im.enricods.ComicsStore.entities.Comic;
@@ -28,10 +32,6 @@ import im.enricods.ComicsStore.entities.ComicInPurchase;
 import im.enricods.ComicsStore.entities.Discount;
 import im.enricods.ComicsStore.entities.Purchase;
 import im.enricods.ComicsStore.entities.User;
-import im.enricods.ComicsStore.exceptions.CartEmptyException;
-import im.enricods.ComicsStore.exceptions.ComicsQuantityUnavaiableException;
-import im.enricods.ComicsStore.exceptions.DateWrongRangeException;
-import im.enricods.ComicsStore.exceptions.UserNotFoundException;
 
 @Service
 @Transactional

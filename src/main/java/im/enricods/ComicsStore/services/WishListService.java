@@ -16,14 +16,14 @@ import org.springframework.validation.annotation.Validated;
 import im.enricods.ComicsStore.entities.Comic;
 import im.enricods.ComicsStore.entities.User;
 import im.enricods.ComicsStore.entities.WishList;
-import im.enricods.ComicsStore.exceptions.ComicNotFoundException;
-import im.enricods.ComicsStore.exceptions.UnavaiableWishList;
-import im.enricods.ComicsStore.exceptions.UserNotFoundException;
-import im.enricods.ComicsStore.exceptions.WishListAlreadyExistsException;
-import im.enricods.ComicsStore.exceptions.WishListNotFoundException;
 import im.enricods.ComicsStore.repositories.ComicRepository;
 import im.enricods.ComicsStore.repositories.UserRepository;
 import im.enricods.ComicsStore.repositories.WishListRepository;
+import im.enricods.ComicsStore.utils.exceptions.ComicNotFoundException;
+import im.enricods.ComicsStore.utils.exceptions.UnavaiableWishList;
+import im.enricods.ComicsStore.utils.exceptions.UserNotFoundException;
+import im.enricods.ComicsStore.utils.exceptions.WishListAlreadyExistsException;
+import im.enricods.ComicsStore.utils.exceptions.WishListNotFoundException;
 
 @Service
 @Transactional

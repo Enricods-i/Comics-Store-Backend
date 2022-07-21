@@ -13,10 +13,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
 import im.enricods.ComicsStore.repositories.UserRepository;
+import im.enricods.ComicsStore.utils.exceptions.UserAlreadyExists;
+import im.enricods.ComicsStore.utils.exceptions.UserNotFoundException;
 import im.enricods.ComicsStore.entities.Cart;
 import im.enricods.ComicsStore.entities.User;
-import im.enricods.ComicsStore.exceptions.UserAlreadyExists;
-import im.enricods.ComicsStore.exceptions.UserNotFoundException;
 
 @Service
 @Transactional

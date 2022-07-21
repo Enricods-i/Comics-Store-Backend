@@ -19,13 +19,13 @@ import org.springframework.validation.annotation.Validated;
 import im.enricods.ComicsStore.entities.Author;
 import im.enricods.ComicsStore.entities.Category;
 import im.enricods.ComicsStore.entities.Collection;
-import im.enricods.ComicsStore.exceptions.AuthorNotFoundException;
-import im.enricods.ComicsStore.exceptions.CategoryNotFoundException;
-import im.enricods.ComicsStore.exceptions.CollectionAlreadyExistsException;
-import im.enricods.ComicsStore.exceptions.CollectionNotFoundException;
 import im.enricods.ComicsStore.repositories.AuthorRepository;
 import im.enricods.ComicsStore.repositories.CategoryRepository;
 import im.enricods.ComicsStore.repositories.CollectionRepository;
+import im.enricods.ComicsStore.utils.exceptions.AuthorNotFoundException;
+import im.enricods.ComicsStore.utils.exceptions.CategoryNotFoundException;
+import im.enricods.ComicsStore.utils.exceptions.CollectionAlreadyExistsException;
+import im.enricods.ComicsStore.utils.exceptions.CollectionNotFoundException;
 
 @Service
 @Transactional

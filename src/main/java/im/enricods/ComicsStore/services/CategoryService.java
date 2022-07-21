@@ -13,9 +13,9 @@ import org.springframework.validation.annotation.Validated;
 
 import im.enricods.ComicsStore.entities.Category;
 import im.enricods.ComicsStore.entities.Collection;
-import im.enricods.ComicsStore.exceptions.CategoryAlreadyExistsException;
-import im.enricods.ComicsStore.exceptions.CategoryNotFoundException;
 import im.enricods.ComicsStore.repositories.CategoryRepository;
+import im.enricods.ComicsStore.utils.exceptions.CategoryAlreadyExistsException;
+import im.enricods.ComicsStore.utils.exceptions.CategoryNotFoundException;
 
 @Service
 @Transactional

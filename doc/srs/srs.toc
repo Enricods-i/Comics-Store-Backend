@@ -1,4 +1,3 @@
-\babel@toc {english}{}
 \contentsline {chapter}{\numberline {1}Introduzione}{4}{chapter.1}%
 \contentsline {section}{\numberline {1.1}Propositi}{4}{section.1.1}%
 \contentsline {section}{\numberline {1.2}Obiettivi}{4}{section.1.2}%

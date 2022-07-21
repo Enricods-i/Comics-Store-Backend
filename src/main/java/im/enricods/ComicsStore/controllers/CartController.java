@@ -14,14 +14,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import im.enricods.ComicsStore.entities.Cart;
-import im.enricods.ComicsStore.exceptions.CartNotFoundException;
-import im.enricods.ComicsStore.exceptions.ComicAlreadyExistsException;
-import im.enricods.ComicsStore.exceptions.ComicNotFoundException;
-import im.enricods.ComicsStore.exceptions.ComicNotInCartException;
-import im.enricods.ComicsStore.exceptions.ComicsQuantityUnavaiableException;
-import im.enricods.ComicsStore.exceptions.UserNotFoundException;
 import im.enricods.ComicsStore.services.CartService;
-import im.enricods.ComicsStore.utils.InvalidField;
+import im.enricods.ComicsStore.utils.InvalidValue;
+import im.enricods.ComicsStore.utils.exceptions.CartNotFoundException;
+import im.enricods.ComicsStore.utils.exceptions.ComicAlreadyExistsException;
+import im.enricods.ComicsStore.utils.exceptions.ComicNotFoundException;
+import im.enricods.ComicsStore.utils.exceptions.ComicNotInCartException;
+import im.enricods.ComicsStore.utils.exceptions.ComicsQuantityUnavaiableException;
+import im.enricods.ComicsStore.utils.exceptions.UserNotFoundException;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -44,11 +44,11 @@ public class CartController {
             return new ResponseEntity<Cart>(result, HttpStatus.OK);
         }
         catch(ConstraintViolationException e){
-            List<InvalidField> fieldsViolated = new LinkedList<>();
+            List<InvalidValue> fieldsViolated = new LinkedList<>();
             for(ConstraintViolation<?> cv : e.getConstraintViolations()){
-                fieldsViolated.add(new InvalidField(cv.getInvalidValue(), cv.getMessage()));
+                fieldsViolated.add(new InvalidValue(cv.getInvalidValue(), cv.getMessage()));
             }
-            return new ResponseEntity<List<InvalidField>>(fieldsViolated, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<List<InvalidValue>>(fieldsViolated, HttpStatus.BAD_REQUEST);
         }
         catch(UserNotFoundException e){
             return new ResponseEntity<String>("User \""+userId+"\" not found",HttpStatus.BAD_REQUEST);
@@ -64,11 +64,11 @@ public class CartController {
             cartService.addComicToUsersCart(userId, comicId, quantity);
         }
         catch(ConstraintViolationException e){
-            List<InvalidField> fieldsViolated = new LinkedList<>();
+            List<InvalidValue> fieldsViolated = new LinkedList<>();
             for(ConstraintViolation<?> cv : e.getConstraintViolations()){
-                fieldsViolated.add(new InvalidField(cv.getInvalidValue(), cv.getMessage()));
+                fieldsViolated.add(new InvalidValue(cv.getInvalidValue(), cv.getMessage()));
             }
-            return new ResponseEntity<List<InvalidField>>(fieldsViolated, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<List<InvalidValue>>(fieldsViolated, HttpStatus.BAD_REQUEST);
         }
         catch(UserNotFoundException e){
             return new ResponseEntity<String>("User \""+userId+"\" not found", HttpStatus.BAD_REQUEST);
@@ -91,11 +91,11 @@ public class CartController {
             cartService.updateComicQuantity(userId, comicId, quantity);
         }
         catch(ConstraintViolationException e){
-            List<InvalidField> fieldsViolated = new LinkedList<>();
+            List<InvalidValue> fieldsViolated = new LinkedList<>();
             for(ConstraintViolation<?> cv : e.getConstraintViolations()){
-                fieldsViolated.add(new InvalidField(cv.getInvalidValue(), cv.getMessage()));
+                fieldsViolated.add(new InvalidValue(cv.getInvalidValue(), cv.getMessage()));
             }
-            return new ResponseEntity<List<InvalidField>>(fieldsViolated, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<List<InvalidValue>>(fieldsViolated, HttpStatus.BAD_REQUEST);
         }
         catch(UserNotFoundException e){
             return new ResponseEntity<String>("User \""+userId+"\" not found", HttpStatus.BAD_REQUEST);
@@ -118,11 +118,11 @@ public class CartController {
             cartService.deleteComicFromUsersCart(userId, comicId);
         }
         catch(ConstraintViolationException e){
-            List<InvalidField> fieldsViolated = new LinkedList<>();
+            List<InvalidValue> fieldsViolated = new LinkedList<>();
             for(ConstraintViolation<?> cv : e.getConstraintViolations()){
-                fieldsViolated.add(new InvalidField(cv.getInvalidValue(), cv.getMessage()));
+                fieldsViolated.add(new InvalidValue(cv.getInvalidValue(), cv.getMessage()));
             }
-            return new ResponseEntity<List<InvalidField>>(fieldsViolated, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<List<InvalidValue>>(fieldsViolated, HttpStatus.BAD_REQUEST);
         }
         catch(UserNotFoundException e){
             return new ResponseEntity<String>("User \""+userId+"\" not found", HttpStatus.BAD_REQUEST);

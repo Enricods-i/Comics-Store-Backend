@@ -14,16 +14,16 @@ import im.enricods.ComicsStore.entities.CartContent;
 import im.enricods.ComicsStore.entities.CartContentId;
 import im.enricods.ComicsStore.entities.Comic;
 import im.enricods.ComicsStore.entities.User;
-import im.enricods.ComicsStore.exceptions.CartNotFoundException;
-import im.enricods.ComicsStore.exceptions.ComicAlreadyExistsException;
-import im.enricods.ComicsStore.exceptions.ComicNotFoundException;
-import im.enricods.ComicsStore.exceptions.ComicNotInCartException;
-import im.enricods.ComicsStore.exceptions.ComicsQuantityUnavaiableException;
-import im.enricods.ComicsStore.exceptions.UserNotFoundException;
 import im.enricods.ComicsStore.repositories.CartContentRepository;
 import im.enricods.ComicsStore.repositories.CartRepository;
 import im.enricods.ComicsStore.repositories.ComicRepository;
 import im.enricods.ComicsStore.repositories.UserRepository;
+import im.enricods.ComicsStore.utils.exceptions.CartNotFoundException;
+import im.enricods.ComicsStore.utils.exceptions.ComicAlreadyExistsException;
+import im.enricods.ComicsStore.utils.exceptions.ComicNotFoundException;
+import im.enricods.ComicsStore.utils.exceptions.ComicNotInCartException;
+import im.enricods.ComicsStore.utils.exceptions.ComicsQuantityUnavaiableException;
+import im.enricods.ComicsStore.utils.exceptions.UserNotFoundException;
 
 @Service
 @Transactional

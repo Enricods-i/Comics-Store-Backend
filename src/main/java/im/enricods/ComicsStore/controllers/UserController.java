@@ -18,10 +18,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import im.enricods.ComicsStore.entities.User;
-import im.enricods.ComicsStore.exceptions.UserAlreadyExists;
-import im.enricods.ComicsStore.exceptions.UserNotFoundException;
 import im.enricods.ComicsStore.services.UserService;
-import im.enricods.ComicsStore.utils.InvalidField;
+import im.enricods.ComicsStore.utils.InvalidValue;
+import im.enricods.ComicsStore.utils.exceptions.UserAlreadyExists;
+import im.enricods.ComicsStore.utils.exceptions.UserNotFoundException;
 
 @RestController
 @RequestMapping(path = "users")
@@ -37,11 +37,11 @@ public class UserController {
             return new ResponseEntity<List<User>>(result, HttpStatus.OK);
         }
         catch(ConstraintViolationException e){
-            List<InvalidField> fieldsViolated = new LinkedList<>();
+            List<InvalidValue> fieldsViolated = new LinkedList<>();
             for(ConstraintViolation<?> cv : e.getConstraintViolations()){
-                fieldsViolated.add(new InvalidField(cv.getInvalidValue(), cv.getMessage()));
+                fieldsViolated.add(new InvalidValue(cv.getInvalidValue(), cv.getMessage()));
             }
-            return new ResponseEntity<List<InvalidField>>(fieldsViolated, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<List<InvalidValue>>(fieldsViolated, HttpStatus.BAD_REQUEST);
         }
     }//getByFirstNameAndLastName
 
@@ -52,11 +52,11 @@ public class UserController {
             return new ResponseEntity<List<User>>(result, HttpStatus.OK);
         }
         catch(ConstraintViolationException e){
-            List<InvalidField> fieldsViolated = new LinkedList<>();
+            List<InvalidValue> fieldsViolated = new LinkedList<>();
             for(ConstraintViolation<?> cv : e.getConstraintViolations()){
-                fieldsViolated.add(new InvalidField(cv.getInvalidValue(), cv.getMessage()));
+                fieldsViolated.add(new InvalidValue(cv.getInvalidValue(), cv.getMessage()));
             }
-            return new ResponseEntity<List<InvalidField>>(fieldsViolated, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<List<InvalidValue>>(fieldsViolated, HttpStatus.BAD_REQUEST);
         }
     }//getByCity
 
@@ -67,11 +67,11 @@ public class UserController {
             return new ResponseEntity<User>(result, HttpStatus.OK);
         }
         catch(ConstraintViolationException e){
-            List<InvalidField> fieldsViolated = new LinkedList<>();
+            List<InvalidValue> fieldsViolated = new LinkedList<>();
             for(ConstraintViolation<?> cv : e.getConstraintViolations()){
-                fieldsViolated.add(new InvalidField(cv.getInvalidValue(), cv.getMessage()));
+                fieldsViolated.add(new InvalidValue(cv.getInvalidValue(), cv.getMessage()));
             }
-            return new ResponseEntity<List<InvalidField>>(fieldsViolated, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<List<InvalidValue>>(fieldsViolated, HttpStatus.BAD_REQUEST);
         }
         catch(UserNotFoundException e){
             return new ResponseEntity<String>("User with email "+email+" not found", HttpStatus.BAD_REQUEST);
@@ -85,11 +85,11 @@ public class UserController {
             return new ResponseEntity<User>(result, HttpStatus.OK);
         }
         catch(ConstraintViolationException e){
-            List<InvalidField> fieldsViolated = new LinkedList<>();
+            List<InvalidValue> fieldsViolated = new LinkedList<>();
             for(ConstraintViolation<?> cv : e.getConstraintViolations()){
-                fieldsViolated.add(new InvalidField(cv.getInvalidValue(), cv.getMessage()));
+                fieldsViolated.add(new InvalidValue(cv.getInvalidValue(), cv.getMessage()));
             }
-            return new ResponseEntity<List<InvalidField>>(fieldsViolated, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<List<InvalidValue>>(fieldsViolated, HttpStatus.BAD_REQUEST);
         }
         catch(UserAlreadyExists e){
             return new ResponseEntity<String>("User \""+user.getFirstName()+" "+user.getLastName()+"\" already exists!", HttpStatus.BAD_REQUEST);
@@ -103,11 +103,11 @@ public class UserController {
             return new ResponseEntity<String>("User "+user.getFirstName()+" "+user.getLastName()+ "/"+user.getId()+" updated successful!", HttpStatus.OK);
         }
         catch(ConstraintViolationException e){
-            List<InvalidField> fieldsViolated = new LinkedList<>();
+            List<InvalidValue> fieldsViolated = new LinkedList<>();
             for(ConstraintViolation<?> cv : e.getConstraintViolations()){
-                fieldsViolated.add(new InvalidField(cv.getInvalidValue(), cv.getMessage()));
+                fieldsViolated.add(new InvalidValue(cv.getInvalidValue(), cv.getMessage()));
             }
-            return new ResponseEntity<List<InvalidField>>(fieldsViolated, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<List<InvalidValue>>(fieldsViolated, HttpStatus.BAD_REQUEST);
         }
         catch(UserNotFoundException e){
             return new ResponseEntity<String>("User \""+user.getId()+"\" not found", HttpStatus.BAD_REQUEST);

@@ -17,9 +17,9 @@ import org.springframework.validation.annotation.Validated;
 
 import im.enricods.ComicsStore.entities.Author;
 import im.enricods.ComicsStore.entities.Comic;
-import im.enricods.ComicsStore.exceptions.AuthorAlreadyExistsException;
-import im.enricods.ComicsStore.exceptions.AuthorNotFoundException;
 import im.enricods.ComicsStore.repositories.AuthorRepository;
+import im.enricods.ComicsStore.utils.exceptions.AuthorAlreadyExistsException;
+import im.enricods.ComicsStore.utils.exceptions.AuthorNotFoundException;
 
 @Service
 @Transactional

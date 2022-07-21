@@ -18,11 +18,11 @@ import org.springframework.validation.annotation.Validated;
 
 import im.enricods.ComicsStore.entities.Comic;
 import im.enricods.ComicsStore.entities.Discount;
-import im.enricods.ComicsStore.exceptions.ComicNotFoundException;
-import im.enricods.ComicsStore.exceptions.DateWrongRangeException;
-import im.enricods.ComicsStore.exceptions.DiscountNotFoundException;
 import im.enricods.ComicsStore.repositories.ComicRepository;
 import im.enricods.ComicsStore.repositories.DiscountRepository;
+import im.enricods.ComicsStore.utils.exceptions.ComicNotFoundException;
+import im.enricods.ComicsStore.utils.exceptions.DateWrongRangeException;
+import im.enricods.ComicsStore.utils.exceptions.DiscountNotFoundException;
 
 @Service
 @Transactional
