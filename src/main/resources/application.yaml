@@ -5,9 +5,20 @@ spring:
         username: eds
         password: eds
         url: jdbc:postgresql://localhost:5432/comics_store
+    security:
+        oauth2:
+            resourceserver:
+                jwt:
+                    jwk-set-uri: https://localhost:433/auth/realms/comicsstorerealm/protocol/openid-connect/certs
+                    issuer-uri: https://localhost:433/auth/realms/comicsstorerealm/
     jpa:
         database: POSTGRESQL
         show-sql: true
         properties:
             hibernate:
                 ddl-auto: validate
+server:
+    ssl:
+        key-store-password: pippo
+        key-store-type: pluto
+        key-store: paperino
