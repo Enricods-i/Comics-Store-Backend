@@ -37,9 +37,9 @@ import lombok.EqualsAndHashCode;
 @Entity @Table(name = "personal_data")
 public class User {
 
-    @NotNull @Min(value = 0)
+    @NotNull @Min(0)
     @EqualsAndHashCode.Include
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY) @Column(name = "id", nullable = false)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY) @Column(name = "id")
     private long id;
     
     @NotNull @Size(min = 2, max = 20)

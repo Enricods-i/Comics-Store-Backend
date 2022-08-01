@@ -25,7 +25,7 @@ import lombok.EqualsAndHashCode;
 @Entity @Table(name = "comic_in_purchase")
 public class ComicInPurchase {
     
-    @NotNull @Min(value = 0)
+    @NotNull @Min(0)
     @EqualsAndHashCode.Include
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY) @Column(name = "id")
     private long id;
@@ -49,7 +49,7 @@ public class ComicInPurchase {
     @Column(name = "price", nullable = false)
     private float purchasePrice;
 
-    @NotNull @Min(value = 1)
+    @NotNull @Min(1)
     @Column(name = "quantity", nullable = false)
     private int quantity;
 

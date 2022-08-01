@@ -30,7 +30,7 @@ import lombok.EqualsAndHashCode;
 @Entity @Table(name = "purchase")
 public class Purchase {
     
-    @NotNull @Min(value = 0)
+    @NotNull @Min(0)
     @EqualsAndHashCode.Include
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY) @Column(name = "id")
     private long id;
@@ -43,7 +43,7 @@ public class Purchase {
     @Column(name = "total", nullable = false)
     private float total;
 
-    @OneToMany(mappedBy = "purchase", cascade = CascadeType.MERGE)
+    @OneToMany(mappedBy = "purchase")
     private Set<ComicInPurchase> purchasedComics;
 
     @CreationTimestamp @Temporal(TemporalType.TIMESTAMP) @Column(name = "created_at", nullable = false)

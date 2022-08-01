@@ -5,6 +5,8 @@ import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinTable;
 import javax.persistence.JoinColumn;
@@ -12,10 +14,12 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -29,13 +33,17 @@ import lombok.EqualsAndHashCode;
 @Entity @Table(name = "author")
 public class Author {
 
-    @NotNull @Size(min = 1, max = 20)
+    @NotNull @Min(0)
     @EqualsAndHashCode.Include
-    @Id @Column(name = "name", length = 20)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY) @Column(name = "id")
+    private long id;
+
+    @NotNull @Size(min = 1, max = 20)
+    @Column(name = "name", length = 20)
     private String name;
 
-    @Size(max = 500)
-    @Column(name = "bio", length = 500)
+    @Size(max = 1000)
+    @Column(name = "biography", length = 1000)
     private String biography;
 
     @JsonIgnore
@@ -49,5 +57,9 @@ public class Author {
     @JsonIgnore
     @CreationTimestamp @Temporal(TemporalType.TIMESTAMP) @Column(name = "created_at", nullable = false)
     private Date creationDate;
+
+    @JsonIgnore
+    @UpdateTimestamp @Temporal(TemporalType.TIMESTAMP) @Column(name = "modified_at", nullable = false)
+    private Date dateOfLastModification;
 
 }//Author

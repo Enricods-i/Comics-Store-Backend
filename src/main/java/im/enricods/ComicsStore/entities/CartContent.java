@@ -26,8 +26,17 @@ public class CartContent {
     })
     private CartContentId id;
 
-    @Column(name = "quantity")
+    @Column(name = "quantity", nullable = false)
     private int quantity;
+
+    @Column(name = "price_variation", nullable = false)
+    private boolean priceVariation;
+
+    @Column(name = "discount_added", nullable = false)
+    private boolean discountAdded;
+
+    @Column(name = "discount_terminated", nullable = false)
+    private boolean discountTerminated;
 
     @JsonIgnore
     @MapsId(value = "cart")

@@ -4,9 +4,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -16,11 +17,14 @@ import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Version;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -34,9 +38,13 @@ import lombok.EqualsAndHashCode;
 @Entity @Table(name = "collection")
 public class Collection {
     
-    @NotNull @Size(min = 1, max = 50)
+    @NotNull @Min(0)
     @EqualsAndHashCode.Include
-    @Id @Column(name = "name", length = 50)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY) @Column(name = "id")
+    private long id;
+
+    @NotNull @Size(min = 1, max = 50)
+    @Column(name = "name", length = 50)
     private String name;
 
     @Size(min = 1, max = 20)
@@ -44,11 +52,19 @@ public class Collection {
     private String image;
 
     @NotNull @Positive
-    @Column(name = "price", nullable = false)
-    private float price;
+    @Column(name = "actual_price", nullable = false)
+    private float actualPrice;
+
+    @NotNull @Positive
+    @Column(name = "old_price", nullable = false)
+    private float oldPrice;
 
     @Column(name = "year_of_release")
     private int yearOfRelease;
+
+    @Size(max = 30)
+    @Column(name = "format_and_binding", length = 30)
+    private String formatAndBinding;
 
     @Column(name = "color")
     private boolean color;
@@ -58,7 +74,11 @@ public class Collection {
     private String description;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "collection", cascade = CascadeType.MERGE)
+    @Version @Column(name = "version", nullable = false)
+    private long version;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "collection")
     @OrderBy(value = "number asc")
     private List<Comic> comics;
 
@@ -83,5 +103,9 @@ public class Collection {
     @JsonIgnore
     @CreationTimestamp @Temporal(TemporalType.TIMESTAMP) @Column(name = "created_at", nullable = false)
     private Date creationDate;
+
+    @JsonIgnore
+    @UpdateTimestamp @Temporal(TemporalType.TIMESTAMP) @Column(name = "modified_at", nullable = false)
+    private Date dateOfLastModification;
 
 }//Collection

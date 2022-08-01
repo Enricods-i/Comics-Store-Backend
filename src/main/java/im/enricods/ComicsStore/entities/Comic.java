@@ -3,7 +3,6 @@ package im.enricods.ComicsStore.entities;
 import java.util.Date;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -36,54 +35,58 @@ import lombok.EqualsAndHashCode;
 @Entity @Table(name = "comic")
 public class Comic {
     
-    @NotNull @Min(value = 0)
+    @NotNull @Min(0)
     @EqualsAndHashCode.Include
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY) @Column(name = "id")
     private long id;
-    
-    @NotNull @Min(value = 1)
-    @Column(name = "number", nullable = false)
-    private int number;
 
     @JsonIdentityReference
     @ManyToOne @JoinColumn(name = "collection_id")
     private Collection collection;
+    
+    @NotNull @Min(1)
+    @Column(name = "number", nullable = false)
+    private int number;
+
+    @NotNull @Min(0)
+    @Column(name = "quantity", nullable = false)
+    private int quantity;
+
+    @Size(max = 20)
+    @Column(name = "image", length = 20)
+    private String image;
+
+    @Min(1)
+    @Column(name = "pages")
+    private int pages;
+
+    @NotNull @Size(max = 13)
+    @Column(name = "isbn", length = 13, unique = true, nullable = false)
+    private String isbn;
+
+    @PastOrPresent
+    @Temporal(TemporalType.DATE) @Column(name = "publication_date")
+    private Date publicationDate;
+
+    @Size(max = 200)
+    @Column(name = "description", length = 200)
+    private String description;
+
+    @JsonIgnore
+    @Version @Column(name = "version", nullable = false)
+    private long version;
 
     @JsonIdentityReference(alwaysAsId = true)
-    @ManyToMany(mappedBy = "works", cascade = CascadeType.MERGE)
+    @ManyToMany(mappedBy = "works")
     private Set<Author> authors;
 
     public void addAuthor(Author author){
         authors.add(author);
         author.getWorks().add(this);
     }//addAuthor
-    
-    @Size(max = 20)
-    @Column(name = "image", length = 20)
-    private String image;
-
-    @Min(value = 1)
-    @Column(name = "pages")
-    private int pages;
-
-    @PastOrPresent
-    @Temporal(TemporalType.DATE) @Column(name = "publication_date")
-    private Date publicationDate;
-
-    @NotNull @Size(max = 13)
-    @Column(name = "isbn", length = 13, unique = true, nullable = false)
-    private String isbn;
-    
-    @Size(max = 200)
-    @Column(name = "description", length = 200)
-    private String description;
-
-    @NotNull @Min(value = 0)
-    @Column(name = "quantity", nullable = false)
-    private int quantity;
 
     @JsonIgnore
-    @ManyToMany(cascade = CascadeType.MERGE)
+    @ManyToMany
     @JoinTable(
         name = "promotion",
         joinColumns = @JoinColumn(name = "comic_id"),
@@ -94,10 +97,6 @@ public class Comic {
     @JsonIgnore
     @OneToMany(mappedBy = "comic")
     private Set<ComicInPurchase> copiesSold;
-
-    @JsonIgnore
-    @Version @Column(name = "version", nullable = false)
-    private long version;
 
     @JsonIgnore
     @CreationTimestamp @Temporal(TemporalType.TIMESTAMP) @Column(name = "created_at", nullable = false)
