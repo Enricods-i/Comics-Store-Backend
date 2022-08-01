@@ -1,9 +1,7 @@
 package im.enricods.ComicsStore.controllers;
 
-import java.util.LinkedList;
 import java.util.List;
 
-import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -34,18 +33,25 @@ public class CategoryController {
         return categoryService.showAllCategories();
     }//getAll
 
+    @GetMapping(path = "/searchByName")
+    public ResponseEntity<?> getByName(@RequestParam(value = "ctgrName") String categoryName){
+        try {
+            List<Category> result = categoryService.showCategoriesByName(categoryName);
+            return new ResponseEntity<List<Category>>(result, HttpStatus.OK);
+        }
+        catch(ConstraintViolationException e){
+            return new ResponseEntity<List<InvalidValue>>(InvalidValue.getAllInvalidValues(e), HttpStatus.BAD_REQUEST);
+        }
+    }//getByName
+
     @PostMapping
-    public ResponseEntity<?> create(@RequestParam(value = "cName") String categoryName){
+    public ResponseEntity<?> create(@RequestParam(value = "ctgrName") String categoryName){
         try{
             categoryService.createCategory(categoryName);
             return new ResponseEntity<String>("Category \""+ categoryName +"\" added succesful!", HttpStatus.OK);
         }
         catch(ConstraintViolationException e){
-            List<InvalidValue> fieldsViolated = new LinkedList<>();
-            for(ConstraintViolation<?> cv : e.getConstraintViolations()){
-                fieldsViolated.add(new InvalidValue(cv.getInvalidValue(), cv.getMessage()));
-            }
-            return new ResponseEntity<List<InvalidValue>>(fieldsViolated, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<List<InvalidValue>>(InvalidValue.getAllInvalidValues(e), HttpStatus.BAD_REQUEST);
         }
         catch(CategoryAlreadyExistsException e){
             return new ResponseEntity<String>("Category \"" + categoryName + "\" already exists!", HttpStatus.BAD_REQUEST);
@@ -59,15 +65,28 @@ public class CategoryController {
             return new ResponseEntity<String>("Category \""+ categoryId +"\" deleted succesful!", HttpStatus.OK);
         }
         catch(ConstraintViolationException e){
-            List<InvalidValue> fieldsViolated = new LinkedList<>();
-            for(ConstraintViolation<?> cv : e.getConstraintViolations()){
-                fieldsViolated.add(new InvalidValue(cv.getInvalidValue(), cv.getMessage()));
-            }
-            return new ResponseEntity<List<InvalidValue>>(fieldsViolated, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<List<InvalidValue>>(InvalidValue.getAllInvalidValues(e), HttpStatus.BAD_REQUEST);
         }
         catch(CategoryNotFoundException e){
             return new ResponseEntity<String>("Category \"" + categoryId + "\" not found!", HttpStatus.BAD_REQUEST);
         }
     }//delete
+
+    @PutMapping
+    public ResponseEntity<?> updateName(@RequestParam(value = "ctgr") long categoryId, @RequestParam(value = "newName") String newName){
+        try {
+            categoryService.changeCategoryName(categoryId, newName);
+            return new ResponseEntity<String>("Name \""+newName+"\" applied successful to category "+categoryId, HttpStatus.OK);
+        }
+        catch(ConstraintViolationException e){
+            return new ResponseEntity<List<InvalidValue>>(InvalidValue.getAllInvalidValues(e), HttpStatus.BAD_REQUEST);
+        }
+        catch(CategoryNotFoundException e){
+            return new ResponseEntity<String>("Category \"" + categoryId + "\" not found!", HttpStatus.BAD_REQUEST);
+        }
+        catch(CategoryAlreadyExistsException e){
+            return new ResponseEntity<String>("Category \"" + newName + "\" already exists!", HttpStatus.BAD_REQUEST);
+        }
+    }//updateName
 
 }//CategoryController

@@ -34,7 +34,15 @@ public class CategoryService {
     }//showAllCategories
 
 
-    public void createCategory(@NotNull @Size(min = 1, max = 30) String categoryName){
+    @Transactional(readOnly = true)
+    public List<Category> showCategoriesByName(@NotNull @Size(min=3, max=30) String categoryName){
+
+        return categoryRepository.findByName(categoryName);
+
+    }//showAllCategories
+
+
+    public void createCategory(@NotNull @Size(min=1, max=30) String categoryName){
 
         //verify that Category with the name specified doesn't already exists
         if(categoryRepository.existsByName(categoryName))
@@ -46,6 +54,21 @@ public class CategoryService {
         categoryRepository.save(c);
 
     }//createCategory
+
+
+    public void changeCategoryName(@NotNull @Min(0) long categoryId, @NotNull @Size(min=3, max=30) String newName){
+
+        //verify that Category with the id specified already exists
+        Optional<Category> resultCategory = categoryRepository.findById(categoryId);
+        if(!resultCategory.isPresent())
+            throw new CategoryNotFoundException();
+        
+        if(categoryRepository.existsByName(newName))
+            throw new CategoryAlreadyExistsException();
+        
+        resultCategory.get().setName(newName);
+        
+    }//changeCategoryName
 
 
     public void deleteCategory(@NotNull @Min(0) long categoryId){

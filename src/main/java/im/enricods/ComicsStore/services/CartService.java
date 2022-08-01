@@ -1,6 +1,7 @@
 package im.enricods.ComicsStore.services;
 
 import java.util.Optional;
+import java.util.Set;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -52,11 +53,11 @@ public class CartService {
         if(!resultUser.isPresent())
             throw new UserNotFoundException();
 
-        //verify that User has a Cart
+        //get the User's Cart
         Optional<Cart> resultCart = cartRepository.findByUser(resultUser.get());
         if(!resultCart.isPresent())
             throw new CartNotFoundException();
-        
+
         return resultCart.get();
 
     }//getUsersCart
@@ -159,5 +160,27 @@ public class CartService {
         usersCart.setSize(usersCart.getSize() - bias);
 
     }//updateComicsQuantity
+
+    
+    public void readReceipt(@NotNull @Min(1) long userId){
+
+        //verify that User with userId exists
+        Optional<User> resultUser = userRepository.findById(userId);
+        if(!resultUser.isPresent())
+            throw new UserNotFoundException();
+        
+        //get the User's Cart
+        Optional<Cart> resultCart = cartRepository.findByUser(resultUser.get());
+        if(!resultCart.isPresent())
+            throw new CartNotFoundException();
+
+        Set<CartContent> content = resultCart.get().getContent();
+        for(CartContent cc : content){
+            cc.setPriceVariation(false);
+            cc.setDiscountAdded(false);
+            cc.setDiscountTerminated(false);
+        }
+        
+    }//readReceipt
 
 }//CartService

@@ -1,9 +1,7 @@
 package im.enricods.ComicsStore.controllers;
 
-import java.util.LinkedList;
 import java.util.List;
 
-import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,11 +38,7 @@ public class CollectionController {
             return new ResponseEntity<List<Collection>>(result, HttpStatus.OK);
         }
         catch(ConstraintViolationException e){
-            List<InvalidValue> fieldsViolated = new LinkedList<>();
-            for(ConstraintViolation<?> cv : e.getConstraintViolations()){
-                fieldsViolated.add(new InvalidValue(cv.getInvalidValue(), cv.getMessage()));
-            }
-            return new ResponseEntity<List<InvalidValue>>(fieldsViolated, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<List<InvalidValue>>(InvalidValue.getAllInvalidValues(e), HttpStatus.BAD_REQUEST);
         }
         catch(PropertyReferenceException e){
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
@@ -58,11 +52,7 @@ public class CollectionController {
             return new ResponseEntity<List<Collection>>(result, HttpStatus.OK);
         }
         catch(ConstraintViolationException e){
-            List<InvalidValue> fieldsViolated = new LinkedList<>();
-            for(ConstraintViolation<?> cv : e.getConstraintViolations()){
-                fieldsViolated.add(new InvalidValue(cv.getInvalidValue(), cv.getMessage()));
-            }
-            return new ResponseEntity<List<InvalidValue>>(fieldsViolated, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<List<InvalidValue>>(InvalidValue.getAllInvalidValues(e), HttpStatus.BAD_REQUEST);
         }
         catch(PropertyReferenceException e){
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
@@ -79,11 +69,7 @@ public class CollectionController {
             return new ResponseEntity<List<Collection>>(result, HttpStatus.OK);
         }
         catch(ConstraintViolationException e){
-            List<InvalidValue> fieldsViolated = new LinkedList<>();
-            for(ConstraintViolation<?> cv : e.getConstraintViolations()){
-                fieldsViolated.add(new InvalidValue(cv.getInvalidValue(), cv.getMessage()));
-            }
-            return new ResponseEntity<List<InvalidValue>>(fieldsViolated, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<List<InvalidValue>>(InvalidValue.getAllInvalidValues(e), HttpStatus.BAD_REQUEST);
         }
         catch(PropertyReferenceException e){
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
@@ -100,11 +86,7 @@ public class CollectionController {
             return new ResponseEntity<String>("Collection \""+collection.getName()+"\" added successful!", HttpStatus.OK);
         }
         catch(ConstraintViolationException e){
-            List<InvalidValue> fieldsViolated = new LinkedList<>();
-            for(ConstraintViolation<?> cv : e.getConstraintViolations()){
-                fieldsViolated.add(new InvalidValue(cv.getInvalidValue(), cv.getMessage()));
-            }
-            return new ResponseEntity<List<InvalidValue>>(fieldsViolated, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<List<InvalidValue>>(InvalidValue.getAllInvalidValues(e), HttpStatus.BAD_REQUEST);
         }
         catch(CollectionAlreadyExistsException e){
             return new ResponseEntity<String>("Collection \"" + collection.getName() + "\" already exists!",HttpStatus.BAD_REQUEST);
@@ -118,11 +100,7 @@ public class CollectionController {
             return new ResponseEntity<String>("Collection "+ collection.getName()  +" updated successful!", HttpStatus.OK);
         }
         catch(ConstraintViolationException e){
-            List<InvalidValue> fieldsViolated = new LinkedList<>();
-            for(ConstraintViolation<?> cv : e.getConstraintViolations()){
-                fieldsViolated.add(new InvalidValue(cv.getInvalidValue(), cv.getMessage()));
-            }
-            return new ResponseEntity<List<InvalidValue>>(fieldsViolated, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<List<InvalidValue>>(InvalidValue.getAllInvalidValues(e), HttpStatus.BAD_REQUEST);
         }
         catch(CollectionNotFoundException e){
             return new ResponseEntity<String>("Collection "+ collection.getName()  +" not found!", HttpStatus.BAD_REQUEST);
@@ -136,11 +114,7 @@ public class CollectionController {
             return new ResponseEntity<String>("Collection "+ collectionId  +" binded to "+ categoryId, HttpStatus.OK);
         }
         catch(ConstraintViolationException e){
-            List<InvalidValue> fieldsViolated = new LinkedList<>();
-            for(ConstraintViolation<?> cv : e.getConstraintViolations()){
-                fieldsViolated.add(new InvalidValue(cv.getInvalidValue(), cv.getMessage()));
-            }
-            return new ResponseEntity<List<InvalidValue>>(fieldsViolated, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<List<InvalidValue>>(InvalidValue.getAllInvalidValues(e), HttpStatus.BAD_REQUEST);
         }
         catch(CategoryNotFoundException e){
             return new ResponseEntity<String>("Category \"" + categoryId + "\" not found!", HttpStatus.BAD_REQUEST);
