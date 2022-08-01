@@ -6,6 +6,7 @@ import java.util.Optional;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,7 +71,7 @@ public class CollectionService {
 
 
     @Transactional(readOnly = true)
-    public List<Collection> showCollectionsByCategory(@NotNull @Min(0) long categoryId, @Min(0) int pageNumber, @Min(0) int pageSize, String sortBy){
+    public List<Collection> showCollectionsByCategory(@Min(0) long categoryId, @Min(0) int pageNumber, @Min(0) int pageSize, String sortBy){
 
         //verify that Category specified by categoryId exists
         Optional<Category> result = categoryRepository.findById(categoryId);
@@ -85,7 +86,7 @@ public class CollectionService {
 
 
     @Transactional(readOnly = true)
-    public List<Collection> showCollectionsByAuthor(@NotNull @Min(0) long authorId, @Min(0) int pageNumber, @Min(0) int pageSize, String sortBy){
+    public List<Collection> showCollectionsByAuthor(@Min(0) long authorId, @Min(0) int pageNumber, @Min(0) int pageSize, String sortBy){
 
         //verify that Author specified by authorId exists
         Optional<Author> resultAuthor = authorRepository.findById(authorId);
@@ -97,6 +98,41 @@ public class CollectionService {
         return pagedResult.getContent();
         
     }//showCollectionsByAuthor
+
+
+    @Transactional(readOnly = true)
+    public List<Collection> showCollectionsBy(@Size(min=3, max=50) String name, @Min(0) Long categoryId, @Min(0) Long authorId, @Min(0) int pageNumber, @Min(0) int pageSize, String sortBy){
+
+        if( (name==null && categoryId==null) || 
+            (name==null && authorId==null) || 
+            (categoryId==null && authorId==null) )
+            throw new IllegalArgumentException();
+
+        Author author = null;
+        if(authorId!=null){
+            //verify that Author specified by authorId exists
+            Optional<Author> resultAuthor = authorRepository.findById(authorId);
+            if(!resultAuthor.isPresent())
+                throw new AuthorNotFoundException();
+            author = resultAuthor.get();
+        }
+        
+        Category category = null;
+        if(categoryId!=null){
+            //verify that Category specified by categoryId exists
+            Optional<Category> resultCategory = categoryRepository.findById(categoryId);
+            if(!resultCategory.isPresent())
+                throw new CategoryNotFoundException();
+            category = resultCategory.get();
+        }
+
+        Pageable paging = PageRequest.of(pageNumber, pageSize, Sort.by(sortBy));
+        Page<Collection> pagedResult = collectionRepository.advancedSearch(name, author, category, paging);
+        return pagedResult.getContent();
+
+
+    }//showCollectionsBy
+
 
     public void addCollection(@Valid Collection collection){
 
@@ -135,8 +171,23 @@ public class CollectionService {
 
     }//updateCollection
 
+
+    public void changePrice(@Min(0) long collectionId, @Positive float newPrice ){
+
+        //verify that Collection specified already exists
+        Optional<Collection> resultCollection = collectionRepository.findById(collectionId);
+        if(!resultCollection.isPresent())
+            throw new CollectionNotFoundException();
+        
+        Collection c = resultCollection.get();
+        c.setOldPrice(c.getActualPrice());
+        c.setActualPrice(newPrice);
+
+    }//changePrice
+
+
     /*A Collection can be deleted if and only if there was not a Purchase that involve a Comic in the Collection considered*/
-    public void deleteCollection(@NotNull @Min(0) long collectionId){
+    public void deleteCollection(@Min(0) long collectionId){
 
         //verify that Collection specified already exists
         Optional<Collection> resultCollection = collectionRepository.findById(collectionId);

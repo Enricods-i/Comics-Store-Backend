@@ -14,15 +14,23 @@ import im.enricods.ComicsStore.entities.Collection;
 public interface CollectionRepository extends JpaRepository<Collection,Long>{
 
     boolean existsByName(String name);
+
     
     Page<Collection> findByNameContaining(String name, Pageable pageable);
 
-    // @Query(value = "SELECT DISTINCT c.collection FROM Comic c JOIN c.authors a WHERE a = :author ORDER BY :sortBy ASC")
     @Query(value = "SELECT col FROM Collection col JOIN col.comics com JOIN com.authors auth WHERE auth = :author")
     Page<Collection> findByAuthor(Author author, Pageable pageable);
 
     @Query(value = "SELECT col FROM Collection col JOIN col.categories cat WHERE cat = :category")
     Page<Collection> findByCategory(Category category, Pageable pageable);
+
+    @Query(value =  "SELECT col" +
+                    "FROM Collection col JOIN col.comics com JOIN com.authors auth JOIN col.categories cat" +
+                    "WHERE (col.name LIKE :name OR :name IS NULL) AND" +
+                    " (auth = :author OR :author IS NULL) AND" +
+                    " (cat = :category OR :category IS NULL)" )
+    Page<Collection> advancedSearch(String name, Author author, Category category, Pageable pageable);
+    
 
     @Query(value = "SELECT COUNT(cip) FROM Collection col JOIN col.comics com JOIN com.copiesSold cip WHERE col = :collection")
     int countPurchasesInCollection(Collection collection);
