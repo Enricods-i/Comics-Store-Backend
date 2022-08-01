@@ -44,7 +44,7 @@ public class Collection {
     private long id;
 
     @NotNull @Size(min = 1, max = 50)
-    @Column(name = "name", length = 50)
+    @Column(name = "name",nullable = false, unique = true, length = 50)
     private String name;
 
     @Size(min = 1, max = 20)

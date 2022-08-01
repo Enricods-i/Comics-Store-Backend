@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mapping.PropertyReferenceException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -23,6 +24,7 @@ import im.enricods.ComicsStore.utils.exceptions.AuthorNotFoundException;
 import im.enricods.ComicsStore.utils.exceptions.CategoryNotFoundException;
 import im.enricods.ComicsStore.utils.exceptions.CollectionAlreadyExistsException;
 import im.enricods.ComicsStore.utils.exceptions.CollectionNotFoundException;
+import im.enricods.ComicsStore.utils.exceptions.NonRemovalCollectionException;
 
 @RestController
 @RequestMapping(path = "/collections")
@@ -106,6 +108,23 @@ public class CollectionController {
             return new ResponseEntity<String>("Collection "+ collection.getName()  +" not found!", HttpStatus.BAD_REQUEST);
         }
     }//update
+
+    @DeleteMapping
+    public ResponseEntity<?> delete(@RequestParam(value = "cllctn") long collectionId){
+        try {
+            collectionService.deleteCollection(collectionId);
+            return new ResponseEntity<String>("Collection \""+collectionId+"\" deleted successful!", HttpStatus.OK);
+        }
+        catch(ConstraintViolationException e){
+            return new ResponseEntity<List<InvalidValue>>(InvalidValue.getAllInvalidValues(e), HttpStatus.BAD_REQUEST);
+        }
+        catch(CollectionNotFoundException e){
+            return new ResponseEntity<String>("Collection "+ collectionId  +" not found!", HttpStatus.BAD_REQUEST);
+        }
+        catch(NonRemovalCollectionException e){
+            return new ResponseEntity<String>("Collection "+ collectionId  +" cannot be deleted!", HttpStatus.BAD_REQUEST);
+        }
+    }//delete
 
     @PutMapping(path = "/bindCategory")
     public ResponseEntity<?> bindCategory(@RequestParam(value = "cllctn") long collectionId, @RequestParam(value = "ctgr") long categoryId){

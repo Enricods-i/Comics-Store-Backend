@@ -24,4 +24,7 @@ public interface CollectionRepository extends JpaRepository<Collection,Long>{
     @Query(value = "SELECT col FROM Collection col JOIN col.categories cat WHERE cat = :category")
     Page<Collection> findByCategory(Category category, Pageable pageable);
 
+    @Query(value = "SELECT COUNT(cip) FROM Collection col JOIN col.comics com JOIN com.copiesSold cip WHERE col = :collection")
+    int countPurchasesInCollection(Collection collection);
+
 }//CollectionRepository
