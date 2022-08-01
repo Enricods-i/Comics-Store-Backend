@@ -11,7 +11,9 @@ import im.enricods.ComicsStore.entities.Category;
 import im.enricods.ComicsStore.entities.Collection;
 
 @Repository
-public interface CollectionRepository extends JpaRepository<Collection,String>{
+public interface CollectionRepository extends JpaRepository<Collection,Long>{
+
+    boolean existsByName(String name);
     
     Page<Collection> findByNameContaining(String name, Pageable pageable);
 

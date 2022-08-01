@@ -3,6 +3,7 @@ package im.enricods.ComicsStore.services;
 import java.util.List;
 import java.util.Optional;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -36,7 +37,7 @@ public class CategoryService {
     public void createCategory(@NotNull @Size(min = 1, max = 30) String categoryName){
 
         //verify that Category with the name specified doesn't already exists
-        if(categoryRepository.existsById(categoryName))
+        if(categoryRepository.existsByName(categoryName))
             throw new CategoryAlreadyExistsException();
         
         Category c = new Category();
@@ -47,10 +48,10 @@ public class CategoryService {
     }//createCategory
 
 
-    public void deleteCategory(@NotNull @Size(min = 1, max = 30) String categoryName){
+    public void deleteCategory(@NotNull @Min(0) long categoryId){
 
-        //verify that Category with the name specified already exists
-        Optional<Category> resultCategory = categoryRepository.findById(categoryName);
+        //verify that Category with the id specified already exists
+        Optional<Category> resultCategory = categoryRepository.findById(categoryId);
         if(!resultCategory.isPresent())
             throw new CategoryNotFoundException();
         

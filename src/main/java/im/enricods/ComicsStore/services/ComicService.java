@@ -6,7 +6,6 @@ import java.util.Optional;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -44,10 +43,10 @@ public class ComicService {
 
 
     @Transactional(readOnly = true)
-    public List<Comic> showComicsInCollection(@NotNull @Size(min = 1, max = 50) String collectionName, @Min(0) int pageNumber, @Min(0) int pageSize, String sortBy){
+    public List<Comic> showComicsInCollection(@NotNull @Min(0) long collectionId, @Min(0) int pageNumber, @Min(0) int pageSize, String sortBy){
 
-        //verify that a Collection with collectionName exists
-         Optional<Collection> result = collectionRepository.findById(collectionName);
+        //verify that a Collection with collectionId exists
+         Optional<Collection> result = collectionRepository.findById(collectionId);
          if(!result.isPresent())
             throw new CollectionNotFoundException();
         
@@ -59,15 +58,15 @@ public class ComicService {
 
 
     @Transactional(readOnly = true)
-    public List<Comic> showComicsInCollectionCreatedByAuthor(@Size(min = 1, max = 50) String collectionName, @Size(min = 1, max = 20) String authorName, @Min(0) int pageNumber, @Min(0) int pageSize, String sortBy){
+    public List<Comic> showComicsInCollectionCreatedByAuthor(@NotNull @Min(0) long collectionId, @NotNull @Min(0) long authorId, @Min(0) int pageNumber, @Min(0) int pageSize, String sortBy){
 
-        //verify that a Collection with collectionName exists
-        Optional<Collection> resultCollection = collectionRepository.findById(collectionName);
+        //verify that a Collection with collectionId exists
+        Optional<Collection> resultCollection = collectionRepository.findById(collectionId);
          if(!resultCollection.isPresent())
             throw new CollectionNotFoundException();
         
-        //verify that a Author with authorName exists
-        Optional<Author> resultAuthor = authorRepository.findById(authorName);
+        //verify that a Author with authorId exists
+        Optional<Author> resultAuthor = authorRepository.findById(authorId);
         if(!resultAuthor.isPresent())
             throw new AuthorNotFoundException();
         
@@ -78,10 +77,10 @@ public class ComicService {
     }//showComicsInCollectionCreatedByAuthor
 
 
-    public Comic addComic(@Valid Comic comic, @Size(min = 1, max = 50) String collectionName){
+    public Comic addComic(@Valid Comic comic, @NotNull @Min(0) long collectionId){
 
-        //verify that a Collection with collectionName exists
-        Optional<Collection> resultCollection = collectionRepository.findById(collectionName);
+        //verify that a Collection with collectionId exists
+        Optional<Collection> resultCollection = collectionRepository.findById(collectionId);
         if(!resultCollection.isPresent())
             throw new CollectionNotFoundException();
         
@@ -131,10 +130,10 @@ public class ComicService {
     }//updateComic
 
 
-    public void addAuthorToComic(@Size(min = 1, max = 20) String authorName, @Min(1) long comicId){
+    public void addAuthorToComic(@NotNull @Min(0) long authorId, @NotNull @Min(1) long comicId){
 
-        //verify that a Author with authorName exists
-        Optional<Author> resultAuthor = authorRepository.findById(authorName);
+        //verify that a Author with authorId exists
+        Optional<Author> resultAuthor = authorRepository.findById(authorId);
         if(!resultAuthor.isPresent())
             throw new AuthorNotFoundException();
         

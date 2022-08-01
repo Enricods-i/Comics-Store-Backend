@@ -14,6 +14,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Version;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -42,6 +43,10 @@ public class Author {
     @Column(name = "name", length = 20)
     private String name;
 
+    @Size(max = 20)
+    @Column(name = "image", length = 20)
+    private String image;
+
     @Size(max = 1000)
     @Column(name = "biography", length = 1000)
     private String biography;
@@ -53,6 +58,10 @@ public class Author {
         inverseJoinColumns = {@JoinColumn(name = "comic_id")}
     )
     private Set<Comic> works;
+
+    @JsonIgnore
+    @Version @Column(name = "version", nullable = false)
+    private long version;
     
     @JsonIgnore
     @CreationTimestamp @Temporal(TemporalType.TIMESTAMP) @Column(name = "created_at", nullable = false)

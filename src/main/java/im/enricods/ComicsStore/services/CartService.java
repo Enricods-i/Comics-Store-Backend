@@ -3,6 +3,7 @@ package im.enricods.ComicsStore.services;
 import java.util.Optional;
 
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -44,7 +45,7 @@ public class CartService {
 
 
     @Transactional(readOnly = true)
-    public Cart getCartByUser(@Min(1) long userId){
+    public Cart getCartByUser(@NotNull @Min(1) long userId){
 
         //verify that User with Id specified exists
         Optional<User> resultUser = userRepository.findById(userId);
@@ -61,7 +62,7 @@ public class CartService {
     }//getUsersCart
 
 
-    public void addComicToUsersCart(@Min(1) long userId, @Min(1) long comicId, @Min(1) int quantity){
+    public void addComicToUsersCart(@NotNull @Min(1) long userId, @NotNull @Min(1) long comicId, @NotNull @Min(1) int quantity){
 
         //verify that a User with userId exists
         Optional<User> resultUser = userRepository.findById(userId);
@@ -99,7 +100,7 @@ public class CartService {
     }//addComicToUsersCart
 
 
-    public void deleteComicFromUsersCart(@Min(1) long userId, @Min(1) long comicId){
+    public void deleteComicFromUsersCart(@NotNull @Min(1) long userId, @NotNull @Min(1) long comicId){
 
         //verify that User with userId exists
         Optional<User> resultUser = userRepository.findById(userId);
@@ -128,7 +129,7 @@ public class CartService {
     }//deleteComicFromUsersCart
 
 
-    public void updateComicQuantity(@Min(1) long userId, @Min(1) long comicId, @Min(1) int newQuantity){
+    public void updateComicQuantity(@NotNull @Min(1) long userId, @NotNull @Min(1) long comicId, @NotNull @Min(1) int newQuantity){
 
         //verify that User with userId exists
         Optional<User> resultUser = userRepository.findById(userId);

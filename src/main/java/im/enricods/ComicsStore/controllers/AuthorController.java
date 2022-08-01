@@ -38,10 +38,30 @@ public class AuthorController {
             List<Author> result = authorService.showAllAuthors(pageNumber, pageSize, sortBy);
             return new ResponseEntity<List<Author>>(result, HttpStatus.OK);
         }
+        //if the sortBy parameter has values that are not allowed
         catch(PropertyReferenceException e){
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }//getAll
+
+    @GetMapping(path = "/byName")
+    public ResponseEntity<?> getByName(@RequestParam(value = "name") String authorName,@RequestParam(value = "pageNumber", defaultValue = "0") int pageNumber, @RequestParam(value = "pageSize", defaultValue = "10") int pageSize, @RequestParam(value = "sortBy", defaultValue = "name") String sortBy ){
+        try{
+            List<Author> result = authorService.showAuthorsByName(authorName, pageNumber, pageSize, sortBy);
+            return new ResponseEntity<List<Author>>(result, HttpStatus.OK);
+        }
+        catch(ConstraintViolationException e){
+            List<InvalidValue> fieldsViolated = new LinkedList<>();
+            for(ConstraintViolation<?> cv : e.getConstraintViolations()){
+                fieldsViolated.add(new InvalidValue(cv.getInvalidValue(), cv.getMessage()));
+            }
+            return new ResponseEntity<List<InvalidValue>>(fieldsViolated, HttpStatus.BAD_REQUEST);
+        }
+        //if the sortBy parameter has values that are not allowed
+        catch(PropertyReferenceException e){
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }//getByName
 
     @PostMapping
     public ResponseEntity<?> create(@RequestBody Author author){
@@ -80,10 +100,10 @@ public class AuthorController {
     }//update
 
     @DeleteMapping
-    public ResponseEntity<?> delete(@RequestParam(value = "auth") String authorName){
+    public ResponseEntity<?> delete(@RequestParam(value = "auth") long authorId){
         try{
-            authorService.deleteAuthor(authorName);
-            return new ResponseEntity<String>("Author \""+ authorName + "\" deleted succesful!", HttpStatus.OK);
+            authorService.deleteAuthor(authorId);
+            return new ResponseEntity<String>("Author \""+ authorId + "\" deleted succesful!", HttpStatus.OK);
         }
         catch(ConstraintViolationException e){
             List<InvalidValue> fieldsViolated = new LinkedList<>();
@@ -93,7 +113,7 @@ public class AuthorController {
             return new ResponseEntity<List<InvalidValue>>(fieldsViolated, HttpStatus.BAD_REQUEST);
         }
         catch(AuthorNotFoundException e){
-            return new ResponseEntity<String>("Author with name \"" + authorName + "\" not found!", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<String>("Author with name \"" + authorId + "\" not found!", HttpStatus.BAD_REQUEST);
         }
     }//delete
 

@@ -52,9 +52,9 @@ public class CollectionController {
     }//getByName
 
     @GetMapping(path = "/byCategory")
-    public ResponseEntity<?>  getByCategory(@RequestParam(value = "ctgr") String categoryName, @RequestParam(value = "pageNumber", defaultValue = "0") int pageNumber, @RequestParam(value = "pageSize", defaultValue = "10") int pageSize, @RequestParam(value = "sortBy", defaultValue = "name") String sortBy){
+    public ResponseEntity<?>  getByCategory(@RequestParam(value = "ctgr") long categoryId, @RequestParam(value = "pageNumber", defaultValue = "0") int pageNumber, @RequestParam(value = "pageSize", defaultValue = "10") int pageSize, @RequestParam(value = "sortBy", defaultValue = "name") String sortBy){
         try{
-            List<Collection> result = collectionService.showCollectionsByCategory(categoryName, pageNumber, pageSize, sortBy);
+            List<Collection> result = collectionService.showCollectionsByCategory(categoryId, pageNumber, pageSize, sortBy);
             return new ResponseEntity<List<Collection>>(result, HttpStatus.OK);
         }
         catch(ConstraintViolationException e){
@@ -68,14 +68,14 @@ public class CollectionController {
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
         catch(CategoryNotFoundException e){
-            return new ResponseEntity<String>("Category \""+categoryName+"\" not found!",HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<String>("Category \""+categoryId+"\" not found!",HttpStatus.BAD_REQUEST);
         }
     }//getByCategory
 
     @GetMapping(path = "/byAuthor")
-    public ResponseEntity<?> getByAuthor(@RequestParam(value = "autr") String authorName, @RequestParam(value = "pageNumber", defaultValue = "0") int pageNumber, @RequestParam(value = "pageSize", defaultValue = "10") int pageSize, @RequestParam(value = "sortBy", defaultValue = "name") String sortBy){
+    public ResponseEntity<?> getByAuthor(@RequestParam(value = "autr") long authorId, @RequestParam(value = "pageNumber", defaultValue = "0") int pageNumber, @RequestParam(value = "pageSize", defaultValue = "10") int pageSize, @RequestParam(value = "sortBy", defaultValue = "name") String sortBy){
         try{
-            List<Collection> result = collectionService.showCollectionsByAuthor(authorName, pageNumber, pageSize, sortBy);
+            List<Collection> result = collectionService.showCollectionsByAuthor(authorId, pageNumber, pageSize, sortBy);
             return new ResponseEntity<List<Collection>>(result, HttpStatus.OK);
         }
         catch(ConstraintViolationException e){
@@ -89,7 +89,7 @@ public class CollectionController {
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
         catch(AuthorNotFoundException e){
-            return new ResponseEntity<String>("Author \""+authorName+"\" not found!",HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<String>("Author \""+authorId+"\" not found!",HttpStatus.BAD_REQUEST);
         }
     }//getByAuthor
 
@@ -130,10 +130,10 @@ public class CollectionController {
     }//update
 
     @PutMapping(path = "/bindCategory")
-    public ResponseEntity<?> bindCategory(@RequestParam(value = "cllctn") String collectionName, @RequestParam(value = "ctgr") String categoryName){
+    public ResponseEntity<?> bindCategory(@RequestParam(value = "cllctn") long collectionId, @RequestParam(value = "ctgr") long categoryId){
         try{
-            collectionService.bindCategoryToCollection(categoryName, collectionName);
-            return new ResponseEntity<String>("Collection "+ collectionName  +" binded to "+ categoryName, HttpStatus.OK);
+            collectionService.bindCategoryToCollection(categoryId, collectionId);
+            return new ResponseEntity<String>("Collection "+ collectionId  +" binded to "+ categoryId, HttpStatus.OK);
         }
         catch(ConstraintViolationException e){
             List<InvalidValue> fieldsViolated = new LinkedList<>();
@@ -143,10 +143,10 @@ public class CollectionController {
             return new ResponseEntity<List<InvalidValue>>(fieldsViolated, HttpStatus.BAD_REQUEST);
         }
         catch(CategoryNotFoundException e){
-            return new ResponseEntity<String>("Category \"" + categoryName + "\" not found!", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<String>("Category \"" + categoryId + "\" not found!", HttpStatus.BAD_REQUEST);
         }
         catch(CollectionNotFoundException e){
-            return new ResponseEntity<String>("Collection \"" + collectionName + "\" not found!", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<String>("Collection \"" + collectionId + "\" not found!", HttpStatus.BAD_REQUEST);
         }
     }//update
     

@@ -6,8 +6,8 @@ import org.springframework.stereotype.Repository;
 import im.enricods.ComicsStore.entities.Category;
 
 @Repository
-public interface CategoryRepository extends JpaRepository<Category,String>{
-
-    //È già presente la ricerca per nome (chiave primaria)
+public interface CategoryRepository extends JpaRepository<Category,Long>{
     
+    boolean existsByName(String name);
+
 }//CategoryRepository

@@ -53,10 +53,10 @@ public class CategoryController {
     }//create
 
     @DeleteMapping
-    public ResponseEntity<?> delete(@RequestParam(value = "cName") String categoryName){
+    public ResponseEntity<?> delete(@RequestParam(value = "ctgr") long categoryId){
         try{
-            categoryService.deleteCategory(categoryName);
-            return new ResponseEntity<String>("Category \""+ categoryName +"\" deleted succesful!", HttpStatus.OK);
+            categoryService.deleteCategory(categoryId);
+            return new ResponseEntity<String>("Category \""+ categoryId +"\" deleted succesful!", HttpStatus.OK);
         }
         catch(ConstraintViolationException e){
             List<InvalidValue> fieldsViolated = new LinkedList<>();
@@ -66,7 +66,7 @@ public class CategoryController {
             return new ResponseEntity<List<InvalidValue>>(fieldsViolated, HttpStatus.BAD_REQUEST);
         }
         catch(CategoryNotFoundException e){
-            return new ResponseEntity<String>("Category \"" + categoryName + "\" not found!", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<String>("Category \"" + categoryId + "\" not found!", HttpStatus.BAD_REQUEST);
         }
     }//delete
 

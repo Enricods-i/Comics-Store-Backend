@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -31,7 +32,7 @@ public class AuthorService {
 
 
     @Transactional(readOnly = true)
-    public List<Author> showAllAuthors(int pageNumber, int pageSize, String sortBy){
+    public List<Author> showAllAuthors(@Min(0) int pageNumber, @Min(0) int pageSize, String sortBy){
 
         Pageable paging = PageRequest.of(pageNumber, pageSize, Sort.by(sortBy));
         return authorRepository.findAll(paging).getContent();
@@ -39,10 +40,19 @@ public class AuthorService {
     }//showAllAuthors
 
 
+    @Transactional(readOnly = true)
+    public List<Author> showAuthorsByName(@NotNull @Size(min=3, max=20) String name, @Min(0) int pageNumber, @Min(0) int pageSize, String sortBy){
+
+        Pageable paging = PageRequest.of(pageNumber, pageSize, Sort.by(sortBy));
+        return authorRepository.findByNameContaining(name, paging).getContent();
+
+    }//showAuthorsByName
+
+
     public void addAuthor(@Valid Author author){
 
         //verify that Author specified doesn't already exists
-        if(authorRepository.existsById(author.getName()))
+        if(authorRepository.existsById(author.getId()))
             throw new AuthorAlreadyExistsException();
         
         //persist
@@ -51,10 +61,10 @@ public class AuthorService {
     }//addAuthor
 
 
-    public void deleteAuthor(@NotNull @Size(min = 1, max= 20)String authorName){
+    public void deleteAuthor(@NotNull @Min(0) long authorId){
 
-        //verify that Author with authorName specified exists
-        Optional<Author> resultAuthor = authorRepository.findById(authorName);
+        //verify that Author with authorId specified exists
+        Optional<Author> resultAuthor = authorRepository.findById(authorId);
         if(!resultAuthor.isPresent())
             throw new AuthorNotFoundException();
         
@@ -72,7 +82,7 @@ public class AuthorService {
     public void updateAuthor(@Valid Author author){
 
         //verify that Author specified exists
-        Optional<Author> resultAuthor = authorRepository.findById(author.getName());
+        Optional<Author> resultAuthor = authorRepository.findById(author.getId());
         if(!resultAuthor.isPresent())
             throw new AuthorNotFoundException();
         
