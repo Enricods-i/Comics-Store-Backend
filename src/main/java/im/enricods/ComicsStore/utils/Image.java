@@ -7,6 +7,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.multipart.MultipartFile;
 
 public class Image {
@@ -14,6 +15,7 @@ public class Image {
     @Value("$(image-path)")
     private static String IMAGES_DIRECTORY;
 
+    @Async
     public static void saveImage(String fileName, MultipartFile file) throws IOException{
         BufferedImage image = ImageIO.read(file.getInputStream());
         if(image.getWidth() != 435 || image.getHeight() != 682)

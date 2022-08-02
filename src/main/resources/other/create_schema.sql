@@ -22,7 +22,6 @@ CREATE TABLE collection (
 	name VARCHAR(50) NOT NULL UNIQUE,
 	actual_price FLOAT NOT NULL,
 	old_price FLOAT NOT NULL,
-	image VARCHAR(20),
 	year_of_release INT,
 	format_and_binding VARCHAR(30),
 	color BOOLEAN,
@@ -37,7 +36,6 @@ CREATE TABLE comic (
     collection_id BIGINT NOT NULL REFERENCES collection (id),
 	number SMALLINT NOT NULL,
 	quantity SMALLINT NOT NULL,
-	image VARCHAR(20),
 	pages SMALLINT,
 	isbn VARCHAR(13) UNIQUE NOT NULL,
 	publication_date DATE,
@@ -60,7 +58,6 @@ CREATE TABLE cart_content(
 CREATE TABLE author (
 	id BIGSERIAL PRIMARY KEY,
 	name VARCHAR(20) NOT NULL UNIQUE,
-	image VARCHAR(20),
 	biography VARCHAR(1000),
 	version BIGINT,
 	created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,

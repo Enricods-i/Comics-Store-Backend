@@ -1,12 +1,12 @@
 package im.enricods.ComicsStore.services;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +17,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.multipart.MultipartFile;
 
 import im.enricods.ComicsStore.entities.Author;
 import im.enricods.ComicsStore.entities.CartContent;
@@ -31,6 +32,7 @@ import im.enricods.ComicsStore.repositories.CategoryRepository;
 import im.enricods.ComicsStore.repositories.CollectionRepository;
 import im.enricods.ComicsStore.repositories.ComicRepository;
 import im.enricods.ComicsStore.repositories.WishListRepository;
+import im.enricods.ComicsStore.utils.Image;
 import im.enricods.ComicsStore.utils.exceptions.AuthorNotFoundException;
 import im.enricods.ComicsStore.utils.exceptions.CategoryNotFoundException;
 import im.enricods.ComicsStore.utils.exceptions.CollectionAlreadyExistsException;
@@ -59,6 +61,7 @@ public class CollectionService {
 
     @Autowired
     private ComicRepository comicRepository;
+
     
     @Transactional(readOnly = true)
     public List<Collection> showCollectionsByName(@NotNull @Size(min=3, max=50) String name, @Min(0) int pageNumber, @Min(0) int pageSize, String sortBy){
@@ -106,7 +109,7 @@ public class CollectionService {
         if( (name==null && categoryId==null) || 
             (name==null && authorId==null) || 
             (categoryId==null && authorId==null) )
-            throw new IllegalArgumentException();
+            throw new NullPointerException("Too many parameter are null");
 
         Author author = null;
         if(authorId!=null){
@@ -143,7 +146,6 @@ public class CollectionService {
         //set fields that client don't know
         collection.setOldPrice(-1);
         collection.setVersion(1);
-        collection.setImage(null);
 
         collectionRepository.save(collection);
 
@@ -153,36 +155,44 @@ public class CollectionService {
     public void updateCollection(@Valid Collection collection){
 
         //verify that Collection specified already exists
-        Optional<Collection> resultCollection = collectionRepository.findById(collection.getId());
-        if(!resultCollection.isPresent())
-            throw new CollectionNotFoundException();
+        Optional<Collection> c1 = collectionRepository.findById(collection.getId());
+        if(!c1.isPresent())
+            throw new IllegalArgumentException("Collection with id "+collection.getId()+" not found!");
+       
+        Collection target = c1.get();
 
-        Collection c = resultCollection.get();
+        //verify that a Collection with the name specified doesn't already exist
+        Optional<Collection> c2 = collectionRepository.findByName(collection.getName());
+        if(c2.isPresent() && !c2.get().equals(target))
+            throw new IllegalArgumentException("A Collection with name \""+collection.getName()+"\" already exists");
+
+        if(Math.abs( collection.getActualPrice() - target.getActualPrice() ) > 1e-9){
+            //change price
+            collection.setOldPrice(target.getActualPrice());
+        }
+        else{
+            //price don't change
+            collection.setOldPrice(target.getOldPrice());
+        }
 
         //client can't modify this parameters
-        collection.setActualPrice(c.getActualPrice());
-        collection.setOldPrice(c.getOldPrice());
-        collection.setImage(c.getImage());
-        collection.setVersion(c.getVersion());
-        collection.setCreationDate(c.getCreationDate());
+        collection.setVersion(target.getVersion());
+        collection.setCreationDate(target.getCreationDate());
 
         //merge
         collectionRepository.save(collection);
 
     }//updateCollection
 
-
-    public void changePrice(@Min(0) long collectionId, @Positive float newPrice ){
+    @Transactional(readOnly = true)
+    public void updateImage(@Min(0) long collectionId, MultipartFile img ) throws IOException{
 
         //verify that Collection specified already exists
-        Optional<Collection> resultCollection = collectionRepository.findById(collectionId);
-        if(!resultCollection.isPresent())
-            throw new CollectionNotFoundException();
+        if(!collectionRepository.existsById(collectionId))
+            throw new IllegalArgumentException("Collection "+collectionId+" not found!");
         
-        Collection c = resultCollection.get();
-        c.setOldPrice(c.getActualPrice());
-        c.setActualPrice(newPrice);
-
+        Image.saveImage("col_"+collectionId, img);
+       
     }//changePrice
 
 

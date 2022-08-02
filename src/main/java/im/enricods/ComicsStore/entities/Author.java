@@ -43,9 +43,11 @@ public class Author {
     @Column(name = "name", length = 20)
     private String name;
 
+    /*
     @Size(max = 20)
     @Column(name = "image", length = 20)
     private String image;
+    */
 
     @Size(max = 1000)
     @Column(name = "biography", length = 1000)

@@ -52,9 +52,11 @@ public class Comic {
     @Column(name = "quantity", nullable = false)
     private int quantity;
 
+    /*
     @Size(max = 20)
     @Column(name = "image", length = 20)
     private String image;
+    */
 
     @Min(1)
     @Column(name = "pages")

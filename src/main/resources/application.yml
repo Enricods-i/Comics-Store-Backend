@@ -23,7 +23,7 @@ server:
         key-store-type: pluto
         key-store: paperino
 
-images-path: images
+images-path: images/
 
 keycloak:
     resource: pippo

@@ -47,9 +47,11 @@ public class Collection {
     @Column(name = "name",nullable = false, unique = true, length = 50)
     private String name;
 
+    /*
     @Size(min = 1, max = 20)
     @Column(name = "image", length = 20)
     private String image;
+    */
 
     @NotNull @Positive
     @Column(name = "actual_price", nullable = false)
