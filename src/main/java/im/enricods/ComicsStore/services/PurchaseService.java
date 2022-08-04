@@ -138,7 +138,7 @@ public class PurchaseService {
             purchase.getPurchasedComics().add(cip);
 
             //calculate effective price of the comic stock
-            initialPrice = c.getCollection().getActualPrice();
+            initialPrice = c.getCollection().getPrice();
             newPrice = initialPrice;
             //appling active discounts
             for(Discount d : discountRepository.findActiveByComic(c)){

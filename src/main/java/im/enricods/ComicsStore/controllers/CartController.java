@@ -117,21 +117,4 @@ public class CartController {
         }
     }//addComic
 
-    @PutMapping(path = "/readReceipts")
-    public ResponseEntity<?> readReceipts(@RequestParam(value = "usr") long userId){
-        try {
-            cartService.readReceipt(userId);
-            return new ResponseEntity<String>(HttpStatus.OK);
-        }
-        catch(ConstraintViolationException e){
-            return new ResponseEntity<List<InvalidValue>>(InvalidValue.getAllInvalidValues(e), HttpStatus.BAD_REQUEST);
-        }
-        catch(UserNotFoundException e){
-            return new ResponseEntity<String>("User \""+userId+"\" not found",HttpStatus.BAD_REQUEST);
-        }
-        catch(CartNotFoundException e){
-            return new ResponseEntity<String>("Cart for user \""+userId+"\" not found",HttpStatus.BAD_REQUEST);
-        }
-    }//readReceipts
-
 }//CartController

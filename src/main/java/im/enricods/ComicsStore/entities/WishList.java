@@ -38,7 +38,7 @@ public class WishList {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY) @Column(name = "id")
     private long id;
 
-    @NotNull @Size(max = 50)
+    @NotNull @Size(max = 30)
     @Column(name = "name", nullable = false, length = 50)
     private String name;
 

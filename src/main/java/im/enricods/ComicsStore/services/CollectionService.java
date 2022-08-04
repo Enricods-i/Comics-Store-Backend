@@ -144,7 +144,6 @@ public class CollectionService {
             throw new CollectionAlreadyExistsException();
         
         //set fields that client don't know
-        collection.setOldPrice(-1);
         collection.setVersion(1);
 
         collectionRepository.save(collection);
@@ -165,15 +164,6 @@ public class CollectionService {
         Optional<Collection> c2 = collectionRepository.findByName(collection.getName());
         if(c2.isPresent() && !c2.get().equals(target))
             throw new IllegalArgumentException("A Collection with name \""+collection.getName()+"\" already exists");
-
-        if(Math.abs( collection.getActualPrice() - target.getActualPrice() ) > 1e-9){
-            //change price
-            collection.setOldPrice(target.getActualPrice());
-        }
-        else{
-            //price don't change
-            collection.setOldPrice(target.getOldPrice());
-        }
 
         //client can't modify this parameters
         collection.setVersion(target.getVersion());
