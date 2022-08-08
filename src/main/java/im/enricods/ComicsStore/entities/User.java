@@ -10,6 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -88,6 +89,10 @@ public class User {
     @JsonIgnore
     @OneToMany(mappedBy = "buyer")
     private Set<Purchase> purchases;
+
+    @JsonIgnore
+    @ManyToMany(mappedBy = "users")
+    private Set<Purchase> messages;
 
     @JsonIgnore
     @CreationTimestamp @Temporal(TemporalType.TIMESTAMP) @Column(name = "created_at", nullable = false)

@@ -46,11 +46,11 @@ public class ComicInPurchase {
     private Set<Discount> discountsApplied;
 
     @NotNull @PositiveOrZero
-    @Column(name = "price", nullable = false)
-    private float purchasePrice;
+    @Column(name = "comic_price", nullable = false)
+    private float comicPrice;
 
     @NotNull @Min(1)
-    @Column(name = "quantity", nullable = false)
-    private int quantity;
+    @Column(name = "comic_quantity", nullable = false)
+    private int comicQuantity;
 
 }//ComicInPurchase

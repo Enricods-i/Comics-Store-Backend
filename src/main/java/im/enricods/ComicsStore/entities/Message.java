@@ -1,6 +1,7 @@
 package im.enricods.ComicsStore.entities;
 
 import java.util.Date;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,7 +9,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -30,16 +32,33 @@ public class Message {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY) @Column(name = "id")
     private long id;
 
-    @OneToMany @JoinColumn(name = "user_id")
-    private User user;
+    @ManyToMany
+    @JoinTable(
+        name = "messages",
+        joinColumns = @JoinColumn(name = "message_id"),
+        inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    private Set<User> users;
 
     @NotNull
     @Column(name = "read", nullable = false)
     private boolean read;
 
-    @NotNull @Size(max=500)
-    @Column(name = "content", nullable = false)
-    private String content;
+    @NotNull @Size(max=20)
+    @Column(name = "type", nullable = false)
+    private String type;
+
+    @NotNull @Min(0)
+    @Column(name = "subject_id", nullable = false)
+    private long subjectId;
+
+    @NotNull
+    @Column(name = "cart", nullable = false)
+    private boolean cart;
+
+    @NotNull
+    @Column(name = "list", nullable = false)
+    private boolean list;
 
     @CreationTimestamp @Temporal(TemporalType.TIMESTAMP) @Column(name = "created_at", nullable = false)
     private Date creationDate;

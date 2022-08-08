@@ -149,10 +149,10 @@ public class PurchaseService {
                 newPrice -= (initialPrice/100)*d.getPercentage();
             }
             //set effective price
-            cip.setPurchasePrice(newPrice);
+            cip.setComicPrice(newPrice);
 
             //set quantity of comic in purchase
-            cip.setQuantity(cc.getQuantity());
+            cip.setComicQuantity(cc.getQuantity());
             //update comic's quantity
             c.setQuantity(newQuantity);
 

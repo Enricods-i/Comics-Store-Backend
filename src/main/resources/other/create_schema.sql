@@ -121,8 +121,8 @@ CREATE TABLE comic_in_purchase (
 	id BIGSERIAL PRIMARY KEY,
 	purchase_id BIGINT NOT NULL REFERENCES purchase (id),
 	comic_id BIGINT NOT NULL REFERENCES comic (id),
-	price FLOAT NOT NULL,
-	quantity SMALLINT NOT NULL
+	comic_price FLOAT NOT NULL,
+	comic_quantity SMALLINT NOT NULL
 );
 
 CREATE TABLE discount_application (
@@ -133,8 +133,16 @@ CREATE TABLE discount_application (
 
 CREATE TABLE message (
 	id BIGSERIAL PRIMARY KEY,
-	user_id BIGINT REFERENCES personal_data (id),
 	read BOOLEAN NOT NULL,
-	content VARCHAR(500) NOT NULL,
+	type VARCHAR(20) NOT NULL,
+	subject_id BIGINT NOT NULL,
+	cart BOOLEAN NOT NULL,
+	list BOOLEAN NOT NULL,
 	created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE TABLE messages {
+	user_id BIGINT REFERENCES personal_data (id),
+	message_id BIGINT REFERENCES message (id),
+	PRIMARY KEY (user_id, message_id)
+};

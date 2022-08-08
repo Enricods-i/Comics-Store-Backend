@@ -54,8 +54,8 @@ public class WishList {
     )
     private Set<Comic> content;
 
-    @Column(name = "notifications")
-    private boolean notifications;
+    @Column(name = "email_notifications")
+    private boolean emailNotifications;
 
     @JsonIgnore
     @CreationTimestamp @Temporal(TemporalType.TIMESTAMP) @Column(name = "created_at", nullable = false)
