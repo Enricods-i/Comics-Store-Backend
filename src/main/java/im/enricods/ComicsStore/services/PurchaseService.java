@@ -131,7 +131,7 @@ public class PurchaseService {
 
             //bind bidirectional relation with Comic
             cip.setComic(c);
-            c.getCopiesSold().add(cip);
+            c.getComicsSold().add(cip);
 
             //bind bidirectional relation with Purchase
             cip.setPurchase(purchase);

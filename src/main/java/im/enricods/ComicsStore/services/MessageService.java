@@ -1,17 +1,21 @@
 package im.enricods.ComicsStore.services;
 
-import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import im.enricods.ComicsStore.entities.Message;
 import im.enricods.ComicsStore.entities.User;
+import im.enricods.ComicsStore.entities.WishList;
 import im.enricods.ComicsStore.repositories.MessageRepository;
 import im.enricods.ComicsStore.repositories.UserRepository;
+import im.enricods.ComicsStore.repositories.WishListRepository;
 
 @Service
+@Transactional
 public class MessageService {
 
     @Autowired
@@ -20,14 +24,47 @@ public class MessageService {
     @Autowired
     private UserRepository userRepository;
 
-    public List<Message> showUnreadMessages(long userId){
+    @Autowired
+    private WishListRepository wishListRepository;
+
+    @Transactional(readOnly = true)
+    public Set<Message> showAllMessages(long userId){
 
         Optional<User> usr = userRepository.findById(userId);
         if(!usr.isPresent())
             throw new IllegalArgumentException("User with id "+userId+" not found!");
         
-        return messageRepository.findByUser(usr.get());
+        return usr.get().getMessages();
         
     }//showUnreadMessages
+
+
+    @Transactional(readOnly = true)
+    public Set<Message> showCartMessages(long userId){
+
+        Optional<User> usr = userRepository.findById(userId);
+        if(!usr.isPresent())
+            throw new IllegalArgumentException("User with id "+userId+" not found!");
+
+        return messageRepository.findCartMessages(usr.get());
+
+    }//showCartMessages
+
+
+    @Transactional(readOnly = true)
+    public Set<Message> showListMessages(long userId, long listId){
+
+        Optional<User> usr = userRepository.findById(userId);
+        if(!usr.isPresent())
+            throw new IllegalArgumentException("User with id "+userId+" not found!");
+
+        Optional<WishList> list = wishListRepository.findById(listId);
+        if(!list.isPresent())
+            throw new IllegalArgumentException("Wish list with id "+listId+" not found!");
+
+        return messageRepository.findListMessages(usr.get(), list.get());
+        
+    }//showListMessages
+
     
 }//MessageService
