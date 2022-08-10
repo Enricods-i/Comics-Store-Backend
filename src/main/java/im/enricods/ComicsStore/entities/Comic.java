@@ -98,7 +98,7 @@ public class Comic {
 
     @JsonIgnore
     @OneToMany(mappedBy = "comic")
-    private Set<ComicInPurchase> copiesSold;
+    private Set<ComicInPurchase> comicsSold;
 
     @JsonIgnore
     @CreationTimestamp @Temporal(TemporalType.TIMESTAMP) @Column(name = "created_at", nullable = false)

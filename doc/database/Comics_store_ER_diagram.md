@@ -1,4 +1,4 @@
-# Schema concettuale
+## Schema concettuale
 
 ```mermaid
 erDiagram
@@ -16,7 +16,9 @@ erDiagram
     Purchase }|--|| Comic_in_purchase :""
     Comic_in_purchase ||--o{ Comic :""
     Comic_in_purchase }o--o{ Discount :discount_application
-    Personal_data }o--o{ Message :""
+    Personal_data }o--|| Message :""
+    Message }o--o{ Wish_list :"involved_list"
+    Message ||--o{ Change_log :""
 
     Personal_data {
         long id
@@ -112,13 +114,17 @@ erDiagram
         int comic_qauntity
     }
 
+    Change_log {
+        long id
+        string type
+        long subject_id
+        timestamp created_at
+    }
+
     Message {
         long id
         boolean read
-        string type
-        long subject_id
-        boolean cart
-        boolean list
     }
+
 
 ```
