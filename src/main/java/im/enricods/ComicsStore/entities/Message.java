@@ -31,7 +31,7 @@ public class Message {
     private long id;
 
     @ManyToOne @JoinColumn(name = "change_log_id")
-    private ChangeLog changeLog;
+    private ChangeLog change;
 
     @ManyToOne @JoinColumn(name = "user_id")
     private User targetUser;

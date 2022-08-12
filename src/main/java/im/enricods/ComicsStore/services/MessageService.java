@@ -27,6 +27,7 @@ public class MessageService {
     @Autowired
     private WishListRepository wishListRepository;
 
+
     @Transactional(readOnly = true)
     public Set<Message> showAllMessages(long userId){
 
@@ -65,6 +66,28 @@ public class MessageService {
         return messageRepository.findListMessages(usr.get(), list.get());
         
     }//showListMessages
+
+
+    public void removeMessages(Set<Long> messageIds){
+
+        for(long id : messageIds){
+            Optional<Message> msg = messageRepository.findById(id);
+            if(!msg.isPresent()) { /*DO SOMETHING*/ }
+
+            Message message = msg.get();
+
+            //remove bidirectional relations
+            message.getTargetUser().getMessages().remove(message);
+            for(WishList wl : message.getInvolvedLists()){
+                wl.getMessages().remove(message);
+            }
+
+            //remove message
+            messageRepository.delete(message);
+
+        }
+
+    }//removeMessages
 
     
 }//MessageService

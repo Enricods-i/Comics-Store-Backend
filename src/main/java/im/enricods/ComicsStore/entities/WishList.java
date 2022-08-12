@@ -58,6 +58,10 @@ public class WishList {
     private boolean emailNotifications;
 
     @JsonIgnore
+    @ManyToMany(mappedBy = "involvedLists")
+    private Set<Message> messages;
+
+    @JsonIgnore
     @CreationTimestamp @Temporal(TemporalType.TIMESTAMP) @Column(name = "created_at", nullable = false)
     private Date creationDate;
 
