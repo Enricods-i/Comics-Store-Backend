@@ -32,7 +32,7 @@ import im.enricods.ComicsStore.repositories.CategoryRepository;
 import im.enricods.ComicsStore.repositories.CollectionRepository;
 import im.enricods.ComicsStore.repositories.ComicRepository;
 import im.enricods.ComicsStore.repositories.WishListRepository;
-import im.enricods.ComicsStore.utils.Image;
+import im.enricods.ComicsStore.utils.Images;
 import im.enricods.ComicsStore.utils.exceptions.AuthorNotFoundException;
 import im.enricods.ComicsStore.utils.exceptions.CategoryNotFoundException;
 import im.enricods.ComicsStore.utils.exceptions.CollectionAlreadyExistsException;
@@ -191,7 +191,7 @@ public class CollectionService {
         if(!collectionRepository.existsById(collectionId))
             throw new IllegalArgumentException("Collection "+collectionId+" not found!");
         
-        Image.saveImage("col_"+collectionId, img);
+        Images.saveImage("col_"+collectionId, img);
        
     }//changePrice
 

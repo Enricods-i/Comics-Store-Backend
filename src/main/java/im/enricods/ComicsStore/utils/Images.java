@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.multipart.MultipartFile;
 
-public class Image {
+public class Images {
 
     @Value("$(image-path)")
     private static String IMAGES_DIRECTORY;
