@@ -8,8 +8,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinTable;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -36,11 +34,11 @@ public class Author {
 
     @NotNull @Min(0)
     @EqualsAndHashCode.Include
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY) @Column(name = "id")
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @NotNull @Size(min = 1, max = 20)
-    @Column(name = "name", length = 20)
+    @Column(length = 20)
     private String name;
 
     /*
@@ -50,19 +48,25 @@ public class Author {
     */
 
     @Size(max = 1000)
-    @Column(name = "biography", length = 1000)
+    @Column(length = 1000)
     private String biography;
 
     @JsonIgnore
-    @ManyToMany
-    @JoinTable(name = "authors",
-        joinColumns = {@JoinColumn(name = "author_id")},
-        inverseJoinColumns = {@JoinColumn(name = "comic_id")}
-    )
+    @ManyToMany(mappedBy = "authors")
     private Set<Comic> works;
 
+    public void addWork(Comic comic){
+        works.add(comic);
+        comic.getAuthors().add(this);
+    }
+
+    public void removeWork(Comic comic){
+        works.remove(comic);
+        comic.getAuthors().remove(this);
+    }
+
     @JsonIgnore
-    @Version @Column(name = "version", nullable = false)
+    @Version @Column(nullable = false)
     private long version;
     
     @JsonIgnore

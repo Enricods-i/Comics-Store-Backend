@@ -79,13 +79,12 @@ public class Comic {
     private long version;
 
     @JsonIdentityReference(alwaysAsId = true)
-    @ManyToMany(mappedBy = "works")
+    @ManyToMany
+    @JoinTable(name = "authors",
+        joinColumns = {@JoinColumn(name = "comic_id")},
+        inverseJoinColumns = {@JoinColumn(name = "author_id")}
+    )
     private Set<Author> authors;
-
-    public void addAuthor(Author author){
-        authors.add(author);
-        author.getWorks().add(this);
-    }//addAuthor
 
     @JsonIgnore
     @ManyToMany
