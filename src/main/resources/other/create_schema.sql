@@ -20,8 +20,7 @@ CREATE TABLE personal_data (
 CREATE TABLE collection (
 	id BIGSERIAL PRIMARY KEY,
 	name VARCHAR(50) NOT NULL UNIQUE,
-	actual_price FLOAT NOT NULL,
-	old_price FLOAT NOT NULL,
+	price FLOAT NOT NULL,
 	year_of_release INT,
 	format_and_binding VARCHAR(30),
 	color BOOLEAN,
@@ -49,9 +48,6 @@ CREATE TABLE cart_content(
     cart_id BIGINT REFERENCES cart_data (id),
    	comic_id BIGINT REFERENCES comic (id),
 	quantity SMALLINT NOT NULL,
-	price_variation BOOLEAN NOT NULL DEFAULT FALSE,
-	discount_added BOOLEAN NOT NULL DEFAULT FALSE,
-	discount_terminated BOOLEAN NOT NULL DEFAULT FALSE,
     PRIMARY KEY (cart_id, comic_id)
 );
 
@@ -73,8 +69,7 @@ CREATE TABLE authors (
 CREATE TABLE wish_list (
     id BIGSERIAL PRIMARY KEY,
     user_id BIGINT NOT NULL REFERENCES personal_data (id),
-    name VARCHAR(50) NOT NULL,
-    notifications BOOLEAN DEFAULT FALSE,
+    name VARCHAR(30) NOT NULL,
 	created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 

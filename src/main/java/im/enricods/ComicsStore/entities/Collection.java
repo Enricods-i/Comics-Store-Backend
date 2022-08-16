@@ -54,12 +54,8 @@ public class Collection {
     */
 
     @NotNull @Positive
-    @Column(name = "actual_price", nullable = false)
-    private float actualPrice;
-
-    @NotNull @Positive
-    @Column(name = "old_price", nullable = false)
-    private float oldPrice;
+    @Column(name = "price", nullable = false)
+    private float price;
 
     @Column(name = "year_of_release")
     private int yearOfRelease;

@@ -38,7 +38,7 @@ public class WishList {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY) @Column(name = "id")
     private long id;
 
-    @NotNull @Size(max = 50)
+    @NotNull @Size(max = 30)
     @Column(name = "name", nullable = false, length = 50)
     private String name;
 
@@ -53,9 +53,6 @@ public class WishList {
         inverseJoinColumns = {@JoinColumn(name = "comic_id")}
     )
     private Set<Comic> content;
-
-    @Column(name = "notifications")
-    private boolean notifications;
 
     @JsonIgnore
     @CreationTimestamp @Temporal(TemporalType.TIMESTAMP) @Column(name = "created_at", nullable = false)
