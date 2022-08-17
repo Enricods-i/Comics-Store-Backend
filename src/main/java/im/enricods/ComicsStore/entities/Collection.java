@@ -40,11 +40,11 @@ public class Collection {
     
     @NotNull @Min(0)
     @EqualsAndHashCode.Include
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY) @Column(name = "id")
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @NotNull @Size(min = 1, max = 50)
-    @Column(name = "name",nullable = false, unique = true, length = 50)
+    @Column(nullable = false, unique = true, length = 50)
     private String name;
 
     /*
@@ -54,7 +54,7 @@ public class Collection {
     */
 
     @NotNull @Positive
-    @Column(name = "price", nullable = false)
+    @Column(nullable = false)
     private float price;
 
     @Column(name = "year_of_release")
@@ -64,15 +64,14 @@ public class Collection {
     @Column(name = "format_and_binding", length = 30)
     private String formatAndBinding;
 
-    @Column(name = "color")
     private boolean color;
    
     @Size(max = 1000)
-    @Column(name = "description", length = 1000)
+    @Column(length = 1000)
     private String description;
 
     @JsonIgnore
-    @Version @Column(name = "version", nullable = false)
+    @Version
     private long version;
 
     @JsonIgnore

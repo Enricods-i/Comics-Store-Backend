@@ -3,9 +3,11 @@ package im.enricods.ComicsStore.services;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -20,24 +22,14 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.multipart.MultipartFile;
 
 import im.enricods.ComicsStore.entities.Author;
-import im.enricods.ComicsStore.entities.CartContent;
 import im.enricods.ComicsStore.entities.Category;
 import im.enricods.ComicsStore.entities.Collection;
-import im.enricods.ComicsStore.entities.Comic;
-import im.enricods.ComicsStore.entities.Discount;
-import im.enricods.ComicsStore.entities.WishList;
 import im.enricods.ComicsStore.repositories.AuthorRepository;
-import im.enricods.ComicsStore.repositories.CartContentRepository;
 import im.enricods.ComicsStore.repositories.CategoryRepository;
 import im.enricods.ComicsStore.repositories.CollectionRepository;
-import im.enricods.ComicsStore.repositories.ComicRepository;
-import im.enricods.ComicsStore.repositories.WishListRepository;
-import im.enricods.ComicsStore.utils.Images;
-import im.enricods.ComicsStore.utils.exceptions.AuthorNotFoundException;
-import im.enricods.ComicsStore.utils.exceptions.CategoryNotFoundException;
+import im.enricods.ComicsStore.utils.Covers.Cover;
+import im.enricods.ComicsStore.utils.Covers.Type;
 import im.enricods.ComicsStore.utils.exceptions.CollectionAlreadyExistsException;
-import im.enricods.ComicsStore.utils.exceptions.CollectionNotFoundException;
-import im.enricods.ComicsStore.utils.exceptions.NonRemovalCollectionException;
 
 @Service
 @Transactional
@@ -53,58 +45,49 @@ public class CollectionService {
     @Autowired
     private AuthorRepository authorRepository;
 
-    @Autowired
-    private CartContentRepository cartContentRepository;
-
-    @Autowired
-    private WishListRepository wishListRepository;
-
-    @Autowired
-    private ComicRepository comicRepository;
-
     
     @Transactional(readOnly = true)
-    public List<Collection> showCollectionsByName(@NotNull @Size(min=3, max=50) String name, @Min(0) int pageNumber, @Min(0) int pageSize, String sortBy){
+    public List<Collection> getByName(@NotNull @Size(min=3, max=50) String name, @Min(0) int pageNumber, @Min(0) int pageSize, String sortBy){
 
         Pageable paging = PageRequest.of(pageNumber, pageSize, Sort.by(sortBy));
         Page<Collection> pagedResult = collectionRepository.findByNameContaining(name,paging);
         return pagedResult.getContent();
 
-    }//showCollectionByName
+    }//getByName
 
 
     @Transactional(readOnly = true)
-    public List<Collection> showCollectionsByCategory(@Min(0) long categoryId, @Min(0) int pageNumber, @Min(0) int pageSize, String sortBy){
+    public List<Collection> getByCategory(@Min(0) long categoryId, @Min(0) int pageNumber, @Min(0) int pageSize, String sortBy){
 
         //verify that Category specified by categoryId exists
-        Optional<Category> result = categoryRepository.findById(categoryId);
-        if(!result.isPresent())
-            throw new CategoryNotFoundException();
+        Optional<Category> ctgr = categoryRepository.findById(categoryId);
+        if(ctgr.isEmpty())
+            throw new IllegalArgumentException("Category "+categoryId+" not found!");
 
         Pageable paging = PageRequest.of(pageNumber, pageSize, Sort.by(sortBy));
-        Page<Collection> pagedResult = collectionRepository.findByCategory(result.get(), paging);
+        Page<Collection> pagedResult = collectionRepository.findByCategory(ctgr.get(), paging);
         return pagedResult.getContent();
 
-    }//showCollectionByCategory
+    }//getByCategory
 
 
     @Transactional(readOnly = true)
-    public List<Collection> showCollectionsByAuthor(@Min(0) long authorId, @Min(0) int pageNumber, @Min(0) int pageSize, String sortBy){
+    public List<Collection> getByAuthor(@Min(0) long authorId, @Min(0) int pageNumber, @Min(0) int pageSize, String sortBy){
 
         //verify that Author specified by authorId exists
-        Optional<Author> resultAuthor = authorRepository.findById(authorId);
-        if(!resultAuthor.isPresent())
-            throw new AuthorNotFoundException();
+        Optional<Author> auth = authorRepository.findById(authorId);
+        if(auth.isEmpty())
+            throw new IllegalArgumentException("Author "+authorId+" not found!");
 
         Pageable paging = PageRequest.of(pageNumber, pageSize, Sort.by(sortBy));
-        Page<Collection> pagedResult = collectionRepository.findByAuthor(resultAuthor.get(), paging);
+        Page<Collection> pagedResult = collectionRepository.findByAuthor(auth.get(), paging);
         return pagedResult.getContent();
         
-    }//showCollectionsByAuthor
+    }//getByAuthor
 
 
     @Transactional(readOnly = true)
-    public List<Collection> showCollectionsBy(@Size(min=3, max=50) String name, @Min(0) Long categoryId, @Min(0) Long authorId, @Min(0) int pageNumber, @Min(0) int pageSize, String sortBy){
+    public List<Collection> advancedSearch(@Size(min=3, max=50) String name, @Min(0) Long categoryId, @Min(0) Long authorId, @Min(0) int pageNumber, @Min(0) int pageSize, String sortBy){
 
         if( (name==null && categoryId==null) || 
             (name==null && authorId==null) || 
@@ -114,19 +97,19 @@ public class CollectionService {
         Author author = null;
         if(authorId!=null){
             //verify that Author specified by authorId exists
-            Optional<Author> resultAuthor = authorRepository.findById(authorId);
-            if(!resultAuthor.isPresent())
-                throw new AuthorNotFoundException();
-            author = resultAuthor.get();
+            Optional<Author> auth = authorRepository.findById(authorId);
+            if(auth.isEmpty())
+                throw new IllegalArgumentException("Author "+authorId+" not found!");
+            author = auth.get();
         }
         
         Category category = null;
         if(categoryId!=null){
             //verify that Category specified by categoryId exists
-            Optional<Category> resultCategory = categoryRepository.findById(categoryId);
-            if(!resultCategory.isPresent())
-                throw new CategoryNotFoundException();
-            category = resultCategory.get();
+            Optional<Category> ctgr = categoryRepository.findById(categoryId);
+            if(ctgr.isEmpty())
+                throw new IllegalArgumentException("Category "+categoryId+" not found!");
+            category = ctgr.get();
         }
 
         Pageable paging = PageRequest.of(pageNumber, pageSize, Sort.by(sortBy));
@@ -134,29 +117,27 @@ public class CollectionService {
         return pagedResult.getContent();
 
 
-    }//showCollectionsBy
+    }//advancedSearch
 
 
-    public void addCollection(@Valid Collection collection){
+    public void add(@Valid Collection collection){
 
         //verify that Collection specified doesn't already exists
         if(collectionRepository.existsByName(collection.getName()))
             throw new CollectionAlreadyExistsException();
         
-        //set fields that client don't know
-        collection.setOldPrice(-1);
-        collection.setVersion(1);
+        collection.setId(0);
 
         collectionRepository.save(collection);
 
-    }//addCollection
+    }//add
 
 
-    public void updateCollection(@Valid Collection collection){
+    public void modify(@Valid Collection collection){
 
         //verify that Collection specified already exists
         Optional<Collection> c1 = collectionRepository.findById(collection.getId());
-        if(!c1.isPresent())
+        if(c1.isEmpty())
             throw new IllegalArgumentException("Collection with id "+collection.getId()+" not found!");
        
         Collection target = c1.get();
@@ -166,15 +147,6 @@ public class CollectionService {
         if(c2.isPresent() && !c2.get().equals(target))
             throw new IllegalArgumentException("A Collection with name \""+collection.getName()+"\" already exists");
 
-        if(Math.abs( collection.getActualPrice() - target.getActualPrice() ) > 1e-9){
-            //change price
-            collection.setOldPrice(target.getActualPrice());
-        }
-        else{
-            //price don't change
-            collection.setOldPrice(target.getOldPrice());
-        }
-
         //client can't modify this parameters
         collection.setVersion(target.getVersion());
         collection.setCreationDate(target.getCreationDate());
@@ -182,89 +154,78 @@ public class CollectionService {
         //merge
         collectionRepository.save(collection);
 
-    }//updateCollection
+    }//modify
 
     @Transactional(readOnly = true)
-    public void updateImage(@Min(0) long collectionId, MultipartFile img ) throws IOException{
+    public void chcov(@Min(0) long collectionId, MultipartFile img ) throws IOException{
 
         //verify that Collection specified already exists
         if(!collectionRepository.existsById(collectionId))
             throw new IllegalArgumentException("Collection "+collectionId+" not found!");
         
-        Images.saveImage("col_"+collectionId, img);
+        Cover.save(Type.COLLECTION.getLabel()+collectionId, img);
        
-    }//changePrice
+    }//updateImage
 
 
-    /*A Collection can be deleted if and only if there was not a Purchase that involve a Comic in the Collection considered*/
-    public void deleteCollection(@Min(0) long collectionId){
+    //Only an empty Collection can be deleted
+    public void remove(@Min(0) long collectionId){
 
         //verify that Collection specified already exists
-        Optional<Collection> resultCollection = collectionRepository.findById(collectionId);
-        if(!resultCollection.isPresent())
-            throw new CollectionNotFoundException();
+        Optional<Collection> cllctn = collectionRepository.findById(collectionId);
+        if(cllctn.isEmpty())
+            throw new IllegalArgumentException("Collection "+collectionId+" not found!");
         
-        Collection target = resultCollection.get();
+        Collection target = cllctn.get();
 
-        //verify that there are no Purchases that involve Collection target
-        if( collectionRepository.countPurchasesInCollection(target)>0 )
-            throw new NonRemovalCollectionException();
+        if(!target.getComics().isEmpty())
+            throw new IllegalArgumentException("Collection "+collectionId+" is not empty!");
 
-        //START - remove all relations
-        //remove relations with Category
-        for(Category cat : target.getCategories())
-            cat.getCollections().remove(target);
-        
-        //remove all Comics in Collection target
-        for(Comic com : target.getComics()){
-
-            //remove relation with Collection
-            com.setCollection(null);
-
-            //remove relations with Author
-            for(Author auth : com.getAuthors())
-                auth.getWorks().remove(com);
-            
-            //remove relations with Discount
-            for(Discount disc : com.getDiscounts())
-                disc.getComicsInPromotion().remove(com);
-            
-            //remove relations with CartContent
-            for(CartContent cc : cartContentRepository.getCartsHavingComic(com)){
-                cc.getCart().getContent().remove(cc);
-                cartContentRepository.delete(cc);
-            }
-
-            //remove relations with WishList
-            for(WishList wl : wishListRepository.getListsContainingComic(com))
-                wl.getContent().remove(com);
-            
-            //delete Comic
-            comicRepository.delete(com);
-
-        }
-        //END - remove all relations
+        //unbind bidirectional relations
+        for(Category ctgr : target.getCategories())
+            ctgr.unbindCollection(target);
 
         collectionRepository.delete(target);
 
-    }//deleteCollection
+        Cover.remove(Type.COLLECTION.getLabel()+collectionId);
+
+    }//remove
 
     
-    public void bindCategoryToCollection(@NotNull @Min(0) long categoryId, @NotNull  @Min(0) long collectionId){
-
-        //verify that Category specified by categoryId exists
-        Optional<Category> resultCategory = categoryRepository.findById(categoryId);
-        if(!resultCategory.isPresent())
-            throw new CategoryNotFoundException();
+    public void bindCategories(@NotNull @Min(0) long collectionId, @NotEmpty Set<@NotNull @Min(0) Long> categoryIds){
         
         //verify that Collection specified by collectionId exists
-        Optional<Collection> resultCollection = collectionRepository.findById(collectionId);
-        if(!resultCollection.isPresent())
-            throw new CollectionNotFoundException();
+        Optional<Collection> cllctn = collectionRepository.findById(collectionId);
+        if(cllctn.isEmpty())
+            throw new IllegalArgumentException("Collection "+collectionId+" not found!");
 
-        //bind bidirectional relation
-        resultCollection.get().bindCategory(resultCategory.get());
+        Collection target = cllctn.get();
+        
+        for(Long id : categoryIds){
+            Optional<Category> ctgr = categoryRepository.findById(id);
+            if(ctgr.isPresent())
+                ctgr.get().bindCollection(target);
+        }
 
-    }//bindCategoryToCollection
+    }//bindCategories
+
+
+    public void unbindCategories(@NotNull @Min(0) long collectionId, @NotEmpty Set<@NotNull @Min(0) Long> categoryIds){
+
+        //verify that Collection specified by collectionId exists
+        Optional<Collection> cllctn = collectionRepository.findById(collectionId);
+        if(cllctn.isEmpty())
+            throw new IllegalArgumentException("Collection "+collectionId+" not found!");
+        
+        Collection target = cllctn.get();
+        Category category = new Category();
+
+        for(long id : categoryIds){
+            category.setId(id);
+            if(target.getCategories().contains(category))
+                category.unbindCollection(target);
+        }
+
+    }//unbindCategories
     
 }//CollectionService
