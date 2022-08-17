@@ -17,7 +17,7 @@ import im.enricods.ComicsStore.utils.InvalidValue;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 
 
@@ -28,8 +28,8 @@ public class CartController {
     @Autowired
     private CartService cartService;
 
-    @GetMapping
-    public ResponseEntity<?> get(@RequestParam(value = "usr") long userId) {
+    @GetMapping(path = "/{usr}")
+    public ResponseEntity<?> get(@PathVariable(value = "usr") long userId) {
         try{
             Cart result = cartService.getByUser(userId);
             return new ResponseEntity<Cart>(result, HttpStatus.OK);
@@ -42,8 +42,8 @@ public class CartController {
         }
     }//getCart
     
-    @PostMapping
-    public ResponseEntity<?> addComic(@RequestParam(value = "usr") long userId, @RequestParam(value = "cmcId") long comicId, @RequestParam(value = "qty") int quantity){
+    @PutMapping(path = "/{usr}/add")
+    public ResponseEntity<?> addComic(@PathVariable(value = "usr") long userId, @RequestParam(value = "cmc") long comicId, @RequestParam(value = "qty") int quantity){
         try{
             cartService.addComic(userId, comicId, quantity);
             return new ResponseEntity<String>("Comic with id \""+ comicId +"\" added succesul!", HttpStatus.OK);
@@ -56,8 +56,8 @@ public class CartController {
         }
     }//addComic
 
-    @PutMapping
-    public ResponseEntity<?> updateComicQuantity(@RequestParam(value = "usr") long userId, @RequestParam(value = "cmcId") long comicId, @RequestParam(value = "qty") int quantity){
+    @PutMapping(path = "/{usr}/chqty")
+    public ResponseEntity<?> updateComicQuantity(@PathVariable(value = "usr") long userId, @RequestParam(value = "cmc") long comicId, @RequestParam(value = "qty") int quantity){
         try{
             cartService.updateComicQuantity(userId, comicId, quantity);
             return new ResponseEntity<String>("Comic quantity updated succesul!", HttpStatus.OK);
@@ -70,8 +70,8 @@ public class CartController {
         }
     }//updateComicQuantity
 
-    @DeleteMapping
-    public ResponseEntity<?> deleteComic(@RequestParam(value = "usr") long userId, @RequestParam(value = "cmcId") long comicId){
+    @DeleteMapping(path = "/{usr}/delete")
+    public ResponseEntity<?> deleteComic(@PathVariable(value = "usr") long userId, @RequestParam(value = "cmc") long comicId){
         try{
             cartService.removeComic(userId, comicId);
             return new ResponseEntity<String>("Comic deleted succesul!", HttpStatus.OK);

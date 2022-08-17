@@ -31,7 +31,7 @@ public class AuthorController {
     @Autowired
     private AuthorService authorService;
 
-    @GetMapping(path = "/all")
+    @GetMapping(path = "/v/all")
     public ResponseEntity<?> showAll(@RequestParam(defaultValue = "0") int pageNumber, @RequestParam(defaultValue = "10") int pageSize, @RequestParam(defaultValue = "name") String sortBy){
         try{
             List<Author> result = authorService.getAll(pageNumber, pageSize, sortBy);
@@ -43,7 +43,7 @@ public class AuthorController {
         }
     }//getAll
 
-    @GetMapping
+    @GetMapping(path = "/v")
     public ResponseEntity<?> showByName(@RequestParam(value = "name") String authorName,@RequestParam(defaultValue = "0") int pageNumber, @RequestParam(defaultValue = "10") int pageSize, @RequestParam(defaultValue = "name") String sortBy ){
         try{
             List<Author> result = authorService.getByName(authorName, pageNumber, pageSize, sortBy);
@@ -58,7 +58,7 @@ public class AuthorController {
         }
     }//getByName
 
-    @PostMapping
+    @PostMapping(path = "/create")
     public ResponseEntity<?> create(@RequestBody Author author){
         try{
             authorService.add(author);
@@ -72,7 +72,7 @@ public class AuthorController {
         }
     }//create
 
-    @PutMapping
+    @PutMapping(path = "/update")
     public ResponseEntity<?> update(@RequestBody Author author){
         try{
             authorService.update(author);
@@ -86,7 +86,7 @@ public class AuthorController {
         }
     }//update
 
-    @DeleteMapping(path = "/{id}")
+    @DeleteMapping(path = "/{id}/delete")
     public ResponseEntity<?> delete(@PathVariable(value = "id") long authorId){
         try{
             authorService.remove(authorId);
