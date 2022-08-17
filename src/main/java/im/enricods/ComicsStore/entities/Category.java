@@ -12,11 +12,13 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Version;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -37,8 +39,16 @@ public class Category {
     private String name;
 
     @JsonIgnore
+    @Version
+    private long version;
+
+    @JsonIgnore
     @CreationTimestamp @Temporal(TemporalType.TIMESTAMP) @Column(name = "created_at",nullable = false)
     private Date creationDate;
+
+    @JsonIgnore
+    @UpdateTimestamp @Temporal(TemporalType.TIMESTAMP) @Column(name = "modified_at", nullable = false)
+    private Date dateOfLastModification;
 
     @JsonIgnore
     @ManyToMany(mappedBy = "categories")
@@ -48,5 +58,10 @@ public class Category {
         collection.getCategories().add(this);
         this.getCollections().add(collection);
     }//bindCollection
+
+    public void unbindCollection(Collection collection){
+        collection.getCategories().remove(this);
+        this.getCollections().remove(collection);
+    }//unbindCollection
 
 }//Category

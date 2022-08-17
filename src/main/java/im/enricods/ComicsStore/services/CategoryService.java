@@ -109,6 +109,25 @@ public class CategoryService {
                 ctgr.get().bindCollection(cllctn.get());
         }
 
-    }//bindCollection
+    }//bindCollections
+
+
+    public void unbindCollections(@NotNull @Min(0) long categoryId, @NotEmpty Set<@NotNull @Min(0) Long> collectionIds){
+
+        //verify that Category with the id specified already exists
+        Optional<Category> ctgr = categoryRepository.findById(categoryId);
+        if(ctgr.isEmpty())
+            throw new IllegalArgumentException("Category "+categoryId+" not found!");
+        
+        Category category = ctgr.get();
+        Collection collection = new Collection();
+
+        for(Long id : collectionIds){
+            collection.setId(id);
+            if(category.getCollections().contains(collection))
+                category.unbindCollection(collection);
+        }
+
+    }//unbindCollections
 
 }//CategoryService

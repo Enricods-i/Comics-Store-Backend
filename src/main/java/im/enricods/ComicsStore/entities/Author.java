@@ -66,7 +66,7 @@ public class Author {
     }
 
     @JsonIgnore
-    @Version @Column(nullable = false)
+    @Version
     private long version;
     
     @JsonIgnore

@@ -102,4 +102,18 @@ public class CategoryController {
         }
     }//bindCollections
 
+    @PatchMapping(path = "/unbind/{id}")
+    public ResponseEntity<?> unbindCollections(@PathVariable(value = "id") long categoryId, @RequestBody Set<Long> collectionIds){
+        try{
+            categoryService.unbindCollections(categoryId, collectionIds);
+            return new ResponseEntity<String>("Collections unbound successful!", HttpStatus.OK);
+        }
+        catch(ConstraintViolationException e){
+            return new ResponseEntity<List<InvalidValue>>(InvalidValue.getAllInvalidValues(e), HttpStatus.BAD_REQUEST);
+        }
+        catch(IllegalArgumentException e){
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }//bindCollections
+
 }//CategoryController

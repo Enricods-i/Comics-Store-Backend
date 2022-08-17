@@ -68,7 +68,9 @@ erDiagram
     Category {
         long id
         string name
+        long version
         timestamp created_at
+        timestamp modified_at
     }
 
     Discount {
