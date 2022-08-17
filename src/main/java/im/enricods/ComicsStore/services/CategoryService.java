@@ -2,8 +2,10 @@ package im.enricods.ComicsStore.services;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -15,8 +17,7 @@ import org.springframework.validation.annotation.Validated;
 import im.enricods.ComicsStore.entities.Category;
 import im.enricods.ComicsStore.entities.Collection;
 import im.enricods.ComicsStore.repositories.CategoryRepository;
-import im.enricods.ComicsStore.utils.exceptions.CategoryAlreadyExistsException;
-import im.enricods.ComicsStore.utils.exceptions.CategoryNotFoundException;
+import im.enricods.ComicsStore.repositories.CollectionRepository;
 
 @Service
 @Transactional
@@ -26,8 +27,12 @@ public class CategoryService {
     @Autowired
     private CategoryRepository categoryRepository;
 
+    @Autowired
+    private CollectionRepository collectionRepository;
+
+
     @Transactional(readOnly = true)
-    public List<Category> showAllCategories(){
+    public List<Category> getAll(){
 
         return categoryRepository.findAll();
 
@@ -35,18 +40,18 @@ public class CategoryService {
 
 
     @Transactional(readOnly = true)
-    public List<Category> showCategoriesByName(@NotNull @Size(min=3, max=30) String categoryName){
+    public List<Category> getByName(@NotNull @Size(min=3, max=30) String categoryName){
 
-        return categoryRepository.findByName(categoryName);
+        return categoryRepository.findByNameContaining(categoryName);
 
     }//showAllCategories
 
 
-    public void createCategory(@NotNull @Size(min=1, max=30) String categoryName){
+    public void add(@NotNull @Size(min=1, max=30) String categoryName){
 
-        //verify that Category with the name specified doesn't already exists
+        //verify that Category with the name specified doesn't already exist
         if(categoryRepository.existsByName(categoryName))
-            throw new CategoryAlreadyExistsException();
+            throw new IllegalArgumentException("Category with name \""+categoryName+"\" already exists");
         
         Category c = new Category();
         c.setName(categoryName);
@@ -56,36 +61,54 @@ public class CategoryService {
     }//createCategory
 
 
-    public void changeCategoryName(@NotNull @Min(0) long categoryId, @NotNull @Size(min=3, max=30) String newName){
+    public void changeName(@NotNull @Min(0) long categoryId, @NotNull @Size(min=3, max=30) String newName){
 
         //verify that Category with the id specified already exists
-        Optional<Category> resultCategory = categoryRepository.findById(categoryId);
-        if(!resultCategory.isPresent())
-            throw new CategoryNotFoundException();
+        Optional<Category> ctgr = categoryRepository.findById(categoryId);
+        if(ctgr.isEmpty())
+            throw new IllegalArgumentException("Category "+categoryId+" not found!");
         
         if(categoryRepository.existsByName(newName))
-            throw new CategoryAlreadyExistsException();
+            throw new IllegalArgumentException("Category with name \""+newName+"\" already exists!");
         
-        resultCategory.get().setName(newName);
+        ctgr.get().setName(newName);
         
     }//changeCategoryName
 
 
-    public void deleteCategory(@NotNull @Min(0) long categoryId){
+    public void remove(@NotNull @Min(0) long categoryId){
 
         //verify that Category with the id specified already exists
-        Optional<Category> resultCategory = categoryRepository.findById(categoryId);
-        if(!resultCategory.isPresent())
-            throw new CategoryNotFoundException();
+        Optional<Category> ctgr = categoryRepository.findById(categoryId);
+        if(ctgr.isEmpty())
+            throw new IllegalArgumentException("Category "+categoryId+" not found!");
         
-        Category target = resultCategory.get();
-
-        categoryRepository.delete(target);
+        Category target = ctgr.get();
 
         //unbind bidirectional relations
         for(Collection c : target.getCollections())
             c.getCategories().remove(target);
+        target.getCollections().clear();
+
+        categoryRepository.delete(target);
         
     }//deleteCategory
+
+
+    public void bindCollections(@NotNull @Min(0) long categoryId, @NotEmpty Set<@NotNull @Min(0) Long> collectionIds){
+
+        //verify that Category with the id specified already exists
+        Optional<Category> ctgr = categoryRepository.findById(categoryId);
+        if(ctgr.isEmpty())
+            throw new IllegalArgumentException("Category "+categoryId+" not found!");
+
+        for(Long id : collectionIds){
+            //verify that Collection with current id exists
+            Optional<Collection> cllctn = collectionRepository.findById(id);
+            if(cllctn.isPresent())
+                ctgr.get().bindCollection(cllctn.get());
+        }
+
+    }//bindCollection
 
 }//CategoryService

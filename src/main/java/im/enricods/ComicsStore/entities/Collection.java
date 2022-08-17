@@ -93,11 +93,6 @@ public class Collection {
     )
     private Set<Category> categories;
 
-    public void bindCategory(Category category){
-        categories.add(category);
-        category.getCollections().add(this);
-    }//bindCategory
-
     @JsonIgnore
     @CreationTimestamp @Temporal(TemporalType.TIMESTAMP) @Column(name = "created_at", nullable = false)
     private Date creationDate;

@@ -29,11 +29,11 @@ public class Category {
     
     @NotNull @Min(0)
     @EqualsAndHashCode.Include
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY) @Column(name = "id")
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @NotNull @Size(min = 1, max = 30)
-    @Column(name = "name", nullable = false, unique = true, length = 30)
+    @Column(nullable = false, unique = true, length = 30)
     private String name;
 
     @JsonIgnore
@@ -43,5 +43,10 @@ public class Category {
     @JsonIgnore
     @ManyToMany(mappedBy = "categories")
     private Set<Collection> collections;
+
+    public void bindCollection(Collection collection){
+        collection.getCategories().add(this);
+        this.getCollections().add(collection);
+    }//bindCollection
 
 }//Category
