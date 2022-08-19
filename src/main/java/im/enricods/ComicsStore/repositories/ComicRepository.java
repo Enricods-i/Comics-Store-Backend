@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import im.enricods.ComicsStore.entities.Author;
 import im.enricods.ComicsStore.entities.Collection;
 import im.enricods.ComicsStore.entities.Comic;
+import im.enricods.ComicsStore.entities.Discount;
 
 @Repository
 public interface ComicRepository extends JpaRepository<Comic,Long>{
@@ -30,5 +31,15 @@ public interface ComicRepository extends JpaRepository<Comic,Long>{
             "FROM Comic cmc JOIN cmc.copiesSold cip"+
             "WHERE cmc = :comic")
     boolean existsPurchaseContaining(Comic comic);
+
+    @Query( "SELECT CASE WHEN COUNT(disc)>0 THEN true ELSE false END"+
+            "FROM Comic cmc JOIN cmc.discounts disc"+
+            "WHERE cmc = :comic AND disc.activationDate<=CURRENT_DATE AND disc.expirationDate>CURRENT_DATE")
+    boolean isDiscounted(Comic comic);
+
+    @Query( "SELECT CASE WHEN COUNT(cip)>0 THEN true ELSE false END"+
+            "FROM Comic cmc JOIN cmc.copiesSold cip JOIN cip.discountsApplied disc"+
+            "WHERE cmc = :comic AND disc = :discount")
+    boolean wasBoughtWithDiscount(Comic comic, Discount discount);
 
 }//ComicRepository
