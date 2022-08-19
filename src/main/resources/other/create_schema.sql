@@ -32,7 +32,7 @@ CREATE TABLE collection (
 
 CREATE TABLE comic (
     id BIGSERIAL PRIMARY KEY,
-    collection_id BIGINT NOT NULL REFERENCES collection (id),
+    collection_id BIGINT REFERENCES collection (id),
 	number SMALLINT NOT NULL,
 	quantity SMALLINT NOT NULL,
 	pages SMALLINT,

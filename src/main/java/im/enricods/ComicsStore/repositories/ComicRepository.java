@@ -19,11 +19,16 @@ public interface ComicRepository extends JpaRepository<Comic,Long>{
 
     Page<Comic> findByCollection(Collection collection, Pageable pageable);
 
-    @Query(value = "SELECT c FROM Comic c JOIN c.authors a WHERE c.collection = :coll AND a = :auth")
+    @Query(value =  "SELECT c"+
+                    "FROM Comic c JOIN c.authors a"+
+                    "WHERE c.collection = :coll AND a = :auth")
     Page<Comic> findByCollectionAndAuthor(Collection coll, Author auth, Pageable pageable);
 
-    boolean existsByIsbn(String isbn);
-
     Optional<Comic> findByIsbn(String isbn);
+
+    @Query("SELECT CASE WHEN COUNT(cip)>0 THEN true ELSE false END"+
+            "FROM Comic cmc JOIN cmc.copiesSold cip"+
+            "WHERE cmc = :comic")
+    boolean existsPurchaseContaining(Comic comic);
 
 }//ComicRepository

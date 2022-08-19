@@ -80,9 +80,14 @@ public class Collection {
     private List<Comic> comics;
 
     public void addComic(Comic comic){
-        comics.add(comic);
+        this.comics.add(comic);
         comic.setCollection(this);
     }//addComic
+
+    public void removeComic(Comic comic){
+        this.comics.remove(comic);
+        comic.setCollection(null);
+    }//rempveComic
 
     @ManyToMany
     @JoinTable(

@@ -17,7 +17,9 @@ public interface WishListRepository extends JpaRepository<WishList,Long> {
 
     boolean existsByName(String name);
 
-    @Query(value = "SELECT wl FROM WishList wl JOIN wl.content com WHERE com = :comic")
-    List<WishList> getListsContainingComic(Comic comic);
+    @Query(value =  "SELECT wl"+
+                    "FROM WishList wl JOIN wl.content com"+
+                    "WHERE com = :comic")
+    List<WishList> findByComic(Comic comic);
 
 }//WishListRepository

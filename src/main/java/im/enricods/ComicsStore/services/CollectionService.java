@@ -29,7 +29,6 @@ import im.enricods.ComicsStore.repositories.CategoryRepository;
 import im.enricods.ComicsStore.repositories.CollectionRepository;
 import im.enricods.ComicsStore.utils.Covers.Cover;
 import im.enricods.ComicsStore.utils.Covers.Type;
-import im.enricods.ComicsStore.utils.exceptions.CollectionAlreadyExistsException;
 
 @Service
 @Transactional
@@ -124,7 +123,7 @@ public class CollectionService {
 
         //verify that Collection specified doesn't already exists
         if(collectionRepository.existsByName(collection.getName()))
-            throw new CollectionAlreadyExistsException();
+            throw new IllegalArgumentException("Collection with name \""+collection.getName()+"\" already exists!");
         
         collection.setId(0);
 
