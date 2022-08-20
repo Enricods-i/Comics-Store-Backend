@@ -114,6 +114,7 @@ public class DiscountController {
             if(payload.size()!=2 || !(payload.get(0) instanceof Discount) || !(payload.get(1) instanceof Set) )
                 return new ResponseEntity<String>(errorResponse, HttpStatus.BAD_REQUEST);
             Discount discount = (Discount) payload.get(0);
+            @SuppressWarnings("rawtypes")
             Set set = (Set) payload.get(1);
             Set<Long> comicIds = new HashSet<>();
             for(Object o : set){
