@@ -35,11 +35,11 @@ public class WishList {
     
     @NotNull @Min(value = 0)
     @EqualsAndHashCode.Include
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY) @Column(name = "id")
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @NotNull @Size(max = 30)
-    @Column(name = "name", nullable = false, length = 50)
+    @Column(nullable = false, length = 30)
     private String name;
 
     @JsonIgnore

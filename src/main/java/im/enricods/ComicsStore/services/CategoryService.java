@@ -102,9 +102,10 @@ public class CategoryService {
         if(ctgr.isEmpty())
             throw new IllegalArgumentException("Category "+categoryId+" not found!");
 
+        Optional<Collection> cllctn = null;
         for(Long id : collectionIds){
             //verify that Collection with current id exists
-            Optional<Collection> cllctn = collectionRepository.findById(id);
+            cllctn = collectionRepository.findById(id);
             if(cllctn.isPresent())
                 ctgr.get().bindCollection(cllctn.get());
         }
@@ -120,12 +121,11 @@ public class CategoryService {
             throw new IllegalArgumentException("Category "+categoryId+" not found!");
         
         Category category = ctgr.get();
-        Collection collection = new Collection();
 
+        Collection collection = new Collection();
         for(Long id : collectionIds){
             collection.setId(id);
-            if(category.getCollections().contains(collection))
-                category.unbindCollection(collection);
+            category.unbindCollection(collection);
         }
 
     }//unbindCollections

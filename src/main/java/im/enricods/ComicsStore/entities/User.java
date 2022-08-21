@@ -79,6 +79,11 @@ public class User {
         wishList.setOwner(this);
     }//addWishList
 
+    public void removeWishList(WishList wishList){
+        this.wishLists.remove(wishList);
+        wishList.setOwner(null);
+    }//removeWishList
+
     @JsonIgnore
     @OneToMany(mappedBy = "buyer")
     private Set<Purchase> purchases;

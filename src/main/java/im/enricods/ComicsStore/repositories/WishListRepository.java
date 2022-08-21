@@ -11,7 +11,7 @@ import im.enricods.ComicsStore.entities.WishList;
 
 public interface WishListRepository extends JpaRepository<WishList,Long> {
 
-    List<WishList> findByOwnerAndName(User user, String name);
+    List<WishList> findByOwnerAndNameContaining(User user, String name);
 
     List<WishList> findByOwner(User user);
 
