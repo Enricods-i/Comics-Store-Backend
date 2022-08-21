@@ -37,6 +37,11 @@ public class Cart {
     @OneToOne(mappedBy = "cart")
     private User user;
 
+    public void bindToUser(User user){
+        this.setUser(user);
+        user.setCart(this);
+    }//bindToUser
+
     @OneToMany(mappedBy = "cart")
     private Set<CartContent> content;
     
