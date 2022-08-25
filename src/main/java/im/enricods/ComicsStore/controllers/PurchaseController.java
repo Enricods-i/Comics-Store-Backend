@@ -10,6 +10,7 @@ import org.springframework.data.mapping.PropertyReferenceException;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,6 +29,7 @@ public class PurchaseController {
     @Autowired
     private PurchaseService purchaseService;
 
+    @PreAuthorize("hasAuthoriry('admin')")
     @GetMapping(path = "/all")
     public ResponseEntity<?> showAll(@RequestParam(defaultValue = "0") int pageNumber, @RequestParam(defaultValue = "10") int pageSize, @RequestParam(defaultValue = "purchaseTime") String sortBy){
         try{
@@ -83,6 +85,7 @@ public class PurchaseController {
         }
     }//showInPeriod
 
+    @PreAuthorize("hasAuthoriry('admin')")
     @PostMapping(path = "/create")
     public ResponseEntity<?> create(@RequestParam(value = "usr") long userId){
         try{

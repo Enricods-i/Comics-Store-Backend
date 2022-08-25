@@ -17,11 +17,12 @@ spring:
         properties:
             hibernate:
                 ddl-auto: validate
+
 server:
     ssl:
         key-store-password: pippo
-        key-store-type: pluto
-        key-store: paperino
+        key-store-type: PKCS12
+        key-store: /etc/pki/tls/certs/server.key
 
 images-path: images/
 

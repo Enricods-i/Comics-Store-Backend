@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mapping.PropertyReferenceException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,6 +32,7 @@ public class DiscountController {
     @Autowired
     private DiscountService discountService;
 
+    @PreAuthorize("hasAuthoriry('admin')")
     @GetMapping(path = "/all")
     public ResponseEntity<?> getAll(@RequestParam(defaultValue = "0") int pageNumber, @RequestParam(defaultValue = "10") int pageSize, @RequestParam(defaultValue = "activationDate") String sortBy){
         try{
@@ -46,11 +48,13 @@ public class DiscountController {
         }
     }//getAll
 
+    @PreAuthorize("hasAuthoriry('admin')")
     @GetMapping(path = "/actives")
     public List<Discount> getActives(){
         return discountService.getAllActiveDiscounts();
     }//getActives
 
+    @PreAuthorize("hasAuthoriry('admin')")
     @PostMapping(path = "/create")
     public ResponseEntity<?> create(@RequestBody Discount discount){
         try{
@@ -65,6 +69,7 @@ public class DiscountController {
         }
     }//create
 
+    @PreAuthorize("hasAuthoriry('admin')")
     @PutMapping(path = "/update")
     public ResponseEntity<?> update(@RequestBody Discount discount){
         try{
@@ -79,6 +84,7 @@ public class DiscountController {
         }
     }//update
 
+    @PreAuthorize("hasAuthoriry('admin')")
     @PatchMapping(path = "/{id}/createPromotion")
     public ResponseEntity<?> createPromotion(@PathVariable(value = "id") long discountId, @RequestParam(value = "cmc") long comicId){
         try{
@@ -93,6 +99,7 @@ public class DiscountController {
         }
     }//createPromotion
 
+    @PreAuthorize("hasAuthoriry('admin')")
     @PatchMapping(path = "/{id}/finishPromotion")
     public ResponseEntity<?> finishPromotion(@PathVariable(value = "id") long discountId, @RequestParam(value = "cmc") long comicId, @RequestParam(value = "rm", defaultValue = "false") boolean remove){
         try{
@@ -107,6 +114,7 @@ public class DiscountController {
         }
     }//finishPromotion
 
+    @PreAuthorize("hasAuthoriry('admin')")
     @PatchMapping(path = "/updatePromotions")
     public ResponseEntity<?> updatePromotions(@RequestBody List<Object> payload){
         String errorResponse = "Must send a list of two elements: the first must be a Discount while the second must be a Set of Comic identifiers!";

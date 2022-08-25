@@ -1,4 +1,4 @@
-package im.enricods.ComicsStore.utils.Covers;
+package im.enricods.ComicsStore.utils.covers;
 
 public enum Type {
     COLLECTION("coll_"),

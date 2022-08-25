@@ -27,8 +27,8 @@ import im.enricods.ComicsStore.entities.Collection;
 import im.enricods.ComicsStore.repositories.AuthorRepository;
 import im.enricods.ComicsStore.repositories.CategoryRepository;
 import im.enricods.ComicsStore.repositories.CollectionRepository;
-import im.enricods.ComicsStore.utils.Covers.Cover;
-import im.enricods.ComicsStore.utils.Covers.Type;
+import im.enricods.ComicsStore.utils.covers.Cover;
+import im.enricods.ComicsStore.utils.covers.Type;
 
 @Service
 @Transactional

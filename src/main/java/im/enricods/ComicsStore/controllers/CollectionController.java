@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mapping.PropertyReferenceException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -27,8 +28,8 @@ import org.springframework.web.multipart.MultipartFile;
 import im.enricods.ComicsStore.entities.Collection;
 import im.enricods.ComicsStore.services.CollectionService;
 import im.enricods.ComicsStore.utils.InvalidValue;
-import im.enricods.ComicsStore.utils.Covers.Cover;
-import im.enricods.ComicsStore.utils.Covers.Type;
+import im.enricods.ComicsStore.utils.covers.Cover;
+import im.enricods.ComicsStore.utils.covers.Type;
 
 @RestController
 @RequestMapping(path = "/collections")
@@ -100,6 +101,7 @@ public class CollectionController {
         }
     }//getCover
 
+    @PreAuthorize("hasAuthoriry('admin')")
     @PostMapping(path = "/create")
     public ResponseEntity<?> create(@RequestBody Collection collection){
         try{
@@ -114,6 +116,7 @@ public class CollectionController {
         }
     }//create
 
+    @PreAuthorize("hasAuthoriry('admin')")
     @PutMapping(path = "/update")
     public ResponseEntity<?> update(@RequestBody Collection collection){
         try{
@@ -128,6 +131,7 @@ public class CollectionController {
         }
     }//update
 
+    @PreAuthorize("hasAuthoriry('admin')")
     @DeleteMapping(path = "/{id}/delete")
     public ResponseEntity<?> delete(@PathVariable(value = "id") long collectionId){
         try {
@@ -142,6 +146,7 @@ public class CollectionController {
         }
     }//delete
 
+    @PreAuthorize("hasAuthoriry('admin')")
     @PatchMapping(path = "/{id}/bindCategories")
     public ResponseEntity<?> bindCategories(@PathVariable(value = "id") long collectionId, @RequestBody Set<Long> categoryIds){
         try{
@@ -156,6 +161,7 @@ public class CollectionController {
         }
     }//bindCategories
 
+    @PreAuthorize("hasAuthoriry('admin')")
     @PatchMapping(path = "/{id}/unbindCategories")
     public ResponseEntity<?> unbindCategories(@PathVariable(value = "id") long collectionId, @RequestBody Set<Long> categoryIds){
         try{
@@ -170,6 +176,7 @@ public class CollectionController {
         }
     }//unbindCategories
 
+    @PreAuthorize("hasAuthoriry('admin')")
     @PatchMapping(path = "/{id}/chcov")
     public ResponseEntity<?> updateCover(@PathVariable(value = "id") long collectionId, @RequestParam("img") MultipartFile image){
         try{

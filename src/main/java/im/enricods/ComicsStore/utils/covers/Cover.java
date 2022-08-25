@@ -1,4 +1,4 @@
-package im.enricods.ComicsStore.utils.Covers;
+package im.enricods.ComicsStore.utils.covers;
 
 import java.awt.image.BufferedImage;
 import java.io.File;

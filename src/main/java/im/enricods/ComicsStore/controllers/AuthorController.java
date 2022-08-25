@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mapping.PropertyReferenceException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -43,7 +44,7 @@ public class AuthorController {
         }
     }//getAll
 
-    @GetMapping(path = "/v")
+    @GetMapping(path = "/v/byName")
     public ResponseEntity<?> showByName(@RequestParam(value = "name") String authorName,@RequestParam(defaultValue = "0") int pageNumber, @RequestParam(defaultValue = "10") int pageSize, @RequestParam(defaultValue = "name") String sortBy ){
         try{
             List<Author> result = authorService.getByName(authorName, pageNumber, pageSize, sortBy);
@@ -58,6 +59,7 @@ public class AuthorController {
         }
     }//getByName
 
+    @PreAuthorize("hasAuthoriry('admin')")
     @PostMapping(path = "/create")
     public ResponseEntity<?> create(@RequestBody Author author){
         try{
@@ -72,6 +74,7 @@ public class AuthorController {
         }
     }//create
 
+    @PreAuthorize("hasAuthoriry('admin')")
     @PutMapping(path = "/update")
     public ResponseEntity<?> update(@RequestBody Author author){
         try{
@@ -86,6 +89,7 @@ public class AuthorController {
         }
     }//update
 
+    @PreAuthorize("hasAuthoriry('admin')")
     @DeleteMapping(path = "/{id}/delete")
     public ResponseEntity<?> delete(@PathVariable(value = "id") long authorId){
         try{
@@ -100,6 +104,7 @@ public class AuthorController {
         }
     }//delete
 
+    @PreAuthorize("hasAuthoriry('admin')")
     @PatchMapping(path = "/{id}/add_works")
     public ResponseEntity<?> addWorks(@PathVariable(value = "id") long authorId, @RequestBody Set<Long> comicIds){
         try{
@@ -114,6 +119,7 @@ public class AuthorController {
         }
     }//addWorks
 
+    @PreAuthorize("hasAuthoriry('admin')")
     @PatchMapping(path = "/{id}/delete_works")
     public ResponseEntity<?> deleteWorks(@PathVariable(value = "id") long authorId, @RequestBody Set<Long> comicIds){
         try{

@@ -22,7 +22,6 @@ import im.enricods.ComicsStore.repositories.DiscountRepository;
 import im.enricods.ComicsStore.repositories.PurchaseRepository;
 import im.enricods.ComicsStore.repositories.UserRepository;
 import im.enricods.ComicsStore.utils.exceptions.ComicsQuantityUnavaiableException;
-import im.enricods.ComicsStore.utils.exceptions.DateWrongRangeException;
 import im.enricods.ComicsStore.entities.Cart;
 import im.enricods.ComicsStore.entities.CartContent;
 import im.enricods.ComicsStore.entities.Comic;
@@ -81,7 +80,7 @@ public class PurchaseService {
         
         //verify that startDate is previous endDate
         if ( startDate.compareTo(endDate) >= 0 )
-            throw new DateWrongRangeException();
+            throw new IllegalArgumentException("End date ("+endDate+") is previous start date ("+startDate+")!");
 
         Pageable paging = PageRequest.of(pageNumber, pageSize, Sort.by(sortBy));
         return purchaseRepository.findByPurchaseTimeBetween(startDate, endDate, paging).getContent();
