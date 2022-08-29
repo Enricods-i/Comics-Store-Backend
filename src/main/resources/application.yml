@@ -5,12 +5,12 @@ spring:
         username: eds
         password: eds
         url: jdbc:postgresql://localhost:5432/comics_store
-    security:
-        oauth2:
-            resourceserver:
-                jwt:
-                    jwk-set-uri: https://localhost:433/auth/realms/comicsstorerealm/protocol/openid-connect/certs
-                    issuer-uri: https://localhost:433/auth/realms/comicsstorerealm/
+#    security:
+#        oauth2:
+#            resourceserver:
+#                jwt:
+#                    jwk-set-uri: https://localhost:433/auth/realms/comicsstorerealm/protocol/openid-connect/certs
+#                   issuer-uri: https://localhost:433/auth/realms/comicsstorerealm/
     jpa:
         database: POSTGRESQL
         show-sql: true
@@ -18,13 +18,10 @@ spring:
             hibernate:
                 ddl-auto: validate
 
-server:
-    ssl:
-        key-store-password: pippo
-        key-store-type: PKCS12
-        key-store: /etc/pki/tls/certs/server.key
+#server:
+#    ssl:
+#        key-store-password: pippo
+#        key-store-type: PKCS12
+#        key-store: /etc/pki/tls/certs/server.key
 
 images-path: images/
-
-keycloak:
-    resource: pippo

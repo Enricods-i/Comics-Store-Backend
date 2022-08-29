@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mapping.PropertyReferenceException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -68,7 +67,6 @@ public class ComicController {
         }
     }//showByCollectionAndAuthor
 
-    @PreAuthorize("hasAuthoriry('admin')")
     @PostMapping(path = "/create")
     public ResponseEntity<?> create(@RequestBody Comic comic, @RequestParam(value = "cllctn") long collectionId){
         try{
@@ -83,7 +81,6 @@ public class ComicController {
         }
     }//create
 
-    @PreAuthorize("hasAuthoriry('admin')")
     @PutMapping(path = "/update")
     public ResponseEntity<?> update(@RequestBody Comic comic){
         try{
@@ -98,7 +95,6 @@ public class ComicController {
         }
     }//update
 
-    @PreAuthorize("hasAuthoriry('admin')")
     @DeleteMapping(path = "/{id}/delete")
     public ResponseEntity<?> delete(@PathVariable(value = "id") long comicId){
         try{
@@ -113,7 +109,6 @@ public class ComicController {
         }
     }//delete
 
-    @PreAuthorize("hasAuthoriry('admin')")
     @PatchMapping(path = "/{id}/addAuthors")
     public ResponseEntity<?> addAuthors(@PathVariable(value = "id") long comicId, @RequestBody Set<Long> authorIds){
         try{
@@ -128,7 +123,6 @@ public class ComicController {
         }
     }//addAuthors
 
-    @PreAuthorize("hasAuthoriry('admin')")
     @PatchMapping(path = "/{id}/delAuthors")
     public ResponseEntity<?> delAuthors(@PathVariable(value = "id") long comicId, @RequestBody Set<Long> authorIds){
         try{

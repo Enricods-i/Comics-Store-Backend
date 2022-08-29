@@ -7,7 +7,6 @@ import javax.validation.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -27,7 +26,6 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @PreAuthorize("hasAuthoriry('admin')")
     @GetMapping(path = "/v/byFirstName&LastName")
     public ResponseEntity<?> showByFirstNameAndLastName(@RequestParam(value = "fName") String firstName, @RequestParam(value = "lName") String lastName){
         try{
@@ -39,7 +37,6 @@ public class UserController {
         }
     }//showByFirstNameAndLastName
 
-    @PreAuthorize("hasAuthoriry('admin')")
     @GetMapping(path = "/v/byCity")
     public ResponseEntity<?> showByCity(@RequestParam(value = "city") String city){
         try{
@@ -51,7 +48,6 @@ public class UserController {
         }
     }//showByCity
 
-    @PreAuthorize("hasAuthoriry('admin')")
     @GetMapping(path = "/v/byEmail")
     public ResponseEntity<?> showByEmail(@RequestParam(value = "email") String email){
         try{
@@ -80,7 +76,6 @@ public class UserController {
         }
     }//create
 
-    @PreAuthorize("hasAuthoriry('user')")
     @PutMapping(path = "/update")
     public ResponseEntity<?> update(@RequestBody User user){
         try{

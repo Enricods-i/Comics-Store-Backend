@@ -8,7 +8,6 @@ import javax.validation.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -47,7 +46,6 @@ public class CategoryController {
         }
     }//getByName
 
-    @PreAuthorize("hasAuthoriry('admin')")
     @PostMapping(path = "/create")
     public ResponseEntity<?> create(@RequestParam(value = "name") String categoryName){
         try{
@@ -62,7 +60,6 @@ public class CategoryController {
         }
     }//create
 
-    @PreAuthorize("hasAuthoriry('admin')")
     @DeleteMapping(path = "/delete/{id}")
     public ResponseEntity<?> delete(@PathVariable(value = "id") long categoryId){
         try{
@@ -77,7 +74,6 @@ public class CategoryController {
         }
     }//delete
 
-    @PreAuthorize("hasAuthoriry('admin')")
     @PutMapping(path = "/chname/{id}")
     public ResponseEntity<?> updateName(@PathVariable(value = "id") long categoryId, @RequestParam(value = "newName") String newName){
         try {
@@ -92,7 +88,6 @@ public class CategoryController {
         }
     }//updateName
 
-    @PreAuthorize("hasAuthoriry('admin')")
     @PatchMapping(path = "/bind/{id}")
     public ResponseEntity<?> bindCollections(@PathVariable(value = "id") long categoryId, @RequestBody Set<Long> collectionIds){
         try{
@@ -107,7 +102,6 @@ public class CategoryController {
         }
     }//bindCollections
 
-    @PreAuthorize("hasAuthoriry('admin')")
     @PatchMapping(path = "/unbind/{id}")
     public ResponseEntity<?> unbindCollections(@PathVariable(value = "id") long categoryId, @RequestBody Set<Long> collectionIds){
         try{
