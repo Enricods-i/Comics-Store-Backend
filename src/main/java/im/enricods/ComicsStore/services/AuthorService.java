@@ -93,6 +93,8 @@ public class AuthorService {
         if(auth.isEmpty())
             throw new IllegalArgumentException("Author "+author.getId()+" not found!");
         
+        author.setCreationDate(auth.get().getCreationDate());
+
         //merge
         authorRepository.save(author);
 
@@ -108,10 +110,11 @@ public class AuthorService {
 
         Author target = auth.get();
 
+        Optional<Comic> cmc = null;
         for(long id : comicIds){
 
             //verify that a Comic with id exists, if not ignore it
-            Optional<Comic> cmc = comicRepository.findById(id);
+            cmc = comicRepository.findById(id);
             if(cmc.isPresent())
                 target.addWork(cmc.get());
 
@@ -128,11 +131,15 @@ public class AuthorService {
             throw new IllegalArgumentException("Author "+authorId+" not found!");
 
         Author target = auth.get();
-        Comic c = new Comic();
-
+        
+        Optional<Comic> cmc = null;
         for(long id : comicIds){
-            c.setId(id);
-            target.removeWork(c);
+
+            //verify that a Comic with id exists, if not ignore it
+            cmc = comicRepository.findById(id);
+            if(cmc.isPresent())
+                target.removeWork(cmc.get());
+
         }
 
     }//removeWorks

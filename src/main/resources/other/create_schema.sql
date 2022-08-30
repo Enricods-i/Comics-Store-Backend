@@ -130,24 +130,3 @@ CREATE TABLE discount_application (
 	discount_id BIGINT REFERENCES discount (id),
 	PRIMARY KEY (comic_in_purchase_id, discount_id)
 );
-
-CREATE TABLE change_log (
-	id BIGSERIAL PRIMARY KEY,
-	type VARCHAR(20) NOT NULL,
-	subject_id BIGINT NOT NULL,
-	created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
-);
-
-CREATE TABLE message {
-	id BIGSERIAL PRIMARY KEY,
-	change_log_id BIGINT REFERENCES change_log (id),
-	user_id BIGINT REFERENCES user (id),
-	involved_cart BOOLEAN NOT NULL,
-	UNIQUE (change_log_id, user_id)
-};
-
-CREATE TABLE involved_list {
-	message_id BIGINT REFERENCES message (id),
-	list_id BIGINT REFERENCES wish_list (id),
-	PRIMARY KEY (message_id, list_id)
-};
