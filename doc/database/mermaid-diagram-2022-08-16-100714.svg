@@ -1,0 +1,3047 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   aria-labelledby="chart-title-graph-div chart-desc-graph-div"
+   role="img"
+   viewBox="0 0 1903.8989 5687.5075"
+   height="3508"
+   width="2480"
+   id="graph-div"
+   version="1.1"
+   sodipodi:docname="mermaid-diagram-2022-08-16-100714.svg"
+   inkscape:version="1.2.1 (9c6d41e410, 2022-07-14)"
+   inkscape:export-filename="mermaid-diagram-2022-08-16-100714.png"
+   inkscape:export-xdpi="300"
+   inkscape:export-ydpi="300"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview522"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     showgrid="false"
+     inkscape:zoom="0.2286203"
+     inkscape:cx="166.21446"
+     inkscape:cy="1754"
+     inkscape:window-width="1920"
+     inkscape:window-height="1011"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="graph-div" />
+  <style
+     id="style2">@import url(&quot;https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css&quot;);'</style>
+  <title
+     id="chart-title-graph-div" />
+  <desc
+     id="chart-desc-graph-div" />
+  <style
+     id="style6">#graph-div {font-family:arial;font-size:18px;fill:#333;}#graph-div .error-icon{fill:#552222;}#graph-div .error-text{fill:#552222;stroke:#552222;}#graph-div .edge-thickness-normal{stroke-width:2px;}#graph-div .edge-thickness-thick{stroke-width:3.5px;}#graph-div .edge-pattern-solid{stroke-dasharray:0;}#graph-div .edge-pattern-dashed{stroke-dasharray:3;}#graph-div .edge-pattern-dotted{stroke-dasharray:2;}#graph-div .marker{fill:#333333;stroke:#333333;}#graph-div .marker.cross{stroke:#333333;}#graph-div svg{font-family:arial;font-size:18px;}#graph-div .entityBox{fill:#c9d7e4;stroke:#004990;}#graph-div .attributeBoxOdd{fill:#ffffff;stroke:#004990;}#graph-div .attributeBoxEven{fill:#f2f2f2;stroke:#004990;}#graph-div .relationshipLabelBox{fill:hsl(80, 100%, 96.2745098039%);opacity:0.7;background-color:hsl(80, 100%, 96.2745098039%);}#graph-div .relationshipLabelBox rect{opacity:0.5;}#graph-div .relationshipLine{stroke:#333333;}#graph-div :root{--mermaid-font-family:&quot;trebuchet ms&quot;,verdana,arial,sans-serif;}</style>
+  <g
+     id="g8" />
+  <defs
+     id="defs13">
+    <marker
+       orient="auto"
+       markerHeight="18"
+       markerWidth="18"
+       refY="9"
+       refX="0"
+       id="ONLY_ONE_START">
+      <path
+         d="M 9,0 V 18 M 15,0 v 18"
+         fill="none"
+         stroke="#808080"
+         id="path10" />
+    </marker>
+  </defs>
+  <defs
+     id="defs18">
+    <marker
+       orient="auto"
+       markerHeight="18"
+       markerWidth="18"
+       refY="9"
+       refX="18"
+       id="ONLY_ONE_END">
+      <path
+         d="M 3,0 V 18 M 9,0 v 18"
+         fill="none"
+         stroke="#808080"
+         id="path15" />
+    </marker>
+  </defs>
+  <defs
+     id="defs25">
+    <marker
+       orient="auto"
+       markerHeight="18"
+       markerWidth="30"
+       refY="9"
+       refX="0"
+       id="ZERO_OR_ONE_START">
+      <circle
+         r="6"
+         cy="9"
+         cx="21"
+         fill="#ffffff"
+         stroke="#808080"
+         id="circle20" />
+      <path
+         d="M 9,0 V 18"
+         fill="none"
+         stroke="#808080"
+         id="path22" />
+    </marker>
+  </defs>
+  <defs
+     id="defs32">
+    <marker
+       orient="auto"
+       markerHeight="18"
+       markerWidth="30"
+       refY="9"
+       refX="30"
+       id="ZERO_OR_ONE_END">
+      <circle
+         r="6"
+         cy="9"
+         cx="9"
+         fill="#ffffff"
+         stroke="#808080"
+         id="circle27" />
+      <path
+         d="M 21,0 V 18"
+         fill="none"
+         stroke="#808080"
+         id="path29" />
+    </marker>
+  </defs>
+  <defs
+     id="defs37">
+    <marker
+       orient="auto"
+       markerHeight="36"
+       markerWidth="45"
+       refY="18"
+       refX="18"
+       id="ONE_OR_MORE_START">
+      <path
+         d="M 0,18 Q 18,0 36,18 18,36 0,18 M 42,9 v 18"
+         fill="none"
+         stroke="#808080"
+         id="path34" />
+    </marker>
+  </defs>
+  <defs
+     id="defs42">
+    <marker
+       orient="auto"
+       markerHeight="36"
+       markerWidth="45"
+       refY="18"
+       refX="27"
+       id="ONE_OR_MORE_END">
+      <path
+         d="M 3,9 V 27 M 9,18 Q 27,0 45,18 27,36 9,18"
+         fill="none"
+         stroke="#808080"
+         id="path39" />
+    </marker>
+  </defs>
+  <defs
+     id="defs49">
+    <marker
+       orient="auto"
+       markerHeight="36"
+       markerWidth="57"
+       refY="18"
+       refX="18"
+       id="ZERO_OR_MORE_START">
+      <circle
+         r="6"
+         cy="18"
+         cx="48"
+         fill="#ffffff"
+         stroke="#808080"
+         id="circle44" />
+      <path
+         d="M 0,18 Q 18,0 36,18 18,36 0,18"
+         fill="none"
+         stroke="#808080"
+         id="path46" />
+    </marker>
+  </defs>
+  <defs
+     id="defs56">
+    <marker
+       orient="auto"
+       markerHeight="36"
+       markerWidth="57"
+       refY="18"
+       refX="39"
+       id="ZERO_OR_MORE_END">
+      <circle
+         r="6"
+         cy="18"
+         cx="9"
+         fill="#ffffff"
+         stroke="#808080"
+         id="circle51" />
+      <path
+         d="M 21,18 Q 39,0 57,18 39,36 21,18"
+         fill="none"
+         stroke="#808080"
+         id="path53" />
+    </marker>
+  </defs>
+  <rect
+     fill-opacity="1"
+     fill="#ffffff"
+     height="0"
+     width="0"
+     y="1071.2673"
+     x="858.25"
+     class="er relationshipLabelBox"
+     id="rect485" />
+  <text
+     style="font-size:12px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+     dominant-baseline="middle"
+     text-anchor="middle"
+     y="1071.2673"
+     x="858.25"
+     id="rel100"
+     class="er relationshipLabel" />
+  <rect
+     fill-opacity="1"
+     fill="#ffffff"
+     height="0"
+     width="0"
+     y="1039.0035"
+     x="323.08691"
+     class="er relationshipLabelBox"
+     id="rect494" />
+  <text
+     style="font-size:12px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+     dominant-baseline="middle"
+     text-anchor="middle"
+     y="1039.0035"
+     x="323.08691"
+     id="rel103"
+     class="er relationshipLabel" />
+  <rect
+     fill-opacity="1"
+     fill="#ffffff"
+     height="0"
+     width="0"
+     y="1593.1173"
+     x="614.41681"
+     class="er relationshipLabelBox"
+     id="rect497" />
+  <text
+     style="font-size:12px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+     dominant-baseline="middle"
+     text-anchor="middle"
+     y="1593.1173"
+     x="614.41681"
+     id="rel104"
+     class="er relationshipLabel" />
+  <rect
+     fill-opacity="1"
+     fill="#ffffff"
+     height="0"
+     width="0"
+     y="492.10089"
+     x="699.21246"
+     class="er relationshipLabelBox"
+     id="rect503" />
+  <text
+     style="font-size:12px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+     dominant-baseline="middle"
+     text-anchor="middle"
+     y="492.10089"
+     x="699.21246"
+     id="rel106"
+     class="er relationshipLabel" />
+  <g
+     id="g976"
+     transform="translate(130.19445,-4.3760317)">
+    <path
+       marker-start="url(#ZERO_OR_MORE_START)"
+       marker-end="url(#ZERO_OR_MORE_END)"
+       fill="none"
+       stroke="#808080"
+       d="m 949.16583,2952.5452 111.14247,69.9665 c 111.1424,69.9662 333.4273,209.8989 444.5697,318.4026 111.1425,108.5036 111.1425,185.5786 111.1425,224.1157 v 38.5375"
+       class="er relationshipLine"
+       id="path58"
+       style="stroke-width:3.16745" />
+    <path
+       marker-start="url(#ZERO_OR_MORE_START)"
+       marker-end="url(#ONLY_ONE_END)"
+       fill="none"
+       stroke="#808080"
+       d="m 2073.9077,1481.3735 12.5677,26.3954 c 12.5678,26.3955 37.7033,79.1864 50.271,156.525 12.5677,77.3387 12.5677,179.2251 12.5677,281.1116 0,101.8864 0,203.7728 0,348.1559 0,144.3831 0,331.2629 0,518.1427 0,186.8797 0,373.7595 0,560.6392 0,186.8798 0,373.7596 0,560.6394 0,186.8797 0,373.7595 0,518.1425 0,144.3833 0,246.2695 0,348.1561 0,101.8865 0,203.7727 -58.4747,288.231 -58.4747,84.4583 -175.4242,151.4882 -233.8989,185.0034 l -58.4747,33.5148"
+       class="er relationshipLine"
+       id="path60"
+       style="stroke-width:3.16745" />
+    <path
+       marker-start="url(#ZERO_OR_MORE_START)"
+       marker-end="url(#ZERO_OR_MORE_END)"
+       fill="none"
+       stroke="#808080"
+       d="m 439.04738,4335.2493 v 26.3953 c 0,26.3957 0,79.1864 0,131.9774 0,52.791 0,105.5817 0,131.9773 v 26.3954"
+       class="er relationshipLine"
+       id="path62"
+       style="stroke-width:3.16745" />
+    <path
+       marker-start="url(#ONLY_ONE_START)"
+       marker-end="url(#ONLY_ONE_END)"
+       fill="none"
+       stroke="#808080"
+       d="m 1448.3566,376.08366 75.227,35.87255 c 75.227,35.87256 225.6811,107.61764 300.9081,169.88566 75.227,62.26799 75.227,115.05887 75.227,141.45434 v 26.39544"
+       class="er relationshipLine"
+       id="path64"
+       style="stroke-width:3.16745" />
+    <path
+       marker-start="url(#ONLY_ONE_START)"
+       marker-end="url(#ZERO_OR_MORE_END)"
+       fill="none"
+       stroke="#808080"
+       d="m 519.94869,3213.9706 -13.48354,26.3957 c -13.48356,26.3953 -40.45067,79.186 -53.9342,131.977 -13.48357,52.791 -13.48357,105.5817 -13.48357,131.9774 v 26.3953"
+       class="er relationshipLine"
+       id="path66"
+       style="stroke-width:3.16745" />
+    <path
+       marker-start="url(#ONLY_ONE_START)"
+       marker-end="url(#ONE_OR_MORE_END)"
+       fill="none"
+       stroke="#808080"
+       d="m 1345.7838,4946.5679 v 26.3953 c 0,26.3957 0,79.1864 23.3365,131.9774 23.3365,52.791 70.0095,105.5817 93.346,131.9773 l 23.3365,26.3954"
+       class="er relationshipLine"
+       id="path68"
+       style="stroke-width:3.16745" />
+    <path
+       marker-start="url(#ZERO_OR_MORE_START)"
+       marker-end="url(#ZERO_OR_MORE_END)"
+       fill="none"
+       stroke="#808080"
+       d="m 1616.0205,4262.3979 v 38.5374 c 0,38.5372 0,115.6121 -23.3365,180.5449 -23.3365,64.9328 -70.0095,117.7235 -93.346,144.1191 l -23.3365,26.3954"
+       class="er relationshipLine"
+       id="path70"
+       style="stroke-width:3.16745" />
+    <path
+       marker-start="url(#ZERO_OR_MORE_START)"
+       marker-end="url(#ONLY_ONE_END)"
+       fill="none"
+       stroke="#808080"
+       d="m 1711.1246,1481.3735 -13.6071,26.3954 c -13.607,26.3955 -40.8212,79.1864 -54.4283,131.9773 -13.607,52.7909 -13.607,105.5818 -13.607,131.9772 v 26.3955"
+       class="er relationshipLine"
+       id="path72"
+       style="stroke-width:3.16745" />
+    <path
+       marker-start="url(#ZERO_OR_MORE_START)"
+       marker-end="url(#ZERO_OR_MORE_END)"
+       fill="none"
+       stroke="#808080"
+       d="m 1629.4822,2092.6921 v 26.3954 c 0,26.3955 0,79.1864 -113.3861,175.8977 -113.3861,96.7114 -340.1582,237.3432 -453.5442,307.6591 l -113.38607,70.3159"
+       class="er relationshipLine"
+       id="path74"
+       style="stroke-width:3.16745" />
+    <path
+       marker-start="url(#ZERO_OR_MORE_START)"
+       marker-end="url(#ZERO_OR_MORE_END)"
+       fill="none"
+       stroke="#808080"
+       d="m 501.7102,2932.1233 -136.31493,73.37 c -136.31488,73.3699 -408.944675,220.1101 -545.25956,344.1593 -136.31489,124.0493 -136.31489,225.4078 -136.31489,276.087 v 50.6793"
+       class="er relationshipLine"
+       id="path76"
+       style="stroke-width:3.16745" />
+    <path
+       marker-start="url(#ONLY_ONE_START)"
+       marker-end="url(#ZERO_OR_MORE_END)"
+       fill="none"
+       stroke="#808080"
+       d="m 1219.0258,4651.9947 -22.7165,-26.3954 c -22.7165,-26.3956 -68.1495,-79.1863 -90.866,-199.0219 -22.7165,-119.8352 -22.7165,-306.715 -22.7165,-493.5947 0,-186.8798 0,-373.7596 -22.2602,-502.1289 -22.2601,-128.3696 -66.78047,-198.2284 -89.04061,-233.1579 l -22.26016,-34.9297"
+       class="er relationshipLine"
+       id="path78"
+       style="stroke-width:3.16745" />
+    <path
+       marker-start="url(#ZERO_OR_MORE_START)"
+       marker-end="url(#ONLY_ONE_END)"
+       fill="none"
+       stroke="#808080"
+       d="M 1069.1068,352.89346 957.03166,392.63107 C 844.95659,432.36865 620.80643,511.8438 508.73137,638.9503 396.6563,766.05684 396.6563,940.79468 396.6563,1115.5326 c 0,174.7378 0,349.4757 0,475.382 0,125.9063 0,202.981 0,241.5183 v 38.5374"
+       class="er relationshipLine"
+       id="path80"
+       style="stroke-width:3.16745" />
+    <path
+       marker-start="url(#ONLY_ONE_START)"
+       marker-end="url(#ZERO_OR_MORE_END)"
+       fill="none"
+       stroke="#808080"
+       d="m 396.6563,2019.8406 v 38.5374 c 0,38.5373 0,115.6121 17.50899,184.0058 17.50896,68.3937 52.52693,128.1064 70.03592,157.9627 l 17.50899,29.8564"
+       class="er relationshipLine"
+       id="path82"
+       style="stroke-width:3.16745" />
+    <g
+       transform="matrix(3.1674538,0,0,3.1674538,1684.9654,749.69165)"
+       id="Personal_data">
+      <rect
+         height="231"
+         width="135.60001"
+         y="0"
+         x="0"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er entityBox"
+         id="rect84" />
+      <text
+         transform="translate(67.799999,12)"
+         style="font-size:12px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="middle"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Personal_data"
+         class="er entityLabel">Personal_data</text>
+      <rect
+         height="23"
+         width="57.033333"
+         y="24"
+         x="0"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxOdd"
+         id="rect87" />
+      <text
+         transform="translate(5,35.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Personal_data-attr-1-type"
+         class="er entityLabel">long</text>
+      <rect
+         height="23"
+         width="78.566666"
+         y="24"
+         x="57.033333"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxOdd"
+         id="rect90" />
+      <text
+         transform="translate(62.033333,35.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Personal_data-attr-1-name"
+         class="er entityLabel">id</text>
+      <rect
+         height="23"
+         width="57.033333"
+         y="47"
+         x="0"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxEven"
+         id="rect93" />
+      <text
+         transform="translate(5,58.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Personal_data-attr-2-type"
+         class="er entityLabel">string</text>
+      <rect
+         height="23"
+         width="78.566666"
+         y="47"
+         x="57.033333"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxEven"
+         id="rect96" />
+      <text
+         transform="translate(62.033333,58.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Personal_data-attr-2-name"
+         class="er entityLabel">first_name</text>
+      <rect
+         height="23"
+         width="57.033333"
+         y="70"
+         x="0"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxOdd"
+         id="rect99" />
+      <text
+         transform="translate(5,81.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Personal_data-attr-3-type"
+         class="er entityLabel">string</text>
+      <rect
+         height="23"
+         width="78.566666"
+         y="70"
+         x="57.033333"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxOdd"
+         id="rect102" />
+      <text
+         transform="translate(62.033333,81.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Personal_data-attr-3-name"
+         class="er entityLabel">last_name</text>
+      <rect
+         height="23"
+         width="57.033333"
+         y="93"
+         x="0"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxEven"
+         id="rect105" />
+      <text
+         transform="translate(5,104.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Personal_data-attr-4-type"
+         class="er entityLabel">date</text>
+      <rect
+         height="23"
+         width="78.566666"
+         y="93"
+         x="57.033333"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxEven"
+         id="rect108" />
+      <text
+         transform="translate(62.033333,104.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Personal_data-attr-4-name"
+         class="er entityLabel">birth_date</text>
+      <rect
+         height="23"
+         width="57.033333"
+         y="116"
+         x="0"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxOdd"
+         id="rect111" />
+      <text
+         transform="translate(5,127.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Personal_data-attr-5-type"
+         class="er entityLabel">string</text>
+      <rect
+         height="23"
+         width="78.566666"
+         y="116"
+         x="57.033333"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxOdd"
+         id="rect114" />
+      <text
+         transform="translate(62.033333,127.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Personal_data-attr-5-name"
+         class="er entityLabel">email</text>
+      <rect
+         height="23"
+         width="57.033333"
+         y="139"
+         x="0"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxEven"
+         id="rect117" />
+      <text
+         transform="translate(5,150.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Personal_data-attr-6-type"
+         class="er entityLabel">string</text>
+      <rect
+         height="23"
+         width="78.566666"
+         y="139"
+         x="57.033333"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxEven"
+         id="rect120" />
+      <text
+         transform="translate(62.033333,150.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Personal_data-attr-6-name"
+         class="er entityLabel">phone_number</text>
+      <rect
+         height="23"
+         width="57.033333"
+         y="162"
+         x="0"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxOdd"
+         id="rect123" />
+      <text
+         transform="translate(5,173.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Personal_data-attr-7-type"
+         class="er entityLabel">string</text>
+      <rect
+         height="23"
+         width="78.566666"
+         y="162"
+         x="57.033333"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxOdd"
+         id="rect126" />
+      <text
+         transform="translate(62.033333,173.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Personal_data-attr-7-name"
+         class="er entityLabel">city</text>
+      <rect
+         height="23"
+         width="57.033333"
+         y="185"
+         x="0"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxEven"
+         id="rect129" />
+      <text
+         transform="translate(5,196.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Personal_data-attr-8-type"
+         class="er entityLabel">timestamp</text>
+      <rect
+         height="23"
+         width="78.566666"
+         y="185"
+         x="57.033333"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxEven"
+         id="rect132" />
+      <text
+         transform="translate(62.033333,196.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Personal_data-attr-8-name"
+         class="er entityLabel">created_at</text>
+      <rect
+         height="23"
+         width="57.033333"
+         y="208"
+         x="0"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxOdd"
+         id="rect135" />
+      <text
+         transform="translate(5,219.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Personal_data-attr-9-type"
+         class="er entityLabel">timestamp</text>
+      <rect
+         height="23"
+         width="78.566666"
+         y="208"
+         x="57.033333"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxOdd"
+         id="rect138" />
+      <text
+         transform="translate(62.033333,219.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Personal_data-attr-9-name"
+         class="er entityLabel">modified_at</text>
+    </g>
+    <g
+       transform="matrix(3.1674538,0,0,3.1674538,1069.1068,138.37306)"
+       id="Cart_data">
+      <rect
+         height="93"
+         width="119.73334"
+         y="0"
+         x="0"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er entityBox"
+         id="rect142" />
+      <text
+         transform="translate(59.866667,12)"
+         style="font-size:12px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="middle"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Cart_data"
+         class="er entityLabel">Cart_data</text>
+      <rect
+         height="23"
+         width="57.033333"
+         y="24"
+         x="0"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxOdd"
+         id="rect145" />
+      <text
+         transform="translate(5,35.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Cart_data-attr-1-type"
+         class="er entityLabel">long</text>
+      <rect
+         height="23"
+         width="62.700001"
+         y="24"
+         x="57.033333"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxOdd"
+         id="rect148" />
+      <text
+         transform="translate(62.033333,35.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Cart_data-attr-1-name"
+         class="er entityLabel">id</text>
+      <rect
+         height="23"
+         width="57.033333"
+         y="47"
+         x="0"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxEven"
+         id="rect151" />
+      <text
+         transform="translate(5,58.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Cart_data-attr-2-type"
+         class="er entityLabel">int</text>
+      <rect
+         height="23"
+         width="62.700001"
+         y="47"
+         x="57.033333"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxEven"
+         id="rect154" />
+      <text
+         transform="translate(62.033333,58.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Cart_data-attr-2-name"
+         class="er entityLabel">size</text>
+      <rect
+         height="23"
+         width="57.033333"
+         y="70"
+         x="0"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxOdd"
+         id="rect157" />
+      <text
+         transform="translate(5,81.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Cart_data-attr-3-type"
+         class="er entityLabel">timestamp</text>
+      <rect
+         height="23"
+         width="62.700001"
+         y="70"
+         x="57.033333"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxOdd"
+         id="rect160" />
+      <text
+         transform="translate(62.033333,81.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Cart_data-attr-3-name"
+         class="er entityLabel">modified_at</text>
+    </g>
+    <g
+       transform="matrix(3.1674538,0,0,3.1674538,238.28361,1870.9703)"
+       id="Cart_content">
+      <rect
+         height="47"
+         width="100"
+         y="0"
+         x="0"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er entityBox"
+         id="rect164" />
+      <text
+         transform="translate(50,12)"
+         style="font-size:12px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="middle"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Cart_content"
+         class="er entityLabel">Cart_content</text>
+      <rect
+         height="23"
+         width="37.533333"
+         y="24"
+         x="0"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxOdd"
+         id="rect167" />
+      <text
+         transform="translate(5,35.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Cart_content-attr-1-type"
+         class="er entityLabel">int</text>
+      <rect
+         height="23"
+         width="62.466667"
+         y="24"
+         x="37.533333"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxOdd"
+         id="rect170" />
+      <text
+         transform="translate(42.533333,35.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Cart_content-attr-1-name"
+         class="er entityLabel">quantity</text>
+    </g>
+    <g
+       transform="matrix(3.1674538,0,0,3.1674538,1447.0368,1798.1189)"
+       id="Wish_list">
+      <rect
+         height="93"
+         width="115.2"
+         y="0"
+         x="0"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er entityBox"
+         id="rect174" />
+      <text
+         transform="translate(57.6,12)"
+         style="font-size:12px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="middle"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Wish_list"
+         class="er entityLabel">Wish_list</text>
+      <rect
+         height="23"
+         width="57.033333"
+         y="24"
+         x="0"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxOdd"
+         id="rect177" />
+      <text
+         transform="translate(5,35.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Wish_list-attr-1-type"
+         class="er entityLabel">long</text>
+      <rect
+         height="23"
+         width="58.166668"
+         y="24"
+         x="57.033333"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxOdd"
+         id="rect180" />
+      <text
+         transform="translate(62.033333,35.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Wish_list-attr-1-name"
+         class="er entityLabel">id</text>
+      <rect
+         height="23"
+         width="57.033333"
+         y="47"
+         x="0"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxEven"
+         id="rect183" />
+      <text
+         transform="translate(5,58.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Wish_list-attr-2-type"
+         class="er entityLabel">string</text>
+      <rect
+         height="23"
+         width="58.166668"
+         y="47"
+         x="57.033333"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxEven"
+         id="rect186" />
+      <text
+         transform="translate(62.033333,58.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Wish_list-attr-2-name"
+         class="er entityLabel">name</text>
+      <rect
+         height="23"
+         width="57.033333"
+         y="70"
+         x="0"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxOdd"
+         id="rect189" />
+      <text
+         transform="translate(5,81.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Wish_list-attr-3-type"
+         class="er entityLabel">timestamp</text>
+      <rect
+         height="23"
+         width="58.166668"
+         y="70"
+         x="57.033333"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxOdd"
+         id="rect192" />
+      <text
+         transform="translate(62.033333,81.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Wish_list-attr-3-name"
+         class="er entityLabel">created_at</text>
+    </g>
+    <g
+       transform="matrix(3.1674538,0,0,3.1674538,501.7102,2409.4375)"
+       id="Comic">
+      <rect
+         height="254"
+         width="141.26666"
+         y="0"
+         x="0"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er entityBox"
+         id="rect196" />
+      <text
+         transform="translate(70.633331,12)"
+         style="font-size:12px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="middle"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Comic"
+         class="er entityLabel">Comic</text>
+      <rect
+         height="23"
+         width="57.033333"
+         y="24"
+         x="0"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxOdd"
+         id="rect199" />
+      <text
+         transform="translate(5,35.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Comic-attr-1-type"
+         class="er entityLabel">long</text>
+      <rect
+         height="23"
+         width="84.23333"
+         y="24"
+         x="57.033333"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxOdd"
+         id="rect202" />
+      <text
+         transform="translate(62.033333,35.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Comic-attr-1-name"
+         class="er entityLabel">id</text>
+      <rect
+         height="23"
+         width="57.033333"
+         y="47"
+         x="0"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxEven"
+         id="rect205" />
+      <text
+         transform="translate(5,58.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Comic-attr-2-type"
+         class="er entityLabel">int</text>
+      <rect
+         height="23"
+         width="84.23333"
+         y="47"
+         x="57.033333"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxEven"
+         id="rect208" />
+      <text
+         transform="translate(62.033333,58.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Comic-attr-2-name"
+         class="er entityLabel">number</text>
+      <rect
+         height="23"
+         width="57.033333"
+         y="70"
+         x="0"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxOdd"
+         id="rect211" />
+      <text
+         transform="translate(5,81.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Comic-attr-3-type"
+         class="er entityLabel">int</text>
+      <rect
+         height="23"
+         width="84.23333"
+         y="70"
+         x="57.033333"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxOdd"
+         id="rect214" />
+      <text
+         transform="translate(62.033333,81.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Comic-attr-3-name"
+         class="er entityLabel">quantity</text>
+      <rect
+         height="23"
+         width="57.033333"
+         y="93"
+         x="0"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxEven"
+         id="rect217" />
+      <text
+         transform="translate(5,104.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Comic-attr-4-type"
+         class="er entityLabel">int</text>
+      <rect
+         height="23"
+         width="84.23333"
+         y="93"
+         x="57.033333"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxEven"
+         id="rect220" />
+      <text
+         transform="translate(62.033333,104.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Comic-attr-4-name"
+         class="er entityLabel">pages</text>
+      <rect
+         height="23"
+         width="57.033333"
+         y="116"
+         x="0"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxOdd"
+         id="rect223" />
+      <text
+         transform="translate(5,127.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Comic-attr-5-type"
+         class="er entityLabel">string</text>
+      <rect
+         height="23"
+         width="84.23333"
+         y="116"
+         x="57.033333"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxOdd"
+         id="rect226" />
+      <text
+         transform="translate(62.033333,127.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Comic-attr-5-name"
+         class="er entityLabel">isbn</text>
+      <rect
+         height="23"
+         width="57.033333"
+         y="139"
+         x="0"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxEven"
+         id="rect229" />
+      <text
+         transform="translate(5,150.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Comic-attr-6-type"
+         class="er entityLabel">date</text>
+      <rect
+         height="23"
+         width="84.23333"
+         y="139"
+         x="57.033333"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxEven"
+         id="rect232" />
+      <text
+         transform="translate(62.033333,150.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Comic-attr-6-name"
+         class="er entityLabel">publication_date</text>
+      <rect
+         height="23"
+         width="57.033333"
+         y="162"
+         x="0"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxOdd"
+         id="rect235" />
+      <text
+         transform="translate(5,173.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Comic-attr-7-type"
+         class="er entityLabel">string</text>
+      <rect
+         height="23"
+         width="84.23333"
+         y="162"
+         x="57.033333"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxOdd"
+         id="rect238" />
+      <text
+         transform="translate(62.033333,173.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Comic-attr-7-name"
+         class="er entityLabel">description</text>
+      <rect
+         height="23"
+         width="57.033333"
+         y="185"
+         x="0"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxEven"
+         id="rect241" />
+      <text
+         transform="translate(5,196.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Comic-attr-8-type"
+         class="er entityLabel">long</text>
+      <rect
+         height="23"
+         width="84.23333"
+         y="185"
+         x="57.033333"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxEven"
+         id="rect244" />
+      <text
+         transform="translate(62.033333,196.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Comic-attr-8-name"
+         class="er entityLabel">version</text>
+      <rect
+         height="23"
+         width="57.033333"
+         y="208"
+         x="0"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxOdd"
+         id="rect247" />
+      <text
+         transform="translate(5,219.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Comic-attr-9-type"
+         class="er entityLabel">timestamp</text>
+      <rect
+         height="23"
+         width="84.23333"
+         y="208"
+         x="57.033333"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxOdd"
+         id="rect250" />
+      <text
+         transform="translate(62.033333,219.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Comic-attr-9-name"
+         class="er entityLabel">created_at</text>
+      <rect
+         height="23"
+         width="57.033333"
+         y="231"
+         x="0"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxEven"
+         id="rect253" />
+      <text
+         transform="translate(5,242.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Comic-attr-10-type"
+         class="er entityLabel">timestamp</text>
+      <rect
+         height="23"
+         width="84.23333"
+         y="231"
+         x="57.033333"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxEven"
+         id="rect256" />
+      <text
+         transform="translate(62.033333,242.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Comic-attr-10-name"
+         class="er entityLabel">modified_at</text>
+    </g>
+    <g
+       transform="matrix(3.1674538,0,0,3.1674538,-505.80409,3676.4189)"
+       id="Author">
+      <rect
+         height="162"
+         width="119.73334"
+         y="0"
+         x="0"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er entityBox"
+         id="rect260" />
+      <text
+         transform="translate(59.866667,12)"
+         style="font-size:12px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="middle"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Author"
+         class="er entityLabel">Author</text>
+      <rect
+         height="23"
+         width="57.033333"
+         y="24"
+         x="0"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxOdd"
+         id="rect263" />
+      <text
+         transform="translate(5,35.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Author-attr-1-type"
+         class="er entityLabel">long</text>
+      <rect
+         height="23"
+         width="62.700001"
+         y="24"
+         x="57.033333"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxOdd"
+         id="rect266" />
+      <text
+         transform="translate(62.033333,35.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Author-attr-1-name"
+         class="er entityLabel">id</text>
+      <rect
+         height="23"
+         width="57.033333"
+         y="47"
+         x="0"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxEven"
+         id="rect269" />
+      <text
+         transform="translate(5,58.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Author-attr-2-type"
+         class="er entityLabel">string</text>
+      <rect
+         height="23"
+         width="62.700001"
+         y="47"
+         x="57.033333"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxEven"
+         id="rect272" />
+      <text
+         transform="translate(62.033333,58.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Author-attr-2-name"
+         class="er entityLabel">name</text>
+      <rect
+         height="23"
+         width="57.033333"
+         y="70"
+         x="0"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxOdd"
+         id="rect275" />
+      <text
+         transform="translate(5,81.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Author-attr-3-type"
+         class="er entityLabel">string</text>
+      <rect
+         height="23"
+         width="62.700001"
+         y="70"
+         x="57.033333"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxOdd"
+         id="rect278" />
+      <text
+         transform="translate(62.033333,81.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Author-attr-3-name"
+         class="er entityLabel">biography</text>
+      <rect
+         height="23"
+         width="57.033333"
+         y="93"
+         x="0"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxEven"
+         id="rect281" />
+      <text
+         transform="translate(5,104.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Author-attr-4-type"
+         class="er entityLabel">long</text>
+      <rect
+         height="23"
+         width="62.700001"
+         y="93"
+         x="57.033333"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxEven"
+         id="rect284" />
+      <text
+         transform="translate(62.033333,104.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Author-attr-4-name"
+         class="er entityLabel">version</text>
+      <rect
+         height="23"
+         width="57.033333"
+         y="116"
+         x="0"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxOdd"
+         id="rect287" />
+      <text
+         transform="translate(5,127.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Author-attr-5-type"
+         class="er entityLabel">timestamp</text>
+      <rect
+         height="23"
+         width="62.700001"
+         y="116"
+         x="57.033333"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxOdd"
+         id="rect290" />
+      <text
+         transform="translate(62.033333,127.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Author-attr-5-name"
+         class="er entityLabel">created_at</text>
+      <rect
+         height="23"
+         width="57.033333"
+         y="139"
+         x="0"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxEven"
+         id="rect293" />
+      <text
+         transform="translate(5,150.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Author-attr-6-type"
+         class="er entityLabel">timestamp</text>
+      <rect
+         height="23"
+         width="62.700001"
+         y="139"
+         x="57.033333"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxEven"
+         id="rect296" />
+      <text
+         transform="translate(62.033333,150.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Author-attr-6-name"
+         class="er entityLabel">modified_at</text>
+    </g>
+    <g
+       transform="matrix(3.1674538,0,0,3.1674538,190.19112,3530.716)"
+       id="Collection">
+      <rect
+         height="254"
+         width="157.13333"
+         y="0"
+         x="0"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er entityBox"
+         id="rect300" />
+      <text
+         transform="translate(78.566666,12)"
+         style="font-size:12px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="middle"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Collection"
+         class="er entityLabel">Collection</text>
+      <rect
+         height="23"
+         width="57.033333"
+         y="24"
+         x="0"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxOdd"
+         id="rect303" />
+      <text
+         transform="translate(5,35.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Collection-attr-1-type"
+         class="er entityLabel">long</text>
+      <rect
+         height="23"
+         width="100.1"
+         y="24"
+         x="57.033333"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxOdd"
+         id="rect306" />
+      <text
+         transform="translate(62.033333,35.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Collection-attr-1-name"
+         class="er entityLabel">id</text>
+      <rect
+         height="23"
+         width="57.033333"
+         y="47"
+         x="0"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxEven"
+         id="rect309" />
+      <text
+         transform="translate(5,58.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Collection-attr-2-type"
+         class="er entityLabel">string</text>
+      <rect
+         height="23"
+         width="100.1"
+         y="47"
+         x="57.033333"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxEven"
+         id="rect312" />
+      <text
+         transform="translate(62.033333,58.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Collection-attr-2-name"
+         class="er entityLabel">name</text>
+      <rect
+         height="23"
+         width="57.033333"
+         y="70"
+         x="0"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxOdd"
+         id="rect315" />
+      <text
+         transform="translate(5,81.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Collection-attr-3-type"
+         class="er entityLabel">float</text>
+      <rect
+         height="23"
+         width="100.1"
+         y="70"
+         x="57.033333"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxOdd"
+         id="rect318" />
+      <text
+         transform="translate(62.033333,81.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Collection-attr-3-name"
+         class="er entityLabel">price</text>
+      <rect
+         height="23"
+         width="57.033333"
+         y="93"
+         x="0"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxEven"
+         id="rect321" />
+      <text
+         transform="translate(5,104.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Collection-attr-4-type"
+         class="er entityLabel">int</text>
+      <rect
+         height="23"
+         width="100.1"
+         y="93"
+         x="57.033333"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxEven"
+         id="rect324" />
+      <text
+         transform="translate(62.033333,104.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Collection-attr-4-name"
+         class="er entityLabel">year_of_release</text>
+      <rect
+         height="23"
+         width="57.033333"
+         y="116"
+         x="0"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxOdd"
+         id="rect327" />
+      <text
+         transform="translate(5,127.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Collection-attr-5-type"
+         class="er entityLabel">string</text>
+      <rect
+         height="23"
+         width="100.1"
+         y="116"
+         x="57.033333"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxOdd"
+         id="rect330" />
+      <text
+         transform="translate(62.033333,127.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Collection-attr-5-name"
+         class="er entityLabel">format_and_binding</text>
+      <rect
+         height="23"
+         width="57.033333"
+         y="139"
+         x="0"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxEven"
+         id="rect333" />
+      <text
+         transform="translate(5,150.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Collection-attr-6-type"
+         class="er entityLabel">boolean</text>
+      <rect
+         height="23"
+         width="100.1"
+         y="139"
+         x="57.033333"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxEven"
+         id="rect336" />
+      <text
+         transform="translate(62.033333,150.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Collection-attr-6-name"
+         class="er entityLabel">color</text>
+      <rect
+         height="23"
+         width="57.033333"
+         y="162"
+         x="0"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxOdd"
+         id="rect339" />
+      <text
+         transform="translate(5,173.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Collection-attr-7-type"
+         class="er entityLabel">string</text>
+      <rect
+         height="23"
+         width="100.1"
+         y="162"
+         x="57.033333"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxOdd"
+         id="rect342" />
+      <text
+         transform="translate(62.033333,173.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Collection-attr-7-name"
+         class="er entityLabel">description</text>
+      <rect
+         height="23"
+         width="57.033333"
+         y="185"
+         x="0"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxEven"
+         id="rect345" />
+      <text
+         transform="translate(5,196.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Collection-attr-8-type"
+         class="er entityLabel">long</text>
+      <rect
+         height="23"
+         width="100.1"
+         y="185"
+         x="57.033333"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxEven"
+         id="rect348" />
+      <text
+         transform="translate(62.033333,196.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Collection-attr-8-name"
+         class="er entityLabel">version</text>
+      <rect
+         height="23"
+         width="57.033333"
+         y="208"
+         x="0"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxOdd"
+         id="rect351" />
+      <text
+         transform="translate(5,219.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Collection-attr-9-type"
+         class="er entityLabel">timestamp</text>
+      <rect
+         height="23"
+         width="100.1"
+         y="208"
+         x="57.033333"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxOdd"
+         id="rect354" />
+      <text
+         transform="translate(62.033333,219.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Collection-attr-9-name"
+         class="er entityLabel">created_at</text>
+      <rect
+         height="23"
+         width="57.033333"
+         y="231"
+         x="0"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxEven"
+         id="rect357" />
+      <text
+         transform="translate(5,242.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Collection-attr-10-type"
+         class="er entityLabel">timestamp</text>
+      <rect
+         height="23"
+         width="100.1"
+         y="231"
+         x="57.033333"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxEven"
+         id="rect360" />
+      <text
+         transform="translate(62.033333,242.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Collection-attr-10-name"
+         class="er entityLabel">modified_at</text>
+    </g>
+    <g
+       transform="matrix(3.1674538,0,0,3.1674538,256.60205,4651.9947)"
+       id="Category">
+      <rect
+         height="93"
+         width="115.2"
+         y="0"
+         x="0"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er entityBox"
+         id="rect364" />
+      <text
+         transform="translate(57.6,12)"
+         style="font-size:12px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="middle"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Category"
+         class="er entityLabel">Category</text>
+      <rect
+         height="23"
+         width="57.033333"
+         y="24"
+         x="0"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxOdd"
+         id="rect367" />
+      <text
+         transform="translate(5,35.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Category-attr-1-type"
+         class="er entityLabel">long</text>
+      <rect
+         height="23"
+         width="58.166668"
+         y="24"
+         x="57.033333"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxOdd"
+         id="rect370" />
+      <text
+         transform="translate(62.033333,35.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Category-attr-1-name"
+         class="er entityLabel">id</text>
+      <rect
+         height="23"
+         width="57.033333"
+         y="47"
+         x="0"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxEven"
+         id="rect373" />
+      <text
+         transform="translate(5,58.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Category-attr-2-type"
+         class="er entityLabel">string</text>
+      <rect
+         height="23"
+         width="58.166668"
+         y="47"
+         x="57.033333"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxEven"
+         id="rect376" />
+      <text
+         transform="translate(62.033333,58.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Category-attr-2-name"
+         class="er entityLabel">name</text>
+      <rect
+         height="23"
+         width="57.033333"
+         y="70"
+         x="0"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxOdd"
+         id="rect379" />
+      <text
+         transform="translate(5,81.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Category-attr-3-type"
+         class="er entityLabel">timestamp</text>
+      <rect
+         height="23"
+         width="58.166668"
+         y="70"
+         x="57.033333"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxOdd"
+         id="rect382" />
+      <text
+         transform="translate(62.033333,81.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Category-attr-3-name"
+         class="er entityLabel">created_at</text>
+    </g>
+    <g
+       transform="matrix(3.1674538,0,0,3.1674538,1399.4722,3603.5675)"
+       id="Discount">
+      <rect
+         height="208"
+         width="136.73334"
+         y="0"
+         x="0"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er entityBox"
+         id="rect386" />
+      <text
+         transform="translate(68.366665,12)"
+         style="font-size:12px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="middle"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Discount"
+         class="er entityLabel">Discount</text>
+      <rect
+         height="23"
+         width="57.033333"
+         y="24"
+         x="0"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxOdd"
+         id="rect389" />
+      <text
+         transform="translate(5,35.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Discount-attr-1-type"
+         class="er entityLabel">long</text>
+      <rect
+         height="23"
+         width="79.699997"
+         y="24"
+         x="57.033333"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxOdd"
+         id="rect392" />
+      <text
+         transform="translate(62.033333,35.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Discount-attr-1-name"
+         class="er entityLabel">id</text>
+      <rect
+         height="23"
+         width="57.033333"
+         y="47"
+         x="0"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxEven"
+         id="rect395" />
+      <text
+         transform="translate(5,58.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Discount-attr-2-type"
+         class="er entityLabel">string</text>
+      <rect
+         height="23"
+         width="79.699997"
+         y="47"
+         x="57.033333"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxEven"
+         id="rect398" />
+      <text
+         transform="translate(62.033333,58.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Discount-attr-2-name"
+         class="er entityLabel">name</text>
+      <rect
+         height="23"
+         width="57.033333"
+         y="70"
+         x="0"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxOdd"
+         id="rect401" />
+      <text
+         transform="translate(5,81.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Discount-attr-3-type"
+         class="er entityLabel">int</text>
+      <rect
+         height="23"
+         width="79.699997"
+         y="70"
+         x="57.033333"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxOdd"
+         id="rect404" />
+      <text
+         transform="translate(62.033333,81.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Discount-attr-3-name"
+         class="er entityLabel">percentage</text>
+      <rect
+         height="23"
+         width="57.033333"
+         y="93"
+         x="0"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxEven"
+         id="rect407" />
+      <text
+         transform="translate(5,104.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Discount-attr-4-type"
+         class="er entityLabel">date</text>
+      <rect
+         height="23"
+         width="79.699997"
+         y="93"
+         x="57.033333"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxEven"
+         id="rect410" />
+      <text
+         transform="translate(62.033333,104.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Discount-attr-4-name"
+         class="er entityLabel">activation_date</text>
+      <rect
+         height="23"
+         width="57.033333"
+         y="116"
+         x="0"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxOdd"
+         id="rect413" />
+      <text
+         transform="translate(5,127.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Discount-attr-5-type"
+         class="er entityLabel">date</text>
+      <rect
+         height="23"
+         width="79.699997"
+         y="116"
+         x="57.033333"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxOdd"
+         id="rect416" />
+      <text
+         transform="translate(62.033333,127.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Discount-attr-5-name"
+         class="er entityLabel">expiration_date</text>
+      <rect
+         height="23"
+         width="57.033333"
+         y="139"
+         x="0"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxEven"
+         id="rect419" />
+      <text
+         transform="translate(5,150.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Discount-attr-6-type"
+         class="er entityLabel">long</text>
+      <rect
+         height="23"
+         width="79.699997"
+         y="139"
+         x="57.033333"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxEven"
+         id="rect422" />
+      <text
+         transform="translate(62.033333,150.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Discount-attr-6-name"
+         class="er entityLabel">version</text>
+      <rect
+         height="23"
+         width="57.033333"
+         y="162"
+         x="0"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxOdd"
+         id="rect425" />
+      <text
+         transform="translate(5,173.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Discount-attr-7-type"
+         class="er entityLabel">timestamp</text>
+      <rect
+         height="23"
+         width="79.699997"
+         y="162"
+         x="57.033333"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxOdd"
+         id="rect428" />
+      <text
+         transform="translate(62.033333,173.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Discount-attr-7-name"
+         class="er entityLabel">created_at</text>
+      <rect
+         height="23"
+         width="57.033333"
+         y="185"
+         x="0"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxEven"
+         id="rect431" />
+      <text
+         transform="translate(5,196.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Discount-attr-8-type"
+         class="er entityLabel">timestamp</text>
+      <rect
+         height="23"
+         width="79.699997"
+         y="185"
+         x="57.033333"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxEven"
+         id="rect434" />
+      <text
+         transform="translate(62.033333,196.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Discount-attr-8-name"
+         class="er entityLabel">modified_at</text>
+    </g>
+    <g
+       transform="matrix(3.1674538,0,0,3.1674538,1433.5751,5263.3133)"
+       id="Purchase">
+      <rect
+         height="93"
+         width="115.2"
+         y="0"
+         x="0"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er entityBox"
+         id="rect438" />
+      <text
+         transform="translate(57.6,12)"
+         style="font-size:12px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="middle"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Purchase"
+         class="er entityLabel">Purchase</text>
+      <rect
+         height="23"
+         width="57.033333"
+         y="24"
+         x="0"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxOdd"
+         id="rect441" />
+      <text
+         transform="translate(5,35.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Purchase-attr-1-type"
+         class="er entityLabel">long</text>
+      <rect
+         height="23"
+         width="58.166668"
+         y="24"
+         x="57.033333"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxOdd"
+         id="rect444" />
+      <text
+         transform="translate(62.033333,35.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Purchase-attr-1-name"
+         class="er entityLabel">id</text>
+      <rect
+         height="23"
+         width="57.033333"
+         y="47"
+         x="0"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxEven"
+         id="rect447" />
+      <text
+         transform="translate(5,58.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Purchase-attr-2-type"
+         class="er entityLabel">float</text>
+      <rect
+         height="23"
+         width="58.166668"
+         y="47"
+         x="57.033333"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxEven"
+         id="rect450" />
+      <text
+         transform="translate(62.033333,58.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Purchase-attr-2-name"
+         class="er entityLabel">total</text>
+      <rect
+         height="23"
+         width="57.033333"
+         y="70"
+         x="0"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxOdd"
+         id="rect453" />
+      <text
+         transform="translate(5,81.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Purchase-attr-3-type"
+         class="er entityLabel">timestamp</text>
+      <rect
+         height="23"
+         width="58.166668"
+         y="70"
+         x="57.033333"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxOdd"
+         id="rect456" />
+      <text
+         transform="translate(62.033333,81.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Purchase-attr-3-name"
+         class="er entityLabel">created_at</text>
+    </g>
+    <g
+       transform="matrix(3.1674538,0,0,3.1674538,1130.397,4651.9947)"
+       id="Comic_in_purchase">
+      <rect
+         height="93"
+         width="136"
+         y="0"
+         x="0"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er entityBox"
+         id="rect460" />
+      <text
+         transform="translate(68,12)"
+         style="font-size:12px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="middle"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Comic_in_purchase"
+         class="er entityLabel">Comic_in_purchase</text>
+      <rect
+         height="23"
+         width="59.783333"
+         y="24"
+         x="0"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxOdd"
+         id="rect463" />
+      <text
+         transform="translate(5,35.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Comic_in_purchase-attr-1-type"
+         class="er entityLabel">long</text>
+      <rect
+         height="23"
+         width="76.216667"
+         y="24"
+         x="59.783333"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxOdd"
+         id="rect466" />
+      <text
+         transform="translate(64.783333,35.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Comic_in_purchase-attr-1-name"
+         class="er entityLabel">id</text>
+      <rect
+         height="23"
+         width="59.783333"
+         y="47"
+         x="0"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxEven"
+         id="rect469" />
+      <text
+         transform="translate(5,58.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Comic_in_purchase-attr-2-type"
+         class="er entityLabel">int</text>
+      <rect
+         height="23"
+         width="76.216667"
+         y="47"
+         x="59.783333"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxEven"
+         id="rect472" />
+      <text
+         transform="translate(64.783333,58.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Comic_in_purchase-attr-2-name"
+         class="er entityLabel">quantity</text>
+      <rect
+         height="23"
+         width="59.783333"
+         y="70"
+         x="0"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxOdd"
+         id="rect475" />
+      <text
+         transform="translate(5,81.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Comic_in_purchase-attr-3-type"
+         class="er entityLabel">float</text>
+      <rect
+         height="23"
+         width="76.216667"
+         y="70"
+         x="59.783333"
+         stroke="#808080"
+         fill-opacity="1"
+         fill="#f0fff0"
+         class="er attributeBoxOdd"
+         id="rect478" />
+      <text
+         transform="translate(64.783333,81.5)"
+         style="font-size:10.2px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+         text-anchor="left"
+         dominant-baseline="middle"
+         y="0"
+         x="0"
+         id="entity-Comic_in_purchase-attr-3-name"
+         class="er entityLabel">price</text>
+    </g>
+    <rect
+       fill-opacity="1"
+       fill="#ffffff"
+       height="44.344353"
+       width="168.93086"
+       y="3207.6091"
+       x="1265.2428"
+       class="er relationshipLabelBox"
+       id="rect482"
+       style="stroke-width:3.16745" />
+    <text
+       style="font-size:38.0094px;font-family:'trebuchet ms', verdana, arial, sans-serif;stroke-width:3.16745"
+       dominant-baseline="middle"
+       text-anchor="middle"
+       y="3229.7812"
+       x="1349.7083"
+       id="rel99"
+       class="er relationshipLabel">promotion</text>
+    <rect
+       fill-opacity="1"
+       fill="#ffffff"
+       height="44.344353"
+       width="215.38686"
+       y="4471.4497"
+       x="331.35388"
+       class="er relationshipLabelBox"
+       id="rect488"
+       style="stroke-width:3.16745" />
+    <text
+       style="font-size:38.0094px;font-family:'trebuchet ms', verdana, arial, sans-serif;stroke-width:3.16745"
+       dominant-baseline="middle"
+       text-anchor="middle"
+       y="4493.6216"
+       x="439.0473"
+       id="rel101"
+       class="er relationshipLabel">classification</text>
+    <rect
+       fill-opacity="1"
+       fill="#ffffff"
+       height="44.344353"
+       width="158.3727"
+       y="493.86575"
+       x="1647.0461"
+       class="er relationshipLabelBox"
+       id="rect491"
+       style="stroke-width:3.16745" />
+    <text
+       style="font-size:38.0094px;font-family:'trebuchet ms', verdana, arial, sans-serif;stroke-width:3.16745"
+       dominant-baseline="middle"
+       text-anchor="middle"
+       y="516.0379"
+       x="1726.2324"
+       id="rel102"
+       class="er relationshipLabel">user data</text>
+    <rect
+       fill-opacity="1"
+       fill="#ffffff"
+       height="44.344353"
+       width="333.63849"
+       y="4452.937"
+       x="1428.0676"
+       class="er relationshipLabelBox"
+       id="rect500"
+       style="stroke-width:3.16745" />
+    <text
+       style="font-size:38.0094px;font-family:'trebuchet ms', verdana, arial, sans-serif;stroke-width:3.16745"
+       dominant-baseline="middle"
+       text-anchor="middle"
+       y="4475.1094"
+       x="1594.887"
+       id="rel105"
+       class="er relationshipLabel">discount application</text>
+    <rect
+       fill-opacity="1"
+       fill="#ffffff"
+       height="44.344353"
+       width="181.60068"
+       y="2403.1228"
+       x="1248.6024"
+       class="er relationshipLabelBox"
+       id="rect506"
+       style="stroke-width:3.16745" />
+    <text
+       style="font-size:38.0094px;font-family:'trebuchet ms', verdana, arial, sans-serif;stroke-width:3.16745"
+       dominant-baseline="middle"
+       text-anchor="middle"
+       y="2425.2949"
+       x="1339.4028"
+       id="rel107"
+       class="er relationshipLabel">list content</text>
+    <rect
+       fill-opacity="1"
+       fill="#ffffff"
+       height="44.344353"
+       width="126.69815"
+       y="3198.6213"
+       x="-70.324478"
+       class="er relationshipLabelBox"
+       id="rect509"
+       style="stroke-width:3.16745" />
+    <text
+       style="font-size:38.0094px;font-family:'trebuchet ms', verdana, arial, sans-serif;stroke-width:3.16745"
+       dominant-baseline="middle"
+       text-anchor="middle"
+       y="3220.7935"
+       x="-6.9753895"
+       id="rel108"
+       class="er relationshipLabel">authors</text>
+  </g>
+  <rect
+     fill-opacity="1"
+     fill="#ffffff"
+     height="0"
+     width="0"
+     y="1210.728"
+     x="521.51605"
+     class="er relationshipLabelBox"
+     id="rect512" />
+  <text
+     style="font-size:12px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+     dominant-baseline="middle"
+     text-anchor="middle"
+     y="1210.728"
+     x="521.51605"
+     id="rel109"
+     class="er relationshipLabel" />
+  <rect
+     fill-opacity="1"
+     fill="#ffffff"
+     height="0"
+     width="0"
+     y="269.1384"
+     x="306.60962"
+     class="er relationshipLabelBox"
+     id="rect515" />
+  <text
+     style="font-size:12px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+     dominant-baseline="middle"
+     text-anchor="middle"
+     y="269.1384"
+     x="306.60962"
+     id="rel110"
+     class="er relationshipLabel" />
+  <rect
+     fill-opacity="1"
+     fill="#ffffff"
+     height="0"
+     width="0"
+     y="681.82666"
+     x="309.84735"
+     class="er relationshipLabelBox"
+     id="rect518" />
+  <text
+     style="font-size:12px;font-family:'trebuchet ms', verdana, arial, sans-serif"
+     dominant-baseline="middle"
+     text-anchor="middle"
+     y="681.82666"
+     x="309.84735"
+     id="rel111"
+     class="er relationshipLabel" />
+</svg>

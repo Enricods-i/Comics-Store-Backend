@@ -34,9 +34,5 @@ public interface CollectionRepository extends JpaRepository<Collection,Long>{
                     " (auth = :author OR :author IS NULL) AND" +
                     " (cat = :category OR :category IS NULL)" )
     Page<Collection> advancedSearch(String name, Author author, Category category, Pageable pageable);
-    
-
-    @Query(value = "SELECT COUNT(cip) FROM Collection col JOIN col.comics com JOIN com.copiesSold cip WHERE col = :collection")
-    int countPurchasesInCollection(Collection collection);
 
 }//CollectionRepository

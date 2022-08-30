@@ -11,13 +11,15 @@ import im.enricods.ComicsStore.entities.WishList;
 
 public interface WishListRepository extends JpaRepository<WishList,Long> {
 
-    List<WishList> findByOwnerAndName(User user, String name);
+    List<WishList> findByOwnerAndNameContaining(User user, String name);
 
     List<WishList> findByOwner(User user);
 
     boolean existsByName(String name);
 
-    @Query(value = "SELECT wl FROM WishList wl JOIN wl.content com WHERE com = :comic")
-    List<WishList> getListsContainingComic(Comic comic);
+    @Query(value =  "SELECT wl"+
+                    "FROM WishList wl JOIN wl.content com"+
+                    "WHERE com = :comic")
+    List<WishList> findByComic(Comic comic);
 
 }//WishListRepository

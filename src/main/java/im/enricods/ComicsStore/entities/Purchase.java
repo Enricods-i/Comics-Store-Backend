@@ -31,7 +31,7 @@ public class Purchase {
     
     @NotNull @Min(0)
     @EqualsAndHashCode.Include
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY) @Column(name = "id")
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @JsonIdentityReference
@@ -39,7 +39,7 @@ public class Purchase {
     private User buyer; 
 
     @NotNull @PositiveOrZero
-    @Column(name = "total", nullable = false)
+    @Column(nullable = false)
     private float total;
 
     @OneToMany(mappedBy = "purchase")

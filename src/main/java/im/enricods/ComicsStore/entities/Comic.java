@@ -37,7 +37,7 @@ public class Comic {
     
     @NotNull @Min(0)
     @EqualsAndHashCode.Include
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY) @Column(name = "id")
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @JsonIdentityReference
@@ -45,11 +45,11 @@ public class Comic {
     private Collection collection;
     
     @NotNull @Min(1)
-    @Column(name = "number", nullable = false)
+    @Column(nullable = false)
     private int number;
 
     @NotNull @Min(0)
-    @Column(name = "quantity", nullable = false)
+    @Column(nullable = false)
     private int quantity;
 
     /*
@@ -59,11 +59,10 @@ public class Comic {
     */
 
     @Min(1)
-    @Column(name = "pages")
     private int pages;
 
     @NotNull @Size(max = 13)
-    @Column(name = "isbn", length = 13, unique = true, nullable = false)
+    @Column(length = 13, unique = true, nullable = false)
     private String isbn;
 
     @PastOrPresent
@@ -71,21 +70,20 @@ public class Comic {
     private Date publicationDate;
 
     @Size(max = 200)
-    @Column(name = "description", length = 200)
+    @Column(length = 200)
     private String description;
 
     @JsonIgnore
-    @Version @Column(name = "version", nullable = false)
+    @Version 
     private long version;
 
     @JsonIdentityReference(alwaysAsId = true)
-    @ManyToMany(mappedBy = "works")
+    @ManyToMany
+    @JoinTable(name = "authors",
+        joinColumns = {@JoinColumn(name = "comic_id")},
+        inverseJoinColumns = {@JoinColumn(name = "author_id")}
+    )
     private Set<Author> authors;
-
-    public void addAuthor(Author author){
-        authors.add(author);
-        author.getWorks().add(this);
-    }//addAuthor
 
     @JsonIgnore
     @ManyToMany

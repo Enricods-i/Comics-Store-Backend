@@ -28,20 +28,25 @@ import lombok.EqualsAndHashCode;
 @Entity @Table(name = "cart_data")
 public class Cart {
 
-    @NotNull @Min(value = 0)
+    @NotNull @Min(0)
     @EqualsAndHashCode.Include
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY) @Column(name = "id")
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @JsonIdentityReference(alwaysAsId = true)
     @OneToOne(mappedBy = "cart")
     private User user;
 
+    public void bindToUser(User user){
+        this.setUser(user);
+        user.setCart(this);
+    }//bindToUser
+
     @OneToMany(mappedBy = "cart")
     private Set<CartContent> content;
     
-    @NotNull @Min(value = 0)
-    @Column(name = "size", nullable = false)
+    @NotNull @Min(0)
+    @Column(nullable = false)
     private int size;
     
     @JsonIgnore

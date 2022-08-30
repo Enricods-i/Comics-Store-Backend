@@ -2,9 +2,11 @@ package im.enricods.ComicsStore.services;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -19,11 +21,6 @@ import im.enricods.ComicsStore.entities.WishList;
 import im.enricods.ComicsStore.repositories.ComicRepository;
 import im.enricods.ComicsStore.repositories.UserRepository;
 import im.enricods.ComicsStore.repositories.WishListRepository;
-import im.enricods.ComicsStore.utils.exceptions.ComicNotFoundException;
-import im.enricods.ComicsStore.utils.exceptions.UnavaiableWishList;
-import im.enricods.ComicsStore.utils.exceptions.UserNotFoundException;
-import im.enricods.ComicsStore.utils.exceptions.WishListAlreadyExistsException;
-import im.enricods.ComicsStore.utils.exceptions.WishListNotFoundException;
 
 @Service
 @Transactional
@@ -41,153 +38,144 @@ public class WishListService {
 
 
     @Transactional(readOnly = true)
-    public List<WishList> showUsersListsByName(@Min(1) long userId, @NotNull @Size(max = 50) String name){
+    public List<WishList> getByOwnerAndName(@Min(0) long userId, @NotNull @Size(max = 50) String name){
         
         //verify that User specified by userId exists
-        Optional<User> resultUser = userRepository.findById(userId);
-        if(!resultUser.isPresent())
-            throw new UserNotFoundException();
+        Optional<User> usr = userRepository.findById(userId);
+        if(usr.isEmpty())
+            throw new IllegalArgumentException("User "+userId+" not found!");
         
-        return wishListRepository.findByOwnerAndName(resultUser.get(), name);
+        return wishListRepository.findByOwnerAndNameContaining(usr.get(), name);
 
-    }//showUsersWishListByName
+    }//getByOwnerAndName
 
 
     @Transactional(readOnly = true)
-    public List<WishList> showAllUsersLists(@Min(1) long userId){
+    public List<WishList> getAllByUser(@Min(0) long userId){
 
         //verify that User specified by userId exists
-        Optional<User> resultUser = userRepository.findById(userId);
-        if(!resultUser.isPresent())
-            throw new UserNotFoundException();
+        Optional<User> usr = userRepository.findById(userId);
+        if(usr.isEmpty())
+            throw new IllegalArgumentException("User "+userId+" not found!");
         
-        return wishListRepository.findByOwner(resultUser.get());
+        return wishListRepository.findByOwner(usr.get());
 
-    }//showAllUsersLists
+    }//getAllByUser
 
 
-    public WishList createUsersList(@Min(1) long userId, @Valid WishList wishList){
+    public WishList add(@Min(0) long userId, @Valid WishList wishList){
 
         //verify that User specified by userId exists
-        Optional<User> resultUser = userRepository.findById(userId);
-        if(!resultUser.isPresent())
-            throw new UserNotFoundException();
+        Optional<User> usr = userRepository.findById(userId);
+        if(usr.isEmpty())
+            throw new IllegalArgumentException("User "+userId+" not found!");
 
-        //verify that WishList specified doesn't already exists
-        if(wishListRepository.existsById(wishList.getId()))
-            throw new WishListAlreadyExistsException();
-
-        wishList.setOwner(resultUser.get());
         WishList wl = wishListRepository.save(wishList);
 
         //bind bidirectional relation
-        resultUser.get().addWishList(wl);
+        usr.get().addWishList(wl);
 
         return wl;
 
-    }//createList
+    }//add
 
 
-    public void deleteUsersList(@Min(1) long userId, @Min(1) long wishListId){
+    public void remove(@Min(0) long userId, @Min(0) long wishListId){
 
         //verify that User specified by userId exists
-        Optional<User> resultUser = userRepository.findById(userId);
-        if(!resultUser.isPresent())
-            throw new UserNotFoundException();
+        Optional<User> usr = userRepository.findById(userId);
+        if(usr.isEmpty())
+            throw new IllegalArgumentException("User "+userId+" not found!");
 
         //verify that WishList specified exists
-        Optional<WishList> resultList = wishListRepository.findById(wishListId);
-        if(!resultList.isPresent())
-            throw new WishListNotFoundException();
+        Optional<WishList> list = wishListRepository.findById(wishListId);
+        if(list.isEmpty())
+            throw new IllegalArgumentException("Wish list "+wishListId+" not found!");
 
         //verify that WishList specified belongs to User specified
-        if(!resultUser.get().getWishLists().contains(resultList.get()))
-            throw new UnavaiableWishList();
+        if(!usr.get().getWishLists().contains(list.get()))
+            throw new IllegalArgumentException("The wish list "+wishListId+" does not belong to the user "+userId);
 
-        WishList target = resultList.get();
+        WishList target = list.get();
 
         wishListRepository.delete(target);
 
         //unbind bidirectional relation
-        resultUser.get().getWishLists().remove(target);
+        usr.get().removeWishList(target);
 
     }//deleteList
 
 
-    public void addComicToList(@Min(1) long userId, @Min(1) long comicId, @Min(1) long wishListId){
-        
+    public void chName(@Min(0) long userId, @Min(0) long wishListId, @NotNull @Size(min = 1, max = 30) String newName){
+
         //verify that User specified by userId exists
-        Optional<User> resultUser = userRepository.findById(userId);
-        if(!resultUser.isPresent())
-            throw new UserNotFoundException();
+        Optional<User> usr = userRepository.findById(userId);
+        if(usr.isEmpty())
+            throw new IllegalArgumentException("User "+userId+" not found!");
 
-        //verify that Comic specified by comicId exists
-        Optional<Comic> resultComic = comicRepository.findById(comicId);
-        if(!resultComic.isPresent())
-            throw new ComicNotFoundException();
-        
-        //verify that WishList specified by wishListId exists
-        Optional<WishList> resultList = wishListRepository.findById(wishListId);
-        if(!resultList.isPresent())
-            throw new WishListNotFoundException();
-        
-        //verify that WishList specified belongs to User specified
-        if(!resultUser.get().getWishLists().contains(resultList.get()))
-            throw new UnavaiableWishList();
-
-        resultList.get().getContent().add(resultComic.get());
-
-    }//addComicToList
-
-
-    public void deleteComicToList(@Min(1) long userId, @Min(1) long comicId, @Min(1) long wishListId){
-        
-        //verify that User specified by userId exists
-        Optional<User> resultUser = userRepository.findById(userId);
-        if(!resultUser.isPresent())
-            throw new UserNotFoundException();
-        
-        //verify that Comic specified by comicId exists
-        Optional<Comic> resultComic = comicRepository.findById(comicId);
-        if(!resultComic.isPresent())
-            throw new ComicNotFoundException();
-        
-        //verify that WishList specified by wishListId exists
-        Optional<WishList> resultList = wishListRepository.findById(wishListId);
-        if(!resultList.isPresent())
-            throw new WishListNotFoundException();
+        //verify that WishList specified exists
+        Optional<WishList> list = wishListRepository.findById(wishListId);
+        if(list.isEmpty())
+            throw new IllegalArgumentException("Wish list "+wishListId+" not found!");
 
         //verify that WishList specified belongs to User specified
-        if(!resultUser.get().getWishLists().contains(resultList.get()))
-            throw new UnavaiableWishList();
+        if(!usr.get().getWishLists().contains(list.get()))
+            throw new IllegalArgumentException("The wish list "+wishListId+" does not belong to the user "+userId);
+
+        list.get().setName(newName);
+
+    }//chName
+
+
+    public void addComics(@Min(0) long userId, @Min(0) long wishListId, @NotEmpty Set<@NotNull @Min(0) Long> comicIds){
         
-        resultList.get().getContent().remove(resultComic.get());
-
-    }//addComicToList
-
-
-    public void updateWishList(@Min(1)long userId, @Valid WishList wishList){
-
         //verify that User specified by userId exists
-        Optional<User> resultUser = userRepository.findById(userId);
-        if(!resultUser.isPresent())
-            throw new UserNotFoundException();
+        Optional<User> usr = userRepository.findById(userId);
+        if(usr.isEmpty())
+            throw new IllegalArgumentException("User "+userId+" not found!");
 
-        //verify that WishList specified by wishListId exists
-        Optional<WishList> resultList = wishListRepository.findById(wishList.getId());
-        if(!resultList.isPresent())
-            throw new WishListNotFoundException();
+        //verify that WishList specified exists
+        Optional<WishList> list = wishListRepository.findById(wishListId);
+        if(list.isEmpty())
+            throw new IllegalArgumentException("Wish list "+wishListId+" not found!");
 
-        //verify that WishList specified belongs to User specified        
-        if(!resultUser.get().getWishLists().contains(resultList.get()))
-            throw new UnavaiableWishList();
+        //verify that WishList specified belongs to User specified
+        if(!usr.get().getWishLists().contains(list.get()))
+            throw new IllegalArgumentException("The wish list "+wishListId+" does not belong to the user "+userId);
+
+        Optional<Comic> cmc = null;
+        for(long id : comicIds){
+            cmc = comicRepository.findById(id);
+            if(cmc.isPresent())
+                list.get().getContent().add(cmc.get());
+        }
+
+    }//addComics
+
+
+    public void removeComics(@Min(0) long userId, @Min(0) long wishListId, @NotEmpty Set<@NotNull @Min(0) Long> comicIds){
         
-        //set fields that client can't change
-        wishList.setCreationDate(resultList.get().getCreationDate());
-        wishList.setOwner(resultUser.get());
-        //merge
-        wishListRepository.save(wishList);
+        //verify that User specified by userId exists
+        Optional<User> usr = userRepository.findById(userId);
+        if(usr.isEmpty())
+            throw new IllegalArgumentException("User "+userId+" not found!");
 
-    }//updateWishList
+        //verify that WishList specified exists
+        Optional<WishList> list = wishListRepository.findById(wishListId);
+        if(list.isEmpty())
+            throw new IllegalArgumentException("Wish list "+wishListId+" not found!");
+
+        //verify that WishList specified belongs to User specified
+        if(!usr.get().getWishLists().contains(list.get()))
+            throw new IllegalArgumentException("The wish list "+wishListId+" does not belong to the user "+userId);
+        
+        Comic cmc = new Comic();
+        for(long id : comicIds){
+            cmc.setId(id);
+            list.get().getContent().remove(cmc);
+        }
+
+    }//removeComics
+
 
 }//WishListService

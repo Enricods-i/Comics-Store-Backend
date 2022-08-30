@@ -3,7 +3,6 @@ package im.enricods.ComicsStore.entities;
 import java.util.Date;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -39,7 +38,7 @@ public class User {
 
     @NotNull @Min(0)
     @EqualsAndHashCode.Include
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY) @Column(name = "id")
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     
     @NotNull @Size(min = 2, max = 20)
@@ -56,7 +55,7 @@ public class User {
     private Date birthDate;
 
     @NotNull @Email
-    @Column(name = "email", nullable = false, unique = true, length = 50)
+    @Column(nullable = false, unique = true, length = 50)
     private String email;
 
     @Size(min=6, max = 20)
@@ -64,29 +63,26 @@ public class User {
     private String phoneNumber;
 
     @Size(min=2, max = 20)
-    @Column(name = "city", length = 20)
+    @Column(length = 20)
     private String city;
 
     @JsonIgnore
-    @OneToOne(cascade = CascadeType.PERSIST) @JoinColumn(name = "cart_id")
+    @OneToOne @JoinColumn(name = "cart_id")
     private Cart cart;
-
-    public void addCart(Cart cart){
-        this.setCart(cart);
-        cart.setUser(this);
-    }//addCart
     
     @JsonIdentityReference(alwaysAsId = true)
     @OneToMany(mappedBy = "owner")
     private Set<WishList> wishLists;
 
     public void addWishList(WishList wishList){
-        wishLists.add(wishList);
+        this.wishLists.add(wishList);
         wishList.setOwner(this);
     }//addWishList
 
-    @OneToMany(mappedBy = "targetUser")
-    private Set<Message> messages;
+    public void removeWishList(WishList wishList){
+        this.wishLists.remove(wishList);
+        wishList.setOwner(null);
+    }//removeWishList
 
     @JsonIgnore
     @OneToMany(mappedBy = "buyer")

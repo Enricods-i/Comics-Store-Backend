@@ -21,10 +21,7 @@ import im.enricods.ComicsStore.repositories.ComicInPurchaseRepository;
 import im.enricods.ComicsStore.repositories.DiscountRepository;
 import im.enricods.ComicsStore.repositories.PurchaseRepository;
 import im.enricods.ComicsStore.repositories.UserRepository;
-import im.enricods.ComicsStore.utils.exceptions.CartEmptyException;
 import im.enricods.ComicsStore.utils.exceptions.ComicsQuantityUnavaiableException;
-import im.enricods.ComicsStore.utils.exceptions.DateWrongRangeException;
-import im.enricods.ComicsStore.utils.exceptions.UserNotFoundException;
 import im.enricods.ComicsStore.entities.Cart;
 import im.enricods.ComicsStore.entities.CartContent;
 import im.enricods.ComicsStore.entities.Comic;
@@ -55,66 +52,66 @@ public class PurchaseService {
 
 
     @Transactional(readOnly = true)
-    public List<Purchase> getAllPurchases(@Min(0) int pageNumber, @Min(0) int pageSize, String sortBy){
+    public List<Purchase> getAll(@Min(0) int pageNumber, @Min(0) int pageSize, String sortBy){
 
         Pageable paging = PageRequest.of(pageNumber, pageSize, Sort.by(sortBy));
         Page<Purchase> pagedResult = purchaseRepository.findAll(paging);
         return pagedResult.getContent();
 
-    }//getAllPurchases
+    }//getAll
 
 
     @Transactional(readOnly = true)
-    public List<Purchase> getAllUsersPurchases(@Min(1) long userId, @Min(0) int pageNumber, @Min(0) int pageSize, String sortBy){
+    public List<Purchase> getByUser(@Min(0) long userId, @Min(0) int pageNumber, @Min(0) int pageSize, String sortBy){
         
         //verify that User specified by userId exists
-        Optional<User> resultUser = userRepository.findById(userId);
-        if(!resultUser.isPresent())
-            throw new UserNotFoundException();
+        Optional<User> usr = userRepository.findById(userId);
+        if(usr.isEmpty())
+            throw new IllegalArgumentException("User "+userId+" not found!");
 
         Pageable paging = PageRequest.of(pageNumber, pageSize, Sort.by(sortBy));
-        return purchaseRepository.findByBuyer(resultUser.get(), paging).getContent();
+        return purchaseRepository.findByBuyer(usr.get(), paging).getContent();
 
-    }//getAllUsersPurchases
+    }//getByUser
 
 
     @Transactional(readOnly = true)
-    public List<Purchase> getPurchasesInPeriod(Date startDate, Date endDate, @Min(0) int pageNumber, @Min(0) int pageSize, String sortBy){
+    public List<Purchase> getInPeriod(Date startDate, Date endDate, @Min(0) int pageNumber, @Min(0) int pageSize, String sortBy){
         
         //verify that startDate is previous endDate
         if ( startDate.compareTo(endDate) >= 0 )
-            throw new DateWrongRangeException();
+            throw new IllegalArgumentException("End date ("+endDate+") is previous start date ("+startDate+")!");
 
         Pageable paging = PageRequest.of(pageNumber, pageSize, Sort.by(sortBy));
         return purchaseRepository.findByPurchaseTimeBetween(startDate, endDate, paging).getContent();
 
-    }//getUsersPurchasesInPeriod
+    }//getInPeriod
 
 
-    public Purchase addPurchase(@Min(1) long userId){
+    public Purchase add(@Min(0) long userId){
 
         //verify that User specified by userId exists
-        Optional<User> resultUser = userRepository.findById(userId);
-        if(!resultUser.isPresent())
-            throw new UserNotFoundException();
+        Optional<User> usr = userRepository.findById(userId);
+        if(usr.isEmpty())
+            throw new IllegalArgumentException("User "+userId+" not found!");
 
         //create Purchase
         Purchase purchase = new Purchase();
         purchase.setPurchasedComics(new HashSet<ComicInPurchase>());
-        purchase.setBuyer(resultUser.get());
+        purchase.setBuyer(usr.get());
         //persist
         purchase = purchaseRepository.save(purchase);
 
         //support variables-----------------------
-        float total=0, initialPrice=0, newPrice=0;
+        float total=0, purchasePrice=0;
         int newQuantity=0;
         Comic c = null;
         //----------------------------------------
 
-        Cart usersCart = resultUser.get().getCart();
+        Cart usersCart = usr.get().getCart();
 
         if(usersCart.getContent().isEmpty())
-            throw new CartEmptyException();
+            throw new IllegalArgumentException("Cart of user "+userId+" is empty!");
 
         //get content of user's cart for get quantity and calculate effective price of each comic and for calculate the purchase's total price
         for(CartContent cc : usersCart.getContent()){
@@ -124,7 +121,7 @@ public class PurchaseService {
             //verify that quantity of the comic is avaiable now
             newQuantity = c.getQuantity() - cc.getQuantity();
             if(newQuantity < 0)
-                throw new ComicsQuantityUnavaiableException("Unavaiable quantity for comic "+ c.getNumber()+ " in collection "+ c.getCollection().getName() +" !");
+                throw new ComicsQuantityUnavaiableException("Unavaiable quantity for comic "+ c.getNumber()+ " in collection "+ c.getCollection().getName() +"!");
             
             //create new comicInPurchase entry
             ComicInPurchase cip = new ComicInPurchase();
@@ -138,26 +135,26 @@ public class PurchaseService {
             purchase.getPurchasedComics().add(cip);
 
             //calculate effective price of the comic stock
-            initialPrice = c.getCollection().getPrice();
-            newPrice = initialPrice;
-            //appling active discounts
-            for(Discount d : discountRepository.findActiveByComic(c)){
+            purchasePrice = c.getCollection().getPrice();
+            //appling active discount
+            Optional<Discount> disc = discountRepository.findActiveByComic(c);
+            if(disc.isPresent()){
                 //bind bidirectional relation
-                cip.getDiscountsApplied().add(d);
-                d.getDiscountedComics().add(cip);
-
-                newPrice -= (initialPrice/100)*d.getPercentage();
+                cip.getDiscountsApplied().add(disc.get());
+                disc.get().getDiscountedComics().add(cip);
             }
+            purchasePrice -= (purchasePrice/100)*disc.get().getPercentage();
+            
             //set effective price
-            cip.setComicPrice(newPrice);
+            cip.setComicPrice(purchasePrice);
 
             //set quantity of comic in purchase
-            cip.setComicQuantity(cc.getQuantity());
+            cip.setQuantity(cc.getQuantity());
             //update comic's quantity
             c.setQuantity(newQuantity);
 
             //update total amount
-            total += newPrice * cc.getQuantity();
+            total += purchasePrice * cc.getQuantity();
 
             //persist
             comicInPurchaseRepository.save(cip);

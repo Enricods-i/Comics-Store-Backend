@@ -9,6 +9,8 @@ import im.enricods.ComicsStore.entities.Author;
 @Repository
 public interface AuthorRepository extends JpaRepository<Author,Long>{
 
+    boolean existsByName(String name);
+
     Page<Author> findByNameContaining(String name, org.springframework.data.domain.Pageable paging);
     
 }//AuthorRepository

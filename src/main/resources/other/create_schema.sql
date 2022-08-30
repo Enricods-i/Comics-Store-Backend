@@ -31,8 +31,8 @@ CREATE TABLE collection (
 );
 
 CREATE TABLE comic (
-	id BIGSERIAL PRIMARY KEY,
-	collection_id BIGINT NOT NULL REFERENCES collection (id),
+    id BIGSERIAL PRIMARY KEY,
+    collection_id BIGINT REFERENCES collection (id),
 	number SMALLINT NOT NULL,
 	quantity SMALLINT NOT NULL,
 	pages SMALLINT,
@@ -48,7 +48,7 @@ CREATE TABLE cart_content(
 	cart_id BIGINT REFERENCES cart_data (id),
 	comic_id BIGINT REFERENCES comic (id),
 	quantity SMALLINT NOT NULL,
-	PRIMARY KEY (cart_id, comic_id)
+    PRIMARY KEY (cart_id, comic_id)
 );
 
 CREATE TABLE author (
@@ -67,12 +67,10 @@ CREATE TABLE authors (
 );
 
 CREATE TABLE wish_list (
-	id BIGSERIAL PRIMARY KEY,
-	user_id BIGINT NOT NULL REFERENCES personal_data (id),
-	name VARCHAR(30) NOT NULL,
-	email_notifications BOOLEAN DEFAULT FALSE,
-	created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-	modified_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+    id BIGSERIAL PRIMARY KEY,
+    user_id BIGINT NOT NULL REFERENCES personal_data (id),
+    name VARCHAR(30) NOT NULL,
+	created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE list_content (
@@ -83,8 +81,10 @@ CREATE TABLE list_content (
 
 CREATE TABLE category (
 	id BIGSERIAL PRIMARY KEY,
-	name VARCHAR(30) NOT NULL UNIQUE,
-	created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+    name VARCHAR(30) NOT NULL UNIQUE,
+	version BIGINT,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	modified_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE classification (

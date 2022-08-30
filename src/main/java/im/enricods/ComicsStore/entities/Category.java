@@ -12,11 +12,13 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Version;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -29,19 +31,37 @@ public class Category {
     
     @NotNull @Min(0)
     @EqualsAndHashCode.Include
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY) @Column(name = "id")
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @NotNull @Size(min = 1, max = 30)
-    @Column(name = "name", nullable = false, unique = true, length = 30)
+    @Column(nullable = false, unique = true, length = 30)
     private String name;
+
+    @JsonIgnore
+    @Version
+    private long version;
 
     @JsonIgnore
     @CreationTimestamp @Temporal(TemporalType.TIMESTAMP) @Column(name = "created_at",nullable = false)
     private Date creationDate;
 
     @JsonIgnore
+    @UpdateTimestamp @Temporal(TemporalType.TIMESTAMP) @Column(name = "modified_at", nullable = false)
+    private Date dateOfLastModification;
+
+    @JsonIgnore
     @ManyToMany(mappedBy = "categories")
     private Set<Collection> collections;
+
+    public void bindCollection(Collection collection){
+        collection.getCategories().add(this);
+        this.getCollections().add(collection);
+    }//bindCollection
+
+    public void unbindCollection(Collection collection){
+        collection.getCategories().remove(this);
+        this.getCollections().remove(collection);
+    }//unbindCollection
 
 }//Category

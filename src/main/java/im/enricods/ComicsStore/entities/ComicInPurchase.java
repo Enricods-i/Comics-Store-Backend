@@ -27,7 +27,7 @@ public class ComicInPurchase {
     
     @NotNull @Min(0)
     @EqualsAndHashCode.Include
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY) @Column(name = "id")
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @JsonIgnore
@@ -50,7 +50,7 @@ public class ComicInPurchase {
     private float comicPrice;
 
     @NotNull @Min(1)
-    @Column(name = "comic_quantity", nullable = false)
-    private int comicQuantity;
+    @Column(nullable = false)
+    private int quantity;
 
 }//ComicInPurchase

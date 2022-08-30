@@ -1,16 +1,18 @@
 package im.enricods.ComicsStore.controllers;
 
-import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
-import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mapping.PropertyReferenceException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,10 +23,6 @@ import org.springframework.web.bind.annotation.RestController;
 import im.enricods.ComicsStore.entities.Comic;
 import im.enricods.ComicsStore.services.ComicService;
 import im.enricods.ComicsStore.utils.InvalidValue;
-import im.enricods.ComicsStore.utils.exceptions.AuthorNotFoundException;
-import im.enricods.ComicsStore.utils.exceptions.CollectionNotFoundException;
-import im.enricods.ComicsStore.utils.exceptions.ComicAlreadyExistsException;
-import im.enricods.ComicsStore.utils.exceptions.ComicNotFoundException;
 
 @RestController
 @RequestMapping(path = "/comics")
@@ -33,112 +31,110 @@ public class ComicController {
     @Autowired
     private ComicService comicService;
 
-    @GetMapping(path = "/inCollection")
-    public ResponseEntity<?> getComicsInCollections(@RequestParam(value = "cllctn") long collectionId, @RequestParam(value = "pageNumber", defaultValue = "0") int pageNumber, @RequestParam(value = "pageSize", defaultValue = "10") int pageSize, @RequestParam(value = "sortBy", defaultValue = "number") String sortBy){
+    @GetMapping(path = "/v/byCollection")
+    public ResponseEntity<?> showByCollections(@RequestParam(value = "cllctn") long collectionId, @RequestParam(defaultValue = "0") int pageNumber, @RequestParam(defaultValue = "10") int pageSize, @RequestParam(defaultValue = "number") String sortBy){
         try{
-            List<Comic> result = comicService.showComicsInCollection(collectionId, pageNumber, pageSize, sortBy);
+            List<Comic> result = comicService.getByCollection(collectionId, pageNumber, pageSize, sortBy);
             return new ResponseEntity<List<Comic>>(result, HttpStatus.OK);
         }
         catch(ConstraintViolationException e){
-            List<InvalidValue> fieldsViolated = new LinkedList<>();
-            for(ConstraintViolation<?> cv : e.getConstraintViolations()){
-                fieldsViolated.add(new InvalidValue(cv.getInvalidValue(), cv.getMessage()));
-            }
-            return new ResponseEntity<List<InvalidValue>>(fieldsViolated, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<List<InvalidValue>>(InvalidValue.getAllInvalidValues(e), HttpStatus.BAD_REQUEST);
         }
+        catch(IllegalArgumentException e){
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+        //sortBy
         catch(PropertyReferenceException e){
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-        catch(CollectionNotFoundException e){
-            return new ResponseEntity<String>("Collection \""+collectionId+"\" not found!", HttpStatus.BAD_REQUEST);
-        }
-    }//getComicsInCollections
+    }//showByCollections
 
-    @GetMapping(path = "/inCollection/byAuthor")
-    public ResponseEntity<?> getComicsInCollectionsCreatedByAuthor(@RequestParam(value = "cllctn") long collectionId, @RequestParam(value = "autr") long authorId, @RequestParam(value = "pageNumber", defaultValue = "0") int pageNumber, @RequestParam(value = "pageSize", defaultValue = "10") int pageSize, @RequestParam(value = "sortBy", defaultValue = "number") String sortBy){
+    @GetMapping(path = "/v/byCollectionAndAuthor")
+    public ResponseEntity<?> showByCollectionAndAuthor(@RequestParam(value = "cllctn") long collectionId, @RequestParam(value = "auth") long authorId, @RequestParam(defaultValue = "0") int pageNumber, @RequestParam(defaultValue = "10") int pageSize, @RequestParam(defaultValue = "number") String sortBy){
         try{
-            List<Comic> result = comicService.showComicsInCollectionCreatedByAuthor(collectionId, authorId, pageNumber, pageSize, sortBy);
+            List<Comic> result = comicService.getByCollectionAndAuthor(collectionId, authorId, pageNumber, pageSize, sortBy);
             return new ResponseEntity<List<Comic>>(result, HttpStatus.OK);
         }
         catch(ConstraintViolationException e){
-            List<InvalidValue> fieldsViolated = new LinkedList<>();
-            for(ConstraintViolation<?> cv : e.getConstraintViolations()){
-                fieldsViolated.add(new InvalidValue(cv.getInvalidValue(), cv.getMessage()));
-            }
-            return new ResponseEntity<List<InvalidValue>>(fieldsViolated, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<List<InvalidValue>>(InvalidValue.getAllInvalidValues(e), HttpStatus.BAD_REQUEST);
         }
+        catch(IllegalArgumentException e){
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+        //sortBy
         catch(PropertyReferenceException e){
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-        catch(CollectionNotFoundException e){
-            return new ResponseEntity<String>("Collection \""+collectionId+"\" not found!", HttpStatus.BAD_REQUEST);
-        }
-        catch(AuthorNotFoundException e){
-            return new ResponseEntity<String>("Author \""+authorId+"\" not found!", HttpStatus.BAD_REQUEST);
-        }
-    }//getComicsInCollectionsCreatedByAuthor
+    }//showByCollectionAndAuthor
 
-    @PostMapping
+    @PostMapping(path = "/create")
     public ResponseEntity<?> create(@RequestBody Comic comic, @RequestParam(value = "cllctn") long collectionId){
         try{
-            Comic result = comicService.addComic(comic, collectionId);
+            Comic result = comicService.add(comic, collectionId);
             return new ResponseEntity<Comic>(result,HttpStatus.OK);
         }
-        catch(CollectionNotFoundException e){
-            return new ResponseEntity<String>("Collection \""+collectionId+"\" not found!", HttpStatus.BAD_REQUEST);
-        }
         catch(ConstraintViolationException e){
-            List<InvalidValue> fieldsViolated = new LinkedList<>();
-            for(ConstraintViolation<?> cv : e.getConstraintViolations()){
-                fieldsViolated.add(new InvalidValue(cv.getInvalidValue(), cv.getMessage()));
-            }
-            return new ResponseEntity<List<InvalidValue>>(fieldsViolated, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<List<InvalidValue>>(InvalidValue.getAllInvalidValues(e), HttpStatus.BAD_REQUEST);
         }
-        catch(ComicAlreadyExistsException e){
-            return new ResponseEntity<String>("Comic \""+comic.getNumber()+"\" already exists in collection \""+collectionId+"\" !", HttpStatus.BAD_REQUEST);
+        catch(IllegalArgumentException e){
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }//create
 
-    @PutMapping
+    @PutMapping(path = "/update")
     public ResponseEntity<?> update(@RequestBody Comic comic){
         try{
-            comicService.updateComic(comic);
+            comicService.update(comic);
             return new ResponseEntity<String>("Comic updated successful!",HttpStatus.OK);
         }
         catch(ConstraintViolationException e){
-            List<InvalidValue> fieldsViolated = new LinkedList<>();
-            for(ConstraintViolation<?> cv : e.getConstraintViolations()){
-                fieldsViolated.add(new InvalidValue(cv.getInvalidValue(), cv.getMessage()));
-            }
-            return new ResponseEntity<List<InvalidValue>>(fieldsViolated, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<List<InvalidValue>>(InvalidValue.getAllInvalidValues(e), HttpStatus.BAD_REQUEST);
         }
-        catch(ComicNotFoundException e){
-            return new ResponseEntity<String>("Comic \""+comic.getId()+"\" not found!", HttpStatus.BAD_REQUEST);
-        }
-        catch(ComicAlreadyExistsException e){
-            return new ResponseEntity<String>("Comic with ISBN\""+comic.getIsbn()+"\" or with number "+comic.getNumber()+" already exists in its collection!", HttpStatus.BAD_REQUEST);
+        catch(IllegalArgumentException e){
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }//update
 
-    @PutMapping(path = "addAuthor")
-    public ResponseEntity<?> addAuthor(@RequestParam(value = "cmc") long comicId, @RequestParam(value = "autr") long authorId){
+    @DeleteMapping(path = "/{id}/delete")
+    public ResponseEntity<?> delete(@PathVariable(value = "id") long comicId){
         try{
-            comicService.addAuthorToComic(authorId, comicId);
-            return new ResponseEntity<String>("Author \""+authorId+"\" added successful to comic \""+comicId+"\" !",HttpStatus.OK);
+            comicService.remove(comicId);
+            return new ResponseEntity<String>("Comic "+comicId+" deleted successful!", HttpStatus.OK);
         }
         catch(ConstraintViolationException e){
-            List<InvalidValue> fieldsViolated = new LinkedList<>();
-            for(ConstraintViolation<?> cv : e.getConstraintViolations()){
-                fieldsViolated.add(new InvalidValue(cv.getInvalidValue(), cv.getMessage()));
-            }
-            return new ResponseEntity<List<InvalidValue>>(fieldsViolated, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<List<InvalidValue>>(InvalidValue.getAllInvalidValues(e), HttpStatus.BAD_REQUEST);
         }
-        catch(ComicNotFoundException e){
-            return new ResponseEntity<String>("Comic \""+comicId+"\" not found!", HttpStatus.BAD_REQUEST);
+        catch(IllegalArgumentException e){
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-        catch(AuthorNotFoundException e){
-            return new ResponseEntity<String>("Author \""+authorId+"\" not found!", HttpStatus.BAD_REQUEST);
+    }//delete
+
+    @PatchMapping(path = "/{id}/addAuthors")
+    public ResponseEntity<?> addAuthors(@PathVariable(value = "id") long comicId, @RequestBody Set<Long> authorIds){
+        try{
+            comicService.addAuthors(comicId, authorIds);
+            return new ResponseEntity<String>("Authors added successful to comic \""+comicId+"\" !",HttpStatus.OK);
         }
-    }//update
+        catch(ConstraintViolationException e){
+            return new ResponseEntity<List<InvalidValue>>(InvalidValue.getAllInvalidValues(e), HttpStatus.BAD_REQUEST);
+        }
+        catch(IllegalArgumentException e){
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }//addAuthors
+
+    @PatchMapping(path = "/{id}/delAuthors")
+    public ResponseEntity<?> delAuthors(@PathVariable(value = "id") long comicId, @RequestBody Set<Long> authorIds){
+        try{
+            comicService.removeAuthors(comicId, authorIds);
+            return new ResponseEntity<String>("Authors deleted successful to comic \""+comicId+"\" !",HttpStatus.OK);
+        }
+        catch(ConstraintViolationException e){
+            return new ResponseEntity<List<InvalidValue>>(InvalidValue.getAllInvalidValues(e), HttpStatus.BAD_REQUEST);
+        }
+        catch(IllegalArgumentException e){
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }//delAuthors
 
 }//ComicController

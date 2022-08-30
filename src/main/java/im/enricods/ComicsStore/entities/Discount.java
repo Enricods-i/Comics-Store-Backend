@@ -32,15 +32,15 @@ public class Discount {
     
     @NotNull @Min(0)
     @EqualsAndHashCode.Include  
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY) @Column(name = "id")
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @Size(max = 30)
-    @Column(name = "name", length = 30)
+    @Column(length = 30)
     private String name;
 
     @NotNull @Min(1) @Max(100)
-    @Column(name = "percentage", nullable = false)
+    @Column(nullable = false)
     private int percentage;
 
     @Temporal(TemporalType.DATE) @Column(name = "activation_date", nullable = false)
@@ -50,7 +50,7 @@ public class Discount {
     private Date expirationDate;
 
     @JsonIgnore
-    @Version @Column(name = "version", nullable = false)
+    @Version
     private long version;
 
     @ManyToMany(mappedBy = "discounts")
@@ -58,12 +58,22 @@ public class Discount {
 
     public void addPromotion(Comic comic){
         comic.getDiscounts().add(this);
-        comicsInPromotion.add(comic);
+        this.comicsInPromotion.add(comic);
     }//addPromotion
+
+    public void removePromotion(Comic comic){
+        comic.getDiscounts().remove(this);
+        this.comicsInPromotion.remove(comic);
+    }//removePromotion
     
     @JsonIgnore
     @ManyToMany(mappedBy = "discountsApplied")
     private Set<ComicInPurchase> discountedComics;
+
+    public void registerDiscount(ComicInPurchase cip){
+        cip.getDiscountsApplied().add(this);
+        this.discountedComics.add(cip);
+    }//registerDiscount
 
     @JsonIgnore
     @CreationTimestamp @Temporal(TemporalType.TIMESTAMP) @Column(name = "created_at", nullable = false)
