@@ -14,13 +14,13 @@ import im.enricods.ComicsStore.entities.Discount;
 @Repository
 public interface DiscountRepository extends JpaRepository<Discount,Long>{
 
-	@Query( "SELECT disc"+
-			"FROM Discount disc JOIN disc.comicsInPromotion c"+
+	@Query( "SELECT disc "+
+			"FROM Discount disc JOIN disc.comicsInPromotion c "+
 			"WHERE c = :comic")
 	List<Discount> findByComic(Comic comic);
 
-	@Query(	"SELECT disc"+
-			"FROM Discount disc JOIN disc.comicsInPromotion c"+
+	@Query(	"SELECT disc "+
+			"FROM Discount disc JOIN disc.comicsInPromotion c "+
 			"WHERE c = :comic AND disc.activationDate<=CURRENT_DATE AND disc.expirationDate>=CURRENT_DATE")
 	Optional<Discount> findActiveByComic(Comic comic);
 	
@@ -28,8 +28,8 @@ public interface DiscountRepository extends JpaRepository<Discount,Long>{
 
 	List<Discount> findByActivationDate(Date activationDate);
 
-	@Query(	"SELECT CASE WHEN COUNT(cip)>0 THEN true ELSE false END"+
-			"FROM Discount disc JOIN disc.discountedComics cip"+
+	@Query(	"SELECT CASE WHEN COUNT(cip)>0 THEN true ELSE false END "+
+			"FROM Discount disc JOIN disc.discountedComics cip "+
 			"WHERE disc = :discount")
 	boolean hasBeenUsed(Discount discount);
 

@@ -16,8 +16,8 @@ public interface CartContentRepository extends JpaRepository<CartContent, CartCo
     
     List<CartContent> findByCart(Cart cart);
 
-    @Query( "SELECT cc"+
-            "FROM CartContent cc"+
+    @Query( "SELECT cc "+
+            "FROM CartContent cc "+
             "WHERE cc.comic = :comic")
     List<CartContent> findByComic(Comic comic);
 

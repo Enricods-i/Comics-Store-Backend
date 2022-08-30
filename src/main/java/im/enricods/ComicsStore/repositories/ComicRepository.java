@@ -20,25 +20,25 @@ public interface ComicRepository extends JpaRepository<Comic,Long>{
 
     Page<Comic> findByCollection(Collection collection, Pageable pageable);
 
-    @Query(value =  "SELECT c"+
-                    "FROM Comic c JOIN c.authors a"+
+    @Query(value =  "SELECT c "+
+                    "FROM Comic c JOIN c.authors a "+
                     "WHERE c.collection = :coll AND a = :auth")
     Page<Comic> findByCollectionAndAuthor(Collection coll, Author auth, Pageable pageable);
 
     Optional<Comic> findByIsbn(String isbn);
 
-    @Query("SELECT CASE WHEN COUNT(cip)>0 THEN true ELSE false END"+
-            "FROM Comic cmc JOIN cmc.copiesSold cip"+
+    @Query("SELECT CASE WHEN COUNT(cip)>0 THEN true ELSE false END "+
+            "FROM Comic cmc JOIN cmc.comicsSold cip "+
             "WHERE cmc = :comic")
     boolean existsPurchaseContaining(Comic comic);
 
-    @Query( "SELECT CASE WHEN COUNT(disc)>0 THEN true ELSE false END"+
-            "FROM Comic cmc JOIN cmc.discounts disc"+
+    @Query( "SELECT CASE WHEN COUNT(disc)>0 THEN true ELSE false END "+
+            "FROM Comic cmc JOIN cmc.discounts disc "+
             "WHERE cmc = :comic AND disc.activationDate<=CURRENT_DATE AND disc.expirationDate>CURRENT_DATE")
     boolean isDiscounted(Comic comic);
 
-    @Query( "SELECT CASE WHEN COUNT(cip)>0 THEN true ELSE false END"+
-            "FROM Comic cmc JOIN cmc.copiesSold cip JOIN cip.discountsApplied disc"+
+    @Query( "SELECT CASE WHEN COUNT(cip)>0 THEN true ELSE false END "+
+            "FROM Comic cmc JOIN cmc.comicsSold cip JOIN cip.discountsApplied disc "+
             "WHERE cmc = :comic AND disc = :discount")
     boolean wasBoughtWithDiscount(Comic comic, Discount discount);
 

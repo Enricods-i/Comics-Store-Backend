@@ -22,17 +22,21 @@ public interface CollectionRepository extends JpaRepository<Collection,Long>{
     
     Page<Collection> findByNameContaining(String name, Pageable pageable);
 
-    @Query(value = "SELECT col FROM Collection col JOIN col.comics com JOIN com.authors auth WHERE auth = :author")
+    @Query( "SELECT col "+
+            "FROM Collection col JOIN col.comics com JOIN com.authors auth "+
+            "WHERE auth = :author")
     Page<Collection> findByAuthor(Author author, Pageable pageable);
 
-    @Query(value = "SELECT col FROM Collection col JOIN col.categories cat WHERE cat = :category")
+    @Query( "SELECT col "+
+            "FROM Collection col JOIN col.categories cat "+
+            "WHERE cat = :category")
     Page<Collection> findByCategory(Category category, Pageable pageable);
 
-    @Query(value =  "SELECT col" +
-                    "FROM Collection col JOIN col.comics com JOIN com.authors auth JOIN col.categories cat" +
-                    "WHERE (col.name LIKE :name OR :name IS NULL) AND" +
-                    " (auth = :author OR :author IS NULL) AND" +
-                    " (cat = :category OR :category IS NULL)" )
+    @Query(value =  "SELECT col " +
+                    "FROM Collection col JOIN col.comics com JOIN com.authors auth JOIN col.categories cat " +
+                    "WHERE (col.name LIKE :name OR :name IS NULL) AND " +
+                    "(auth = :author OR :author IS NULL) AND " +
+                    "(cat = :category OR :category IS NULL)" )
     Page<Collection> advancedSearch(String name, Author author, Category category, Pageable pageable);
 
 }//CollectionRepository
