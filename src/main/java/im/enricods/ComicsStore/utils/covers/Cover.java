@@ -6,14 +6,17 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
+//import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.util.StreamUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 public class Cover {
 
-    @Value("$(image-path)")
-    private static String IMAGES_DIRECTORY;
+    //@Value("${images-path}")
+    private static final String IMAGES_DIRECTORY = "/home/eds/Progetti/Comics-Store-BE/src/main/resources/images/";
 
     @Async
     public static void save(String fileName, MultipartFile file) throws IOException{
@@ -30,11 +33,14 @@ public class Cover {
         new File(IMAGES_DIRECTORY + fileName + ".webp").delete();
     }//remove
 
-    public static java.awt.Image get(String fileName) throws IOException{
-        try {
-            return ImageIO.read(new File(IMAGES_DIRECTORY+fileName+".webp"));
-        } catch (IOException e) {
-            return ImageIO.read(new File("default.webp"));
+    public static byte[] get(String fileName) throws IOException {
+        if(new File(IMAGES_DIRECTORY+fileName+".webp").exists()){
+            Resource imgResource = new ClassPathResource("images/"+fileName+".webp");
+            return StreamUtils.copyToByteArray(imgResource.getInputStream());
+        }
+        else{
+            Resource imgResource = new ClassPathResource("images/"+"default.webp");
+            return StreamUtils.copyToByteArray(imgResource.getInputStream());
         }
     }//get
     

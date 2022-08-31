@@ -24,4 +24,4 @@ spring:
 #        key-store-type: PKCS12
 #        key-store: /etc/pki/tls/certs/server.key
 
-images-path: images/
+images-path: "/home/eds/Progetti/Comics-Store-BE/images/"

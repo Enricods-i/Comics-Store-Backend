@@ -3,7 +3,6 @@ package im.enricods.ComicsStore.controllers;
 import java.util.List;
 import java.util.Set;
 
-import java.awt.Image;
 import java.io.IOException;
 
 import javax.validation.ConstraintViolationException;
@@ -94,8 +93,9 @@ public class CollectionController {
     @GetMapping(path = "/{id}/cover")
     public ResponseEntity<?> getCover(@PathVariable(value = "id") long collectionId){
         try {
-            return new ResponseEntity<Image>(Cover.get(Type.COLLECTION.getLabel()+collectionId),HttpStatus.OK);
+            return new ResponseEntity<byte[]>(Cover.get(Type.COLLECTION.getLabel()+collectionId),HttpStatus.OK);
         } catch (IOException e) {
+            e.printStackTrace();
             return new ResponseEntity<String>("Server error", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }//getCover
@@ -103,8 +103,8 @@ public class CollectionController {
     @PostMapping(path = "/create")
     public ResponseEntity<?> create(@RequestBody Collection collection){
         try{
-            collectionService.add(collection);
-            return new ResponseEntity<String>("Collection \""+collection.getName()+"\" added successful!", HttpStatus.OK);
+            Collection result = collectionService.add(collection);
+            return new ResponseEntity<Collection>(result, HttpStatus.OK);
         }
         catch(ConstraintViolationException e){
             return new ResponseEntity<List<InvalidValue>>(InvalidValue.getAllInvalidValues(e), HttpStatus.BAD_REQUEST);
@@ -173,14 +173,32 @@ public class CollectionController {
     @PatchMapping(path = "/{id}/chcov")
     public ResponseEntity<?> updateCover(@PathVariable(value = "id") long collectionId, @RequestParam("img") MultipartFile image){
         try{
-            collectionService.chcov(collectionId, image);
+            collectionService.chCov(collectionId, image);
             return new ResponseEntity<String>("Cover updated succesful!", HttpStatus.OK);
+        }
+        catch(ConstraintViolationException e){
+            return new ResponseEntity<List<InvalidValue>>(InvalidValue.getAllInvalidValues(e), HttpStatus.BAD_REQUEST);
         }
         catch(IllegalArgumentException e){
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             return new ResponseEntity<String>("Server error", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }//updateCover
+
+    @PatchMapping(path = "/{id}/delcov")
+    public ResponseEntity<?> deleteCover(@PathVariable(value = "id") long collectionId){
+        try{
+            collectionService.rmCov(collectionId);
+            return new ResponseEntity<String>("Cover of the collection "+collectionId+" deleted successful!", HttpStatus.OK);
+        }
+        catch(ConstraintViolationException e){
+            return new ResponseEntity<List<InvalidValue>>(InvalidValue.getAllInvalidValues(e), HttpStatus.BAD_REQUEST);
+        }
+        catch(IllegalArgumentException e){
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
     
 }//CollectionService

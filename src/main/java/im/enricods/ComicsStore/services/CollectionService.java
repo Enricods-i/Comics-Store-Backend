@@ -49,7 +49,7 @@ public class CollectionService {
     public List<Collection> getByName(@NotNull @Size(min=3, max=50) String name, @Min(0) int pageNumber, @Min(0) int pageSize, String sortBy){
 
         Pageable paging = PageRequest.of(pageNumber, pageSize, Sort.by(sortBy));
-        Page<Collection> pagedResult = collectionRepository.findByNameContaining(name,paging);
+        Page<Collection> pagedResult = collectionRepository.findByNameContainingIgnoreCase(name,paging);
         return pagedResult.getContent();
 
     }//getByName
@@ -119,15 +119,13 @@ public class CollectionService {
     }//advancedSearch
 
 
-    public void add(@Valid Collection collection){
+    public Collection add(@Valid Collection collection){
 
         //verify that Collection specified doesn't already exists
         if(collectionRepository.existsByName(collection.getName()))
             throw new IllegalArgumentException("Collection with name \""+collection.getName()+"\" already exists!");
         
-        collection.setId(0);
-
-        collectionRepository.save(collection);
+        return collectionRepository.save(collection);
 
     }//add
 
@@ -156,7 +154,7 @@ public class CollectionService {
     }//modify
 
     @Transactional(readOnly = true)
-    public void chcov(@Min(0) long collectionId, MultipartFile img ) throws IOException{
+    public void chCov(@Min(0) long collectionId, MultipartFile img ) throws IOException{
 
         //verify that Collection specified already exists
         if(!collectionRepository.existsById(collectionId))
@@ -164,7 +162,19 @@ public class CollectionService {
         
         Cover.save(Type.COLLECTION.getLabel()+collectionId, img);
        
-    }//updateImage
+    }//chCov
+
+
+    @Transactional(readOnly = true)
+    public void rmCov(@Min(0) long collectionId){
+        
+        //verify that Collection specified already exists
+        if(!collectionRepository.existsById(collectionId))
+            throw new IllegalArgumentException("Collection "+collectionId+" not found!");
+        
+        Cover.remove(Type.COLLECTION.getLabel()+collectionId);
+
+    }//rmCov
 
 
     //Only an empty Collection can be deleted
@@ -200,8 +210,9 @@ public class CollectionService {
 
         Collection target = cllctn.get();
         
+        Optional<Category> ctgr = null;
         for(Long id : categoryIds){
-            Optional<Category> ctgr = categoryRepository.findById(id);
+            ctgr = categoryRepository.findById(id);
             if(ctgr.isPresent())
                 ctgr.get().bindCollection(target);
         }
@@ -217,12 +228,12 @@ public class CollectionService {
             throw new IllegalArgumentException("Collection "+collectionId+" not found!");
         
         Collection target = cllctn.get();
-        Category category = new Category();
 
-        for(long id : categoryIds){
-            category.setId(id);
-            if(target.getCategories().contains(category))
-                category.unbindCollection(target);
+        Optional<Category> ctgr = null;
+        for(Long id : categoryIds){
+            ctgr = categoryRepository.findById(id);
+            if(ctgr.isPresent())
+                ctgr.get().unbindCollection(target);
         }
 
     }//unbindCategories

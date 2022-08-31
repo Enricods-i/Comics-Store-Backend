@@ -198,12 +198,12 @@ public class ComicService {
         if(cmc.isEmpty())
             throw new IllegalArgumentException("Comic "+comicId+" not found!");
 
-        Author author = new Author();
+        Optional<Author> auth = null;
 
         for(long id : authorIds){
-            author.setId(id);
-            if(cmc.get().getAuthors().contains(author))
-                authorRepository.findById(id).get().removeWork(cmc.get());
+            auth = authorRepository.findById(id);
+            if(auth.isPresent())
+                auth.get().removeWork(cmc.get());
         }
 
     }//removeAuthors

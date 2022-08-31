@@ -75,7 +75,7 @@ public class CategoryController {
     }//delete
 
     @PutMapping(path = "/chname/{id}")
-    public ResponseEntity<?> updateName(@PathVariable(value = "id") long categoryId, @RequestParam(value = "newName") String newName){
+    public ResponseEntity<?> updateName(@PathVariable(value = "id") long categoryId, @RequestParam(value = "name") String newName){
         try {
             categoryService.changeName(categoryId, newName);
             return new ResponseEntity<String>("Category "+categoryId+" renamed successful in \""+newName+"\"", HttpStatus.OK);

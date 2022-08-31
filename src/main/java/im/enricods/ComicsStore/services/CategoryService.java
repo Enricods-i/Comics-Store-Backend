@@ -42,7 +42,7 @@ public class CategoryService {
     @Transactional(readOnly = true)
     public List<Category> getByName(@NotNull @Size(min=3, max=30) String categoryName){
 
-        return categoryRepository.findByNameContaining(categoryName);
+        return categoryRepository.findByNameIgnoreCaseContaining(categoryName);
 
     }//showAllCategories
 
@@ -120,12 +120,12 @@ public class CategoryService {
         if(ctgr.isEmpty())
             throw new IllegalArgumentException("Category "+categoryId+" not found!");
         
-        Category category = ctgr.get();
-
-        Collection collection = new Collection();
+        Optional<Collection> cllctn = null;
         for(Long id : collectionIds){
-            collection.setId(id);
-            category.unbindCollection(collection);
+            //verify that Collection with current id exists
+            cllctn = collectionRepository.findById(id);
+             if(cllctn.isPresent())
+                 ctgr.get().unbindCollection(cllctn.get());
         }
 
     }//unbindCollections

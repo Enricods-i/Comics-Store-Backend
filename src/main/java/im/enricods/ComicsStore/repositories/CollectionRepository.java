@@ -20,7 +20,7 @@ public interface CollectionRepository extends JpaRepository<Collection,Long>{
     Optional<Collection> findByName(String name);
 
     
-    Page<Collection> findByNameContaining(String name, Pageable pageable);
+    Page<Collection> findByNameContainingIgnoreCase(String name, Pageable pageable);
 
     @Query( "SELECT col "+
             "FROM Collection col JOIN col.comics com JOIN com.authors auth "+
