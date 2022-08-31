@@ -91,7 +91,7 @@ public class CollectionService {
         if( (name==null && categoryId==null) || 
             (name==null && authorId==null) || 
             (categoryId==null && authorId==null) )
-            throw new NullPointerException("Too many parameter are null");
+            throw new IllegalArgumentException("Too many parameter are null");
 
         Author author = null;
         if(authorId!=null){

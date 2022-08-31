@@ -90,6 +90,24 @@ public class CollectionController {
         }
     }//showByAuthor
 
+    @GetMapping(path = "/v/search")
+    public ResponseEntity<?> advancedSearch(@RequestParam String name, @RequestParam(value = "ctgr") long categoryId, @RequestParam(value = "auth") long authorId,@RequestParam(defaultValue = "0") int pageNumber, @RequestParam(defaultValue = "10") int pageSize, @RequestParam(defaultValue = "name") String sortBy){
+        try{
+            List<Collection> result = collectionService.advancedSearch(name, categoryId, authorId, pageNumber, pageSize, sortBy);
+            return new ResponseEntity<List<Collection>>(result, HttpStatus.OK);
+        }
+        catch(ConstraintViolationException e){
+            return new ResponseEntity<List<InvalidValue>>(InvalidValue.getAllInvalidValues(e), HttpStatus.BAD_REQUEST);
+        }
+        //sortBy
+        catch(PropertyReferenceException e){
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+        catch(IllegalArgumentException e){
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
     @GetMapping(path = "/{id}/cover")
     public ResponseEntity<?> getCover(@PathVariable(value = "id") long collectionId){
         try {

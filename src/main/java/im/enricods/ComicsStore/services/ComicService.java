@@ -98,8 +98,6 @@ public class ComicService {
         if(cmc.isPresent())
             throw new IllegalArgumentException("Comic with ISBN \""+comic.getIsbn()+"\" already exists!");
         
-        //initialize the missing fields
-        comic.setId(0);
         comic.setCollection(cllctn.get());
         
         //persist
@@ -126,13 +124,12 @@ public class ComicService {
             throw new IllegalArgumentException("There is already a Comic with ISBN \""+comic.getIsbn()+"\" !");
         
         //verify that a Comic with specified Number doesn't already exist in the Collection
-        if( comicRepository.findByCollectionAndNumber( cmc.get().getCollection(), cmc.get().getNumber() ).isPresent())
+        if( comicRepository.findByCollectionAndNumber( cmc.get().getCollection(), comic.getNumber() ).isPresent())
             throw new IllegalArgumentException("A Comic with number "+cmc.get().getNumber()+" already exists in its Collection!");
 
         //can't change Collection or CreationDate or dateOfLastModification or Version field
         comic.setCollection(cmc.get().getCollection());
         comic.setCreationDate(cmc.get().getCreationDate());
-        comic.setVersion(cmc.get().getVersion());
 
         //merge
         comicRepository.save(comic);
@@ -169,6 +166,8 @@ public class ComicService {
             cc.getCart().getContent().remove(cc);
             cartContentRepository.delete(cc);
         }
+
+        comicRepository.delete(target);
 
     }//remove
 
