@@ -87,7 +87,9 @@ public class DiscountService {
         Discount target = disc.get();
 
         //discount has been used at least once
-        if( (!discount.getActivationDate().equals(target.getActivationDate()) || discount.getPercentage()!=target.getPercentage()) && 
+        if( (!discount.getActivationDate().equals(target.getActivationDate()) || 
+            discount.getPercentage()!=target.getPercentage()) 
+            && 
             discountRepository.hasBeenUsed(target) ){
 
             //finish existinig discount
@@ -106,6 +108,32 @@ public class DiscountService {
 
         }
     }//modify
+
+
+    public void finish(@Min(0) long discountId, @NotNull boolean remove){
+
+        //verify that Discount specified exists
+        Optional<Discount> disc = discountRepository.findById(discountId);
+        if(disc.isEmpty())
+            throw new IllegalArgumentException("Discount "+discountId+" not found!");
+
+        Discount target = disc.get();
+        
+        if(remove){
+            if(target.getDiscountedComics().isEmpty()){
+                //removing discount
+                //unbind bidirectional relation with Comic
+                for(Comic cmc : target.getComicsInPromotion())
+                    target.removePromotion(cmc);
+                discountRepository.delete(target);
+            }
+            else throw new IllegalArgumentException("Discount "+discountId+" has been used! You can finish it now.");
+        }
+        else{
+            target.setExpirationDate(new Date());
+        }
+        
+    }//finish
 
 
     public void addPromotion(@Min(0) long discountId, @Min(0) long comicId){

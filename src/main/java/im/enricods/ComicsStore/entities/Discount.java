@@ -21,6 +21,7 @@ import javax.validation.constraints.Size;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
@@ -53,6 +54,7 @@ public class Discount {
     @Version
     private long version;
 
+    @JsonIdentityReference(alwaysAsId = true)
     @ManyToMany(mappedBy = "discounts")
     private Set<Comic> comicsInPromotion;
 

@@ -79,6 +79,20 @@ public class DiscountController {
         }
     }//update
 
+    @PatchMapping(path = "/{id}/finish")
+    public ResponseEntity<?> finish(@PathVariable(value = "id") long discountId, @RequestParam(value = "rm", defaultValue = "false") boolean remove){
+        try{
+            discountService.finish(discountId, remove);
+            return new ResponseEntity<String>("Discount "+discountId+" finished successfully!", HttpStatus.OK);
+        }
+        catch(ConstraintViolationException e){
+            return new ResponseEntity<List<InvalidValue>>(InvalidValue.getAllInvalidValues(e), HttpStatus.BAD_REQUEST);
+        }
+        catch(IllegalArgumentException e){
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }//finish
+
     @PatchMapping(path = "/{id}/createPromotion")
     public ResponseEntity<?> createPromotion(@PathVariable(value = "id") long discountId, @RequestParam(value = "cmc") long comicId){
         try{
@@ -108,14 +122,14 @@ public class DiscountController {
     }//finishPromotion
 
     @PatchMapping(path = "/updatePromotions")
-    public ResponseEntity<?> updatePromotions(@RequestBody List<Object> payload){
+    public ResponseEntity<?> updatePromotions(@RequestBody Object[] payload){
         String errorResponse = "Must send a list of two elements: the first must be a Discount while the second must be a Set of Comic identifiers!";
         try{
-            if(payload.size()!=2 || !(payload.get(0) instanceof Discount) || !(payload.get(1) instanceof Set) )
+            if(payload.length!=2 || !(payload[0] instanceof Discount) || !(payload[1] instanceof Set) )
                 return new ResponseEntity<String>(errorResponse, HttpStatus.BAD_REQUEST);
-            Discount discount = (Discount) payload.get(0);
+            Discount discount = (Discount) payload[0];
             @SuppressWarnings("rawtypes")
-            Set set = (Set) payload.get(1);
+            Set set = (Set) payload[1];
             Set<Long> comicIds = new HashSet<>();
             for(Object o : set){
                 if(!(o instanceof Long))
