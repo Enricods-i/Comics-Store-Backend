@@ -24,6 +24,7 @@ import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
@@ -55,12 +56,6 @@ public class Comic {
     @Column(nullable = false)
     private int quantity;
 
-    /*
-    @Size(max = 20)
-    @Column(name = "image", length = 20)
-    private String image;
-    */
-
     @Min(1)
     private int pages;
 
@@ -69,6 +64,7 @@ public class Comic {
     private String isbn;
 
     @PastOrPresent
+    @DateTimeFormat(pattern = "dd-MM-yyyy")
     @Temporal(TemporalType.DATE) @Column(name = "publication_date")
     private Date publicationDate;
 
@@ -102,10 +98,12 @@ public class Comic {
     private Set<ComicInPurchase> comicsSold;
 
     @JsonIgnore
+    @DateTimeFormat(pattern = "dd-MM-yyyy hh:mm:ss")
     @CreationTimestamp @Temporal(TemporalType.TIMESTAMP) @Column(name = "created_at", nullable = false)
     private Date creationDate;
 
     @JsonIgnore
+    @DateTimeFormat(pattern = "dd-MM-yyyy hh:mm:ss")
     @UpdateTimestamp @Temporal(TemporalType.TIMESTAMP) @Column(name = "modified_at", nullable = false)
     private Date dateOfLastModification;
 

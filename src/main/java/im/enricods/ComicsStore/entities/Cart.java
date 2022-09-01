@@ -17,6 +17,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -50,6 +51,7 @@ public class Cart {
     private int size;
     
     @JsonIgnore
+    @DateTimeFormat(pattern = "dd-MM-yyyy hh:mm:ss")
     @UpdateTimestamp @Temporal(TemporalType.TIMESTAMP) @Column(name = "modified_at", nullable = false)
     private Date dateOfLastModification;
 

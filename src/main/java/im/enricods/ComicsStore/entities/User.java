@@ -22,6 +22,7 @@ import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
@@ -89,10 +90,12 @@ public class User {
     private Set<Purchase> purchases;
 
     @JsonIgnore
+    @DateTimeFormat(pattern = "dd-MM-yyyy hh:mm:ss")
     @CreationTimestamp @Temporal(TemporalType.TIMESTAMP) @Column(name = "created_at", nullable = false)
     private Date creationDate;
 
     @JsonIgnore
+    @DateTimeFormat(pattern = "dd-MM-yyyy hh:mm:ss")
     @UpdateTimestamp @Temporal(TemporalType.TIMESTAMP) @Column(name = "modified_at", nullable = false)
     private Date dateOfLastModification;
 

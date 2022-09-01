@@ -25,6 +25,7 @@ import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -46,12 +47,6 @@ public class Collection {
     @NotNull @Size(min = 1, max = 50)
     @Column(nullable = false, unique = true, length = 50)
     private String name;
-
-    /*
-    @Size(min = 1, max = 20)
-    @Column(name = "image", length = 20)
-    private String image;
-    */
 
     @NotNull @Positive
     @Column(nullable = false)
@@ -98,10 +93,12 @@ public class Collection {
     private Set<Category> categories;
 
     @JsonIgnore
+    @DateTimeFormat(pattern = "dd-MM-yyyy hh:mm:ss")
     @CreationTimestamp @Temporal(TemporalType.TIMESTAMP) @Column(name = "created_at", nullable = false)
     private Date creationDate;
 
     @JsonIgnore
+    @DateTimeFormat(pattern = "dd-MM-yyyy hh:mm:ss")
     @UpdateTimestamp @Temporal(TemporalType.TIMESTAMP) @Column(name = "modified_at", nullable = false)
     private Date dateOfLastModification;
 
