@@ -19,7 +19,6 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
 
 import org.hibernate.annotations.CreationTimestamp;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
 
@@ -46,7 +45,6 @@ public class Purchase {
     @OneToMany(mappedBy = "purchase")
     private Set<ComicInPurchase> purchasedComics;
 
-    @DateTimeFormat(pattern = "dd-MM-yyyy hh:mm:ss")
     @CreationTimestamp @Temporal(TemporalType.TIMESTAMP) @Column(name = "created_at", nullable = false)
     private Date purchaseTime;
 

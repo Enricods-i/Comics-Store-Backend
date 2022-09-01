@@ -104,8 +104,8 @@ public class PurchaseService {
 
         //support variables-----------------------
         float total=0, purchasePrice=0;
-        int newQuantity=0;
-        Comic c = null;
+        int updatedQuantity=0;
+        Comic cmc = null;
         //----------------------------------------
 
         Cart usersCart = usr.get().getCart();
@@ -116,34 +116,26 @@ public class PurchaseService {
         //get content of user's cart for get quantity and calculate effective price of each comic and for calculate the purchase's total price
         for(CartContent cc : usersCart.getContent()){
 
-            c = cc.getComic();
+            cmc = cc.getComic();
 
             //verify that quantity of the comic is avaiable now
-            newQuantity = c.getQuantity() - cc.getQuantity();
-            if(newQuantity < 0)
-                throw new ComicsQuantityUnavaiableException("Unavaiable quantity for comic "+ c.getNumber()+ " in collection "+ c.getCollection().getName() +"!");
+            updatedQuantity = cmc.getQuantity() - cc.getQuantity();
+            if(updatedQuantity < 0)
+                throw new ComicsQuantityUnavaiableException("Unavaiable quantity for comic "+ cmc.getNumber()+ " in collection "+ cmc.getCollection().getName() +"!");
             
             //create new comicInPurchase entry
             ComicInPurchase cip = new ComicInPurchase();
 
-            //bind bidirectional relation with Comic
-            cip.setComic(c);
-            c.getComicsSold().add(cip);
-
-            //bind bidirectional relation with Purchase
-            cip.setPurchase(purchase);
-            purchase.getPurchasedComics().add(cip);
-
-            //calculate effective price of the comic stock
-            purchasePrice = c.getCollection().getPrice();
+            //calculate effective price of the comic stock (appling discount)
+            purchasePrice = cmc.getCollection().getPrice();
             //appling active discount
-            Optional<Discount> disc = discountRepository.findActiveByComic(c);
+            Optional<Discount> disc = discountRepository.findActiveByComic(cmc);
             if(disc.isPresent()){
                 //bind bidirectional relation
                 cip.getDiscountsApplied().add(disc.get());
                 disc.get().getDiscountedComics().add(cip);
+                purchasePrice -= (purchasePrice/100)*disc.get().getPercentage();
             }
-            purchasePrice -= (purchasePrice/100)*disc.get().getPercentage();
             
             //set effective price
             cip.setComicPrice(purchasePrice);
@@ -151,10 +143,18 @@ public class PurchaseService {
             //set quantity of comic in purchase
             cip.setQuantity(cc.getQuantity());
             //update comic's quantity
-            c.setQuantity(newQuantity);
+            cmc.setQuantity(updatedQuantity);
 
             //update total amount
             total += purchasePrice * cc.getQuantity();
+
+            //bind bidirectional relation with Comic
+            cip.setComic(cmc);
+            cmc.getComicsSold().add(cip);
+
+            //bind bidirectional relation with Purchase
+            cip.setPurchase(purchase);
+            purchase.getPurchasedComics().add(cip);
 
             //persist
             comicInPurchaseRepository.save(cip);

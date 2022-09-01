@@ -63,10 +63,10 @@ public class PurchaseController {
 
     @GetMapping(path = "/inPeriod")
     public ResponseEntity<?> showInPeriod(  @RequestParam(value = "start") @DateTimeFormat(pattern = "dd-MM-yyyy") Date startDate,
-                                                    @RequestParam(value = "end") @DateTimeFormat(pattern = "dd-MM-yyyy") Date endDate,
-                                                    @RequestParam(defaultValue = "0") int pageNumber, 
-                                                    @RequestParam(defaultValue = "10") int pageSize, 
-                                                    @RequestParam(defaultValue = "purchaseTime") String sortBy)
+                                            @RequestParam(value = "end") @DateTimeFormat(pattern = "dd-MM-yyyy") Date endDate,
+                                            @RequestParam(defaultValue = "0") int pageNumber, 
+                                            @RequestParam(defaultValue = "10") int pageSize, 
+                                            @RequestParam(defaultValue = "purchaseTime") String sortBy)
     {
         try{
             List<Purchase> result = purchaseService.getInPeriod(startDate, endDate, pageNumber, pageSize, sortBy);

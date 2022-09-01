@@ -50,7 +50,7 @@ public class ComicInPurchase {
     private float comicPrice;
 
     @NotNull @Min(1)
-    @Column(nullable = false)
+    @Column(name = "comic_quantity", nullable = false)
     private int quantity;
 
 }//ComicInPurchase

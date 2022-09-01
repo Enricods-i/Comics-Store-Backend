@@ -97,13 +97,9 @@ public class Comic {
     @OneToMany(mappedBy = "comic")
     private Set<ComicInPurchase> comicsSold;
 
-    @JsonIgnore
-    @DateTimeFormat(pattern = "dd-MM-yyyy hh:mm:ss")
     @CreationTimestamp @Temporal(TemporalType.TIMESTAMP) @Column(name = "created_at", nullable = false)
     private Date creationDate;
 
-    @JsonIgnore
-    @DateTimeFormat(pattern = "dd-MM-yyyy hh:mm:ss")
     @UpdateTimestamp @Temporal(TemporalType.TIMESTAMP) @Column(name = "modified_at", nullable = false)
     private Date dateOfLastModification;
 
