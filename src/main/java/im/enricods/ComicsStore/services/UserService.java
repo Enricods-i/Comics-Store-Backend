@@ -28,6 +28,7 @@ public class UserService {
     @Autowired
     private CartRepository cartRepository;
 
+
     @Transactional(readOnly = true)
     public User getByEmail(@Email String email){
 
@@ -71,15 +72,14 @@ public class UserService {
 
         //create user's cart
         Cart cart = new Cart();
+        //persist cart
         cart = cartRepository.save(cart);
 
-        user.setId(0);
-
-        //persist
-        User result = userRepository.save(user);
-
         //bind cart
-        cart.bindToUser(result);
+        cart.bindToUser(user);
+
+        //persist user
+        User result = userRepository.save(user);
 
         return result;
 
@@ -95,7 +95,7 @@ public class UserService {
 
         //if modifying email verify that does not exist a User with the same email
         if( !user.getEmail().equals(usr.get().getEmail()) && userRepository.existsByEmail(usr.get().getEmail()) )
-            throw new IllegalArgumentException("User with email \""+user.getEmail()+"\" already exists!");
+            throw new IllegalArgumentException("User with email \""+user.getEmail()+"\" already exists!\nOperation calceled.");
 
         //set fields that client can't modify
         user.setCart(usr.get().getCart());

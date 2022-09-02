@@ -26,7 +26,7 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @GetMapping(path = "/v/byFirstName&LastName")
+    @GetMapping(path = "/byFirstNameAndLastName")
     public ResponseEntity<?> showByFirstNameAndLastName(@RequestParam(value = "fName") String firstName, @RequestParam(value = "lName") String lastName){
         try{
             List<User> result = userService.getByName(firstName, lastName);
@@ -37,8 +37,8 @@ public class UserController {
         }
     }//showByFirstNameAndLastName
 
-    @GetMapping(path = "/v/byCity")
-    public ResponseEntity<?> showByCity(@RequestParam(value = "city") String city){
+    @GetMapping(path = "/byCity")
+    public ResponseEntity<?> showByCity(@RequestParam String city){
         try{
             List<User> result = userService.getByCity(city);
             return new ResponseEntity<List<User>>(result, HttpStatus.OK);
@@ -48,8 +48,8 @@ public class UserController {
         }
     }//showByCity
 
-    @GetMapping(path = "/v/byEmail")
-    public ResponseEntity<?> showByEmail(@RequestParam(value = "email") String email){
+    @GetMapping(path = "/byEmail")
+    public ResponseEntity<?> showByEmail(@RequestParam String email){
         try{
             User result = userService.getByEmail(email);
             return new ResponseEntity<User>(result, HttpStatus.OK);
@@ -80,7 +80,7 @@ public class UserController {
     public ResponseEntity<?> update(@RequestBody User user){
         try{
             userService.modify(user);
-            return new ResponseEntity<String>("User "+user.getFirstName()+" "+user.getLastName()+ "/"+user.getId()+" updated successful!", HttpStatus.OK);
+            return new ResponseEntity<String>("User \""+user.getFirstName()+" "+user.getLastName()+ "\" ("+user.getId()+") updated successful!", HttpStatus.OK);
         }
         catch(ConstraintViolationException e){
             return new ResponseEntity<List<InvalidValue>>(InvalidValue.getAllInvalidValues(e), HttpStatus.BAD_REQUEST);

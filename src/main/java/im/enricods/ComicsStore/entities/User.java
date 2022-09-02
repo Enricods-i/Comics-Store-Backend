@@ -22,6 +22,7 @@ import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
@@ -52,6 +53,7 @@ public class User {
     @NotNull @Past
     @Temporal(TemporalType.DATE)
     @Column(name = "birth_date", nullable = false)
+    @DateTimeFormat(pattern = "dd-MM-yyyy")
     private Date birthDate;
 
     @NotNull @Email
