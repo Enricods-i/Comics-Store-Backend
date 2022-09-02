@@ -33,7 +33,7 @@ import lombok.EqualsAndHashCode;
 @Entity @Table(name = "wish_list")
 public class WishList {
     
-    @NotNull @Min(value = 0)
+    @NotNull @Min(0)
     @EqualsAndHashCode.Include
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -48,9 +48,9 @@ public class WishList {
 
     @JsonIgnore
     @ManyToMany
-    @JoinTable(name = "list_content",
-        joinColumns = {@JoinColumn(name = "wish_list_id")},
-        inverseJoinColumns = {@JoinColumn(name = "comic_id")}
+    @JoinTable( name = "list_content",
+                joinColumns = {@JoinColumn(name = "wish_list_id")},
+                inverseJoinColumns = {@JoinColumn(name = "comic_id")}
     )
     private Set<Comic> content;
 

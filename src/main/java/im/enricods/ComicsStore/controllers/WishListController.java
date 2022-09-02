@@ -30,7 +30,7 @@ public class WishListController {
     private WishListService wishListService;
 
     @GetMapping(path = "/v/byOwnerAndName")
-    public ResponseEntity<?> showByOwnerAndName(@RequestParam(value = "usr") long userId, @RequestParam(value = "listName") String listName){
+    public ResponseEntity<?> showByOwnerAndName(@RequestParam(value = "usr") long userId, @RequestParam String listName){
         try{
             List<WishList> result = wishListService.getByOwnerAndName(userId, listName);
             return new ResponseEntity<List<WishList>>(result, HttpStatus.OK);
@@ -43,7 +43,7 @@ public class WishListController {
         }
     }//showByOwnerAndName
 
-    @GetMapping(path = "/v/AllByUser")
+    @GetMapping(path = "/v/allByUser")
     public ResponseEntity<?> showAllByUser(@RequestParam(value = "usr") long userId){
         try{
             List<WishList> result = wishListService.getAllByUser(userId);
@@ -99,8 +99,8 @@ public class WishListController {
         }
     }//chName
 
-    @PatchMapping(path = "/{id}/addComic")
-    public ResponseEntity<?> addComic(@RequestParam(value = "usr") long userId, @PathVariable("id") long wishListId, @RequestBody Set<Long> comicIds){
+    @PatchMapping(path = "/{id}/addComics")
+    public ResponseEntity<?> addComics(@RequestParam(value = "usr") long userId, @PathVariable("id") long wishListId, @RequestBody Set<Long> comicIds){
         try{
             wishListService.addComics(userId, wishListId, comicIds);
             return new ResponseEntity<String>("Comics added successful to wish list "+wishListId+" .", HttpStatus.OK);
@@ -113,7 +113,7 @@ public class WishListController {
         }
     }//addComics
 
-    @DeleteMapping(path = "/{id}/deleteComic")
+    @PatchMapping(path = "/{id}/deleteComics")
     public ResponseEntity<?> deleteComics(@RequestParam(value = "usr") long userId, @PathVariable("id") long wishListId, @RequestBody Set<Long> comicIds){
         try{
             wishListService.removeComics(userId, wishListId, comicIds);

@@ -70,12 +70,10 @@ public class WishListService {
         if(usr.isEmpty())
             throw new IllegalArgumentException("User "+userId+" not found!");
 
-        WishList wl = wishListRepository.save(wishList);
-
         //bind bidirectional relation
-        usr.get().addWishList(wl);
-
-        return wl;
+        usr.get().addWishList(wishList);
+        
+        return wishListRepository.save(wishList);
 
     }//add
 
@@ -98,12 +96,12 @@ public class WishListService {
 
         WishList target = list.get();
 
-        wishListRepository.delete(target);
-
         //unbind bidirectional relation
         usr.get().removeWishList(target);
 
-    }//deleteList
+        wishListRepository.delete(target);
+
+    }//remove
 
 
     public void chName(@Min(0) long userId, @Min(0) long wishListId, @NotNull @Size(min = 1, max = 30) String newName){
