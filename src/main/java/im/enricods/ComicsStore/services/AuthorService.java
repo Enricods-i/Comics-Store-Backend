@@ -1,5 +1,6 @@
 package im.enricods.ComicsStore.services;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -53,7 +54,7 @@ public class AuthorService {
     }//showAuthorsByName
 
 
-    public void add(@Valid Author author){
+    public Author add(@Valid Author author){
 
         //verify that Author specified doesn't already exists
         if(authorRepository.existsByName(author.getName()))
@@ -62,7 +63,7 @@ public class AuthorService {
         author.setId(0);
 
         //persist
-        authorRepository.save(author);
+        return authorRepository.save(author);
 
     }//addAuthor
 
@@ -76,17 +77,19 @@ public class AuthorService {
         
         Author target = auth.get();
 
-        authorRepository.delete(target);
-
         //unbind bidirectional relations
-        for(Comic c : target.getWorks())
-            c.getAuthors().remove(target);
+        Iterator<Comic> it = target.getWorks().iterator();
+        while(it.hasNext()){
+            it.next().getAuthors().remove(target);
+            it.remove();
+        }
+
+        authorRepository.delete(target);
 
     }//deleteAuthor
 
 
-    /*Allows to modify the name and the biography of the specified Author */
-    public void update(@Valid Author author){
+    public void modify(@Valid Author author){
 
         //verify that Author specified exists
         Optional<Author> auth = authorRepository.findById(author.getId());
@@ -99,7 +102,7 @@ public class AuthorService {
         //merge
         authorRepository.save(author);
 
-    }//updateAuthor
+    }//modify
 
 
     public void addWorks(@NotNull @Min(0) long authorId, @NotEmpty Set<@NotNull @Min(0) Long> comicIds){

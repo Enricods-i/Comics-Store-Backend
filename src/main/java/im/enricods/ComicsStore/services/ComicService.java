@@ -1,5 +1,6 @@
 package im.enricods.ComicsStore.services;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -34,7 +35,7 @@ import im.enricods.ComicsStore.repositories.WishListRepository;
 @Transactional
 @Validated
 public class ComicService {
-    
+
     @Autowired
     private ComicRepository comicRepository;
 
@@ -50,161 +51,171 @@ public class ComicService {
     @Autowired
     private CartContentRepository cartContentRepository;
 
-
     @Transactional(readOnly = true)
-    public List<Comic> getByCollection(@NotNull @Min(0) long collectionId, @Min(0) int pageNumber, @Min(0) int pageSize, String sortBy){
+    public List<Comic> getByCollection(@NotNull @Min(0) long collectionId, @Min(0) int pageNumber, @Min(0) int pageSize,
+            String sortBy) {
 
-        //verify that a Collection with collectionId exists
-         Optional<Collection> cllctn = collectionRepository.findById(collectionId);
-         if(cllctn.isEmpty())
-            throw new IllegalArgumentException("Collection "+collectionId+" not found!");
-        
+        // verify that a Collection with collectionId exists
+        Optional<Collection> cllctn = collectionRepository.findById(collectionId);
+        if (cllctn.isEmpty())
+            throw new IllegalArgumentException("Collection " + collectionId + " not found!");
+
         Pageable paging = PageRequest.of(pageNumber, pageSize, Sort.by(sortBy));
         Page<Comic> pagedResult = comicRepository.findByCollection(cllctn.get(), paging);
         return pagedResult.getContent();
 
-    }//getByCollection
-
+    }// getByCollection
 
     @Transactional(readOnly = true)
-    public List<Comic> getByCollectionAndAuthor(@NotNull @Min(0) long collectionId, @NotNull @Min(0) long authorId, @Min(0) int pageNumber, @Min(0) int pageSize, String sortBy){
+    public List<Comic> getByCollectionAndAuthor(@NotNull @Min(0) long collectionId, @NotNull @Min(0) long authorId,
+            @Min(0) int pageNumber, @Min(0) int pageSize, String sortBy) {
 
-        //verify that a Collection with collectionId exists
+        // verify that a Collection with collectionId exists
         Optional<Collection> cllctn = collectionRepository.findById(collectionId);
-         if(cllctn.isEmpty())
-            throw new IllegalArgumentException("Collection "+collectionId+" not found!");
-        
-        //verify that a Author with authorId exists
+        if (cllctn.isEmpty())
+            throw new IllegalArgumentException("Collection " + collectionId + " not found!");
+
+        // verify that a Author with authorId exists
         Optional<Author> auth = authorRepository.findById(authorId);
-        if(auth.isEmpty())
-            throw new IllegalArgumentException("Author "+authorId+" not found!");
-        
+        if (auth.isEmpty())
+            throw new IllegalArgumentException("Author " + authorId + " not found!");
+
         Pageable paging = PageRequest.of(pageNumber, pageSize, Sort.by(sortBy));
         Page<Comic> pagedResult = comicRepository.findByCollectionAndAuthor(cllctn.get(), auth.get(), paging);
         return pagedResult.getContent();
 
-    }//getByCollectionAndAuthor
+    }// getByCollectionAndAuthor
 
+    public Comic add(@Valid Comic comic, @NotNull @Min(0) long collectionId) {
 
-    public Comic add(@Valid Comic comic, @NotNull @Min(0) long collectionId){
-
-        //verify that a Collection with collectionId exists
+        // verify that a Collection with collectionId exists
         Optional<Collection> cllctn = collectionRepository.findById(collectionId);
-        if(cllctn.isEmpty())
-            throw new IllegalArgumentException("Collection "+collectionId+" not found!");
-        
-        //verify that a Comic with specified ISBN doesn't already exists
+        if (cllctn.isEmpty())
+            throw new IllegalArgumentException("Collection " + collectionId + " not found!");
+
+        // verify that a Comic with specified ISBN doesn't already exists
         Optional<Comic> cmc = comicRepository.findByIsbn(comic.getIsbn());
-        if(cmc.isPresent())
-            throw new IllegalArgumentException("Comic with ISBN \""+comic.getIsbn()+"\" already exists!");
-        
+        if (cmc.isPresent())
+            throw new IllegalArgumentException("Comic with ISBN \"" + comic.getIsbn() + "\" already exists!");
+
         comic.setCollection(cllctn.get());
-        
-        //persist
+
+        // persist
         Comic c = comicRepository.save(comic);
-    
-        //bind the bidirectional relation
+
+        // bind the bidirectional relation
         cllctn.get().addComic(c);
 
         return c;
 
-    }//add
+    }// add
 
+    public void update(@Valid Comic comic) {
 
-    public void update(@Valid Comic comic){
-
-        //verify that the Comic exists
+        // verify that the Comic exists
         Optional<Comic> cmc = comicRepository.findById(comic.getId());
-        if(cmc.isEmpty())
-            throw new IllegalArgumentException("Comic "+comic.getId()+" not found!");
+        if (cmc.isEmpty())
+            throw new IllegalArgumentException("Comic " + comic.getId() + " not found!");
 
-        //verify that if a Comic with the specified ISBN exists then it and the Comic specified must be the same
-        if( !cmc.get().getIsbn().equals(comic.getIsbn())  &&  comicRepository.findByIsbn(comic.getIsbn()).isPresent()  )
-            throw new IllegalArgumentException("There is already a Comic with ISBN \""+comic.getIsbn()+"\" !");
-        
-        //verify that a Comic with specified Number doesn't already exist in the Collection
-        if( cmc.get().getNumber()!=comic.getNumber() && comicRepository.findByCollectionAndNumber( cmc.get().getCollection(), comic.getNumber() ).isPresent())
-            throw new IllegalArgumentException("A Comic with number "+cmc.get().getNumber()+" already exists in its Collection!");
+        // verify that if a Comic with the specified ISBN exists then it and the Comic
+        // specified must be the same
+        if (!cmc.get().getIsbn().equals(comic.getIsbn()) && comicRepository.findByIsbn(comic.getIsbn()).isPresent())
+            throw new IllegalArgumentException("There is already a Comic with ISBN \"" + comic.getIsbn() + "\" !");
 
-        //can't change Collection or CreationDate
+        // verify that a Comic with specified Number doesn't already exist in the
+        // Collection
+        if (cmc.get().getNumber() != comic.getNumber()
+                && comicRepository.findByCollectionAndNumber(cmc.get().getCollection(), comic.getNumber()).isPresent())
+            throw new IllegalArgumentException(
+                    "A Comic with number " + cmc.get().getNumber() + " already exists in its Collection!");
+
+        // can't change Collection or CreationDate
         comic.setVersion(cmc.get().getVersion());
         comic.setCollection(cmc.get().getCollection());
         comic.setCreationDate(cmc.get().getCreationDate());
 
-        //merge
+        // merge
         comicRepository.save(comic);
 
-    }//update
+    }// update
 
+    public void remove(@NotNull @Min(0) long comicId) {
 
-    public void remove(@NotNull @Min(0) long comicId){
-
-        //verify that a Comic with comicId exists
+        // verify that a Comic with comicId exists
         Optional<Comic> cmc = comicRepository.findById(comicId);
-        if(cmc.isEmpty())
-            throw new IllegalArgumentException("Comic "+comicId+" not found!");
+        if (cmc.isEmpty())
+            throw new IllegalArgumentException("Comic " + comicId + " not found!");
 
         Comic target = cmc.get();
 
-        //verifiy that not exists a Purchase containing comic cmc
-        if(comicRepository.existsPurchaseContaining(target))
-            throw new IllegalArgumentException("Failed to remove Comic "+comicId+"; The comic was purchased!");
+        // verifiy that not exists a Purchase containing comic cmc
+        if (comicRepository.existsPurchaseContaining(target))
+            throw new IllegalArgumentException("Failed to remove Comic " + comicId + "; The comic was purchased!");
 
-        //remove all relations
+        // remove all relations
+        // with collection
         target.getCollection().removeComic(target);
 
-        for(Author auth : target.getAuthors())
-            auth.removeWork(target);
-        
-        for(Discount disc : target.getDiscounts())
-            disc.removePromotion(target);
-        
-        for(WishList wl : wishListRepository.findByComic(target))
+        // with author
+        Iterator<Author> it = target.getAuthors().iterator();
+        while(it.hasNext()){
+            it.next().getWorks().remove(target);
+            it.remove();
+        }
+
+        // with discount
+        Iterator<Discount> it1 = target.getDiscounts().iterator();
+        while(it1.hasNext()){
+            it1.next().getComicsInPromotion().remove(target);
+            it1.remove();
+        }
+
+        // with wish list
+        for (WishList wl : wishListRepository.findByComic(target))
             wl.getContent().remove(target);
 
-        for(CartContent cc : cartContentRepository.findByComic(target)){
+        // with cart content
+        for (CartContent cc : cartContentRepository.findByComic(target)) {
             cc.getCart().getContent().remove(cc);
             cartContentRepository.delete(cc);
         }
 
         comicRepository.delete(target);
 
-    }//remove
+    }// remove
 
+    public void addAuthors(@NotNull @Min(0) long comicId, @NotEmpty Set<@NotNull @Min(0) Long> authorIds) {
 
-    public void addAuthors(@NotNull @Min(0) long comicId, @NotEmpty Set<@NotNull @Min(0) Long> authorIds){
-        
-        //verify that a Comic with comicId exists
+        // verify that a Comic with comicId exists
         Optional<Comic> cmc = comicRepository.findById(comicId);
-        if(cmc.isEmpty())
-            throw new IllegalArgumentException("Comic "+comicId+" not found!");
+        if (cmc.isEmpty())
+            throw new IllegalArgumentException("Comic " + comicId + " not found!");
 
         Optional<Author> auth = null;
 
-        for(long id : authorIds){
+        for (long id : authorIds) {
             auth = authorRepository.findById(id);
-            if(auth.isPresent())
+            if (auth.isPresent())
                 auth.get().addWork(cmc.get());
         }
 
-    }//addAuthors
+    }// addAuthors
 
+    public void removeAuthors(@NotNull @Min(0) long comicId, @NotEmpty Set<@NotNull @Min(0) Long> authorIds) {
 
-    public void removeAuthors(@NotNull @Min(0) long comicId, @NotEmpty Set<@NotNull @Min(0) Long> authorIds){
-
-        //verify that a Comic with comicId exists
+        // verify that a Comic with comicId exists
         Optional<Comic> cmc = comicRepository.findById(comicId);
-        if(cmc.isEmpty())
-            throw new IllegalArgumentException("Comic "+comicId+" not found!");
+        if (cmc.isEmpty())
+            throw new IllegalArgumentException("Comic " + comicId + " not found!");
 
         Optional<Author> auth = null;
 
-        for(long id : authorIds){
+        for (long id : authorIds) {
             auth = authorRepository.findById(id);
-            if(auth.isPresent())
+            if (auth.isPresent())
                 auth.get().removeWork(cmc.get());
         }
 
-    }//removeAuthors
+    }// removeAuthors
 
-}//ComicService
+}// ComicService

@@ -32,7 +32,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class)
 @Data @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity @Table(name = "personal_data")
 public class User {

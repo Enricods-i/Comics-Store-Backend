@@ -44,7 +44,10 @@ public class CartController {
     }//get
     
     @PutMapping(path = "/add")
-    public ResponseEntity<?> addComic(@RequestParam(value = "usr") long userId, @RequestParam(value = "cmc") long comicId, @RequestParam(value = "qty") int quantity){
+    public ResponseEntity<?> addComic(  @RequestParam(value = "usr") long userId,
+                                        @RequestParam(value = "cmc") long comicId,
+                                        @RequestParam(value = "qty") int quantity )
+    {
         try{
             cartService.addComic(userId, comicId, quantity);
             return new ResponseEntity<String>("Comic with id \""+ comicId +"\" added succesul!", HttpStatus.OK);
@@ -58,7 +61,10 @@ public class CartController {
     }//addComic
 
     @PatchMapping(path = "/chqty")
-    public ResponseEntity<?> updateComicQuantity(@RequestParam(value = "usr") long userId, @RequestParam(value = "cmc") long comicId, @RequestParam(value = "qty") int quantity){
+    public ResponseEntity<?> updateComicQuantity(@RequestParam(value = "usr") long userId, 
+                                                @RequestParam(value = "cmc") long comicId,
+                                                @RequestParam(value = "qty") int quantity)
+    {
         try{
             cartService.updateComicQuantity(userId, comicId, quantity);
             return new ResponseEntity<String>("Comic quantity updated succesul!", HttpStatus.OK);
@@ -72,7 +78,9 @@ public class CartController {
     }//updateComicQuantity
 
     @DeleteMapping(path = "/{usr}/delete")
-    public ResponseEntity<?> deleteComic(@PathVariable(value = "usr") long userId, @RequestParam(value = "cmc") long comicId){
+    public ResponseEntity<?> deleteComic(@PathVariable(value = "usr") long userId,
+                                        @RequestParam(value = "cmc") long comicId)
+    {
         try{
             cartService.removeComic(userId, comicId);
             return new ResponseEntity<String>("Comic deleted succesul!", HttpStatus.OK);

@@ -20,10 +20,10 @@ import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -45,11 +45,9 @@ public class Discount {
     @Column(nullable = false)
     private int percentage;
 
-    @DateTimeFormat(pattern = "dd-MM-yyyy")
     @Temporal(TemporalType.DATE) @Column(name = "activation_date", nullable = false)
     private Date activationDate;
 
-    @DateTimeFormat(pattern = "dd-MM-yyyy")
     @Temporal(TemporalType.DATE) @Column(name = "expiration_date", nullable = false)
     private Date expirationDate;
 
@@ -80,9 +78,11 @@ public class Discount {
         this.discountedComics.add(cip);
     }//registerDiscount
 
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @CreationTimestamp @Temporal(TemporalType.TIMESTAMP) @Column(name = "created_at", nullable = false)
     private Date creationDate;
 
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @UpdateTimestamp @Temporal(TemporalType.TIMESTAMP) @Column(name = "modified_at", nullable = false)
     private Date dateOfLastModification;
 

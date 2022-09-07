@@ -1,5 +1,6 @@
 package im.enricods.ComicsStore.services;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -86,9 +87,11 @@ public class CategoryService {
         Category target = ctgr.get();
 
         //unbind bidirectional relations
-        for(Collection c : target.getCollections())
-            c.getCategories().remove(target);
-        target.getCollections().clear();
+        Iterator<Collection> it = target.getCollections().iterator();
+        while(it.hasNext()){
+            it.next().getCategories().remove(target);
+            it.remove();
+        }
 
         categoryRepository.delete(target);
         

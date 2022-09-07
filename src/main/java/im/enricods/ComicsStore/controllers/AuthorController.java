@@ -61,8 +61,8 @@ public class AuthorController {
     @PostMapping(path = "/create")
     public ResponseEntity<?> create(@RequestBody Author author){
         try{
-            authorService.add(author);
-            return new ResponseEntity<String>("Author \""+ author.getName()  +"\" added succesful!", HttpStatus.OK);
+            Author res = authorService.add(author);
+            return new ResponseEntity<Author>(res, HttpStatus.OK);
         }
         catch(ConstraintViolationException e){
             return new ResponseEntity<List<InvalidValue>>(InvalidValue.getAllInvalidValues(e), HttpStatus.BAD_REQUEST);
@@ -75,7 +75,7 @@ public class AuthorController {
     @PutMapping(path = "/update")
     public ResponseEntity<?> update(@RequestBody Author author){
         try{
-            authorService.update(author);
+            authorService.modify(author);
             return new ResponseEntity<String>("Author with name \""+ author.getName()  +"\" updated succesful!", HttpStatus.OK);
         }
         catch(ConstraintViolationException e){

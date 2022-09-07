@@ -18,7 +18,8 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.UpdateTimestamp;
 
-import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -32,7 +33,7 @@ public class Cart {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @JsonIdentityReference(alwaysAsId = true)
+    @JsonIgnore
     @OneToOne(mappedBy = "cart")
     private User user;
 
@@ -48,6 +49,7 @@ public class Cart {
     @Column(nullable = false)
     private int size;
     
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @UpdateTimestamp @Temporal(TemporalType.TIMESTAMP) @Column(name = "modified_at", nullable = false)
     private Date dateOfLastModification;
 

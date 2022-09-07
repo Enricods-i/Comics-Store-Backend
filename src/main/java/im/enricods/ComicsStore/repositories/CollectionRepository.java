@@ -22,12 +22,12 @@ public interface CollectionRepository extends JpaRepository<Collection,Long>{
     
     Page<Collection> findByNameContainingIgnoreCase(String name, Pageable pageable);
 
-    @Query( "SELECT col "+
+    @Query( "SELECT DISTINCT col "+
             "FROM Collection col JOIN col.comics com JOIN com.authors auth "+
             "WHERE auth = :author")
     Page<Collection> findByAuthor(Author author, Pageable pageable);
 
-    @Query( "SELECT col "+
+    @Query( "SELECT DISTINCT col "+
             "FROM Collection col JOIN col.categories cat "+
             "WHERE cat = :category")
     Page<Collection> findByCategory(Category category, Pageable pageable);

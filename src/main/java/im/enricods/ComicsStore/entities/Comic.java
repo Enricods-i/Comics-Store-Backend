@@ -28,42 +28,52 @@ import org.hibernate.annotations.UpdateTimestamp;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-@Data @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@Entity @Table(name = "comic")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class)
+@Data
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@Entity
+@Table(name = "comic")
 public class Comic {
-    
-    @NotNull @Min(0)
+
+    @NotNull
+    @Min(0)
     @EqualsAndHashCode.Include
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @JsonIdentityReference(alwaysAsId = true)
-    @ManyToOne @JoinColumn(name = "collection_id")
+    @ManyToOne
+    @JoinColumn(name = "collection_id")
     private Collection collection;
-    
-    @NotNull @Min(1)
+
+    @NotNull
+    @Min(1)
     @Column(nullable = false)
     private int number;
 
-    @NotNull @Min(0)
+    @NotNull
+    @Min(0)
     @Column(nullable = false)
     private int quantity;
 
     @Min(1)
     private int pages;
 
-    @NotNull @Size(max = 13)
+    @NotNull
+    @Size(max = 13)
     @Column(length = 13, unique = true, nullable = false)
     private String isbn;
 
     @PastOrPresent
-    @Temporal(TemporalType.DATE) @Column(name = "publication_date")
+    @Temporal(TemporalType.DATE)
+    @Column(name = "publication_date")
     private Date publicationDate;
 
     @Size(max = 200)
@@ -71,34 +81,34 @@ public class Comic {
     private String description;
 
     @JsonIgnore
-    @Version 
+    @Version
     private long version;
 
     @JsonIdentityReference
     @ManyToMany
-    @JoinTable(name = "authors",
-        joinColumns = {@JoinColumn(name = "comic_id")},
-        inverseJoinColumns = {@JoinColumn(name = "author_id")}
-    )
+    @JoinTable(name = "authors", joinColumns = { @JoinColumn(name = "comic_id") }, inverseJoinColumns = {
+            @JoinColumn(name = "author_id") })
     private Set<Author> authors;
 
     @JsonIgnore
     @ManyToMany
-    @JoinTable(
-        name = "promotion",
-        joinColumns = @JoinColumn(name = "comic_id"),
-        inverseJoinColumns = @JoinColumn(name = "discount_id")
-    )
+    @JoinTable(name = "promotion", joinColumns = @JoinColumn(name = "comic_id"), inverseJoinColumns = @JoinColumn(name = "discount_id"))
     private Set<Discount> discounts;
 
     @JsonIgnore
     @OneToMany(mappedBy = "comic")
     private Set<ComicInPurchase> comicsSold;
 
-    @CreationTimestamp @Temporal(TemporalType.TIMESTAMP) @Column(name = "created_at", nullable = false)
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @CreationTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "created_at", nullable = false)
     private Date creationDate;
 
-    @UpdateTimestamp @Temporal(TemporalType.TIMESTAMP) @Column(name = "modified_at", nullable = false)
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @UpdateTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "modified_at", nullable = false)
     private Date dateOfLastModification;
 
-}//Comic
+}// Comic

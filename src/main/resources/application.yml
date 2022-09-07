@@ -16,7 +16,7 @@ spring:
 #                   issuer-uri: https://localhost:433/auth/realms/comicsstorerealm/
     jpa:
         database: POSTGRESQL
-        show-sql: true
+        show-sql: false
         properties:
             hibernate:
                 ddl-auto: validate

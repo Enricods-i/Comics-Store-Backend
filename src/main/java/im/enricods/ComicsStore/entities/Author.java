@@ -22,6 +22,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import lombok.Data;
@@ -38,7 +39,7 @@ public class Author {
     private long id;
 
     @NotNull @Size(min = 1, max = 20)
-    @Column(length = 20)
+    @Column(length = 20, unique = true)
     private String name;
 
     @Size(max = 1000)
@@ -63,9 +64,11 @@ public class Author {
     @Version
     private long version;
     
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @CreationTimestamp @Temporal(TemporalType.TIMESTAMP) @Column(name = "created_at", nullable = false)
     private Date creationDate;
 
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @UpdateTimestamp @Temporal(TemporalType.TIMESTAMP) @Column(name = "modified_at", nullable = false)
     private Date dateOfLastModification;
 

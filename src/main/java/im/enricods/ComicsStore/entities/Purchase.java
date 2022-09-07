@@ -21,6 +21,7 @@ import javax.validation.constraints.PositiveOrZero;
 import org.hibernate.annotations.CreationTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -36,7 +37,12 @@ public class Purchase {
 
     @JsonIdentityReference
     @ManyToOne @JoinColumn(name = "user_id")
-    private User buyer; 
+    private User buyer;
+
+    public void bindBuyer(User usr){
+        this.buyer = usr;
+        usr.getPurchases().add(this);
+    }
 
     @NotNull @PositiveOrZero
     @Column(nullable = false)
@@ -45,6 +51,7 @@ public class Purchase {
     @OneToMany(mappedBy = "purchase")
     private Set<ComicInPurchase> purchasedComics;
 
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @CreationTimestamp @Temporal(TemporalType.TIMESTAMP) @Column(name = "created_at", nullable = false)
     private Date purchaseTime;
 

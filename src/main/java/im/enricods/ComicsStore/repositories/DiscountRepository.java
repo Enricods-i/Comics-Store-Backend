@@ -14,6 +14,8 @@ import im.enricods.ComicsStore.entities.Discount;
 @Repository
 public interface DiscountRepository extends JpaRepository<Discount,Long>{
 
+	boolean existByName(String name);
+
 	@Query( "SELECT disc "+
 			"FROM Discount disc JOIN disc.comicsInPromotion c "+
 			"WHERE c = :comic")
@@ -28,9 +30,9 @@ public interface DiscountRepository extends JpaRepository<Discount,Long>{
 
 	List<Discount> findByActivationDate(Date activationDate);
 
-	@Query(	"SELECT CASE WHEN COUNT(cip)>0 THEN true ELSE false END "+
+	/* @Query(	"SELECT CASE WHEN COUNT(cip)>0 THEN true ELSE false END "+
 			"FROM Discount disc JOIN disc.discountedComics cip "+
 			"WHERE disc = :discount")
-	boolean hasBeenUsed(Discount discount);
+	boolean hasBeenUsed(Discount discount); */
 
 }//Discount
