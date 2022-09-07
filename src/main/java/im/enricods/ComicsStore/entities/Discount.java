@@ -41,7 +41,7 @@ public class Discount {
     @Column(length = 30)
     private String name;
 
-    @NotNull @Min(1) @Max(100)
+    @NotNull @Min(1) @Max(99)
     @Column(nullable = false)
     private int percentage;
 
