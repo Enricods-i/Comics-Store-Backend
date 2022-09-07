@@ -114,6 +114,7 @@ public class DiscountService {
         }
         else{
 
+            discount.setVersion(target.getVersion());
             discount.setCreationDate(target.getCreationDate());
             //merge
             return discountRepository.save(discount);

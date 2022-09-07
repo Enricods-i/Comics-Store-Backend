@@ -93,6 +93,7 @@ public class AuthorService {
         if(auth.isEmpty())
             throw new IllegalArgumentException("Author "+author.getId()+" not found!");
         
+        author.setVersion(auth.get().getVersion());
         author.setCreationDate(auth.get().getCreationDate());
 
         //merge

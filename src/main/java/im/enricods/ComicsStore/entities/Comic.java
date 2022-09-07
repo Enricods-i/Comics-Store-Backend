@@ -24,7 +24,6 @@ import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
@@ -44,7 +43,7 @@ public class Comic {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @JsonIdentityReference
+    @JsonIdentityReference(alwaysAsId = true)
     @ManyToOne @JoinColumn(name = "collection_id")
     private Collection collection;
     
@@ -64,7 +63,6 @@ public class Comic {
     private String isbn;
 
     @PastOrPresent
-    @DateTimeFormat(pattern = "dd-MM-yyyy")
     @Temporal(TemporalType.DATE) @Column(name = "publication_date")
     private Date publicationDate;
 
@@ -76,7 +74,7 @@ public class Comic {
     @Version 
     private long version;
 
-    @JsonIdentityReference(alwaysAsId = true)
+    @JsonIdentityReference
     @ManyToMany
     @JoinTable(name = "authors",
         joinColumns = {@JoinColumn(name = "comic_id")},

@@ -119,15 +119,15 @@ public class ComicService {
             throw new IllegalArgumentException("Comic "+comic.getId()+" not found!");
 
         //verify that if a Comic with the specified ISBN exists then it and the Comic specified must be the same
-        Optional<Comic> cmc2 = comicRepository.findByIsbn(comic.getIsbn());
-        if( cmc2.isPresent()  &&  !cmc.get().equals(cmc2.get())  )
+        if( !cmc.get().getIsbn().equals(comic.getIsbn())  &&  comicRepository.findByIsbn(comic.getIsbn()).isPresent()  )
             throw new IllegalArgumentException("There is already a Comic with ISBN \""+comic.getIsbn()+"\" !");
         
         //verify that a Comic with specified Number doesn't already exist in the Collection
-        if( comicRepository.findByCollectionAndNumber( cmc.get().getCollection(), comic.getNumber() ).isPresent())
+        if( cmc.get().getNumber()!=comic.getNumber() && comicRepository.findByCollectionAndNumber( cmc.get().getCollection(), comic.getNumber() ).isPresent())
             throw new IllegalArgumentException("A Comic with number "+cmc.get().getNumber()+" already exists in its Collection!");
 
-        //can't change Collection or CreationDate or dateOfLastModification or Version field
+        //can't change Collection or CreationDate
+        comic.setVersion(cmc.get().getVersion());
         comic.setCollection(cmc.get().getCollection());
         comic.setCreationDate(cmc.get().getCreationDate());
 

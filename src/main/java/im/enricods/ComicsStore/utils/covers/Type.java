@@ -2,7 +2,7 @@ package im.enricods.ComicsStore.utils.covers;
 
 public enum Type {
     COLLECTION("coll_"),
-    COMIC("comc_"),
+    COMIC("cmc_"),
     AUTHOR("auth_");
 
     private final String label;
