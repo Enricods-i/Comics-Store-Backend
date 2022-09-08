@@ -8,6 +8,7 @@ import javax.validation.ConstraintViolationException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mapping.PropertyReferenceException;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -92,7 +93,7 @@ public class DiscountController {
 
     @PatchMapping(path = "/chact/{id}")
     public ResponseEntity<?> chact(@PathVariable(value = "id") long discountId,
-            @RequestParam(value = "d") Date newActivationDate) {
+            @RequestParam(value = "d") @DateTimeFormat(pattern = "yyyy-MM-dd") Date newActivationDate) {
         try {
             discountService.changeActivationDate(discountId, newActivationDate);
             return new ResponseEntity<String>("Activation Date of Discount " + discountId
@@ -106,7 +107,7 @@ public class DiscountController {
 
     @PatchMapping(path = "/chexp/{id}")
     public ResponseEntity<?> chexp(@PathVariable(value = "id") long discountId,
-            @RequestParam(value = "d") Date newExpirationDate) {
+            @RequestParam(value = "d") @DateTimeFormat(pattern = "yyyy-MM-dd") Date newExpirationDate) {
         try {
             discountService.changeExpirationDate(discountId, newExpirationDate);
             return new ResponseEntity<String>("Expiration Date of Discount " + discountId

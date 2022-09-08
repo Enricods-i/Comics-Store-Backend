@@ -14,7 +14,7 @@ import im.enricods.ComicsStore.entities.Discount;
 @Repository
 public interface DiscountRepository extends JpaRepository<Discount, Long> {
 
-	boolean existByName(String name);
+	boolean existsByName(String name);
 
 	@Query("SELECT disc " +
 			"FROM Discount disc JOIN disc.comicsInPromotion c " +
@@ -24,7 +24,7 @@ public interface DiscountRepository extends JpaRepository<Discount, Long> {
 	List<Discount> findByExpirationDateGreaterThan(Date date);
 
 	@Query("SELECT cmc " +
-			"FROM Discount disc JOIN disc.comicsInPromotions cmc " +
+			"FROM Discount disc JOIN disc.comicsInPromotion cmc " +
 			"WHERE :from < disc.expirationDate " +
 			"AND :to > disc.activationDate")
 	List<Comic> findComicsDiscountedInPeriod(Date from, Date to);

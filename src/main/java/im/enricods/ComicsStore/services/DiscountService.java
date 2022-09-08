@@ -63,7 +63,7 @@ public class DiscountService {
     public Discount add(@Valid Discount discount) {
 
         // verify that a discount with the same name does not exist
-        if (discountRepository.existByName(discount.getName()))
+        if (discountRepository.existsByName(discount.getName()))
             throw new IllegalArgumentException("Discount named \"" + discount.getName() + "\" already exists.");
 
         // verify that discount's ActivationDate is previous discount's ExpirationDate
@@ -235,7 +235,7 @@ public class DiscountService {
                             + ": discount is already expired.");
 
         // verify that the discount is active
-        if (target.getActivationDate().compareTo(new Date()) < 0)
+        if (target.getActivationDate().compareTo(new Date()) >= 0)
             throw new IllegalArgumentException(
                     "Failed to finish discount " + discountId
                             + ": discount is not yet active.");

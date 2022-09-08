@@ -34,7 +34,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class)
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
