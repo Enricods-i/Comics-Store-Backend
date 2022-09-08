@@ -29,16 +29,21 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "name")
-@Data @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@Entity @Table(name = "author")
+@Data
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@Entity
+@Table(name = "author")
 public class Author {
 
-    @NotNull @Min(0)
+    @NotNull
+    @Min(0)
     @EqualsAndHashCode.Include
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @NotNull @Size(min = 1, max = 20)
+    @NotNull
+    @Size(min = 1, max = 20)
     @Column(length = 20, unique = true)
     private String name;
 
@@ -50,12 +55,12 @@ public class Author {
     @ManyToMany(mappedBy = "authors")
     private Set<Comic> works;
 
-    public void addWork(Comic comic){
+    public void addWork(Comic comic) {
         works.add(comic);
         comic.getAuthors().add(this);
     }
 
-    public void removeWork(Comic comic){
+    public void removeWork(Comic comic) {
         works.remove(comic);
         comic.getAuthors().remove(this);
     }
@@ -63,13 +68,17 @@ public class Author {
     @JsonIgnore
     @Version
     private long version;
-    
+
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    @CreationTimestamp @Temporal(TemporalType.TIMESTAMP) @Column(name = "created_at", nullable = false)
+    @CreationTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "created_at", nullable = false)
     private Date creationDate;
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    @UpdateTimestamp @Temporal(TemporalType.TIMESTAMP) @Column(name = "modified_at", nullable = false)
+    @UpdateTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "modified_at", nullable = false)
     private Date dateOfLastModification;
 
-}//Author
+}// Author
