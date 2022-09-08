@@ -181,7 +181,7 @@ public class DiscountService {
     /*
      * Change expiration date of the Discount with id discountId if this Discount
      * exists
-     * and if it is not already active
+     * and if it is not already expired
      * and if the Discount has not been applied to any Comics
      * and if the activation date of the discount is previous to the new expiration
      */
@@ -194,11 +194,11 @@ public class DiscountService {
 
         Discount target = disc.get();
 
-        // verify that the discount is not yet active
-        if (target.getActivationDate().compareTo(new Date()) < 0)
+        // verify that the discount is not yet expired
+        if (target.getExpirationDate().compareTo(new Date()) < 0)
             throw new IllegalArgumentException(
                     "Failed to change expiration date of discount " + discountId
-                            + ": discount is active or already expired.");
+                            + ": discount is already expired.");
 
         // verifiy that the discount has not been applied to comics
         if (!target.getComicsInPromotion().isEmpty())
@@ -213,15 +213,141 @@ public class DiscountService {
 
     }// changeExpirationDate
 
-    public void finish(@Min(0) long discountId){
+    /*
+     * Finish (immediately) the discount with id discountId
+     * if this discount exists
+     * and if it is not already expired
+     * and if it is currently active
+     */
+    public void finish(@Min(0) long discountId) {
+
+        // verify that discount exists
+        Optional<Discount> disc = discountRepository.findById(discountId);
+        if (disc.isEmpty())
+            throw new IllegalArgumentException("Discount " + discountId + " not found.");
+
+        Discount target = disc.get();
+
+        // verify that the discount is not yet expired
+        if (target.getExpirationDate().compareTo(new Date()) < 0)
+            throw new IllegalArgumentException(
+                    "Failed to change expiration date of discount " + discountId
+                            + ": discount is already expired.");
+
+        // verify that the discount is active
+        if (target.getActivationDate().compareTo(new Date()) < 0)
+            throw new IllegalArgumentException(
+                    "Failed to finish discount " + discountId
+                            + ": discount is not yet active.");
+
+        target.setExpirationDate(new Date());
 
     }// finish
 
-    public void applyDiscountToComics(@Min(0) long discountId, @NotEmpty Set< @Min(0)Long> comicIds){
+    /*
+     * Apply the Discount with id discountId to Comics with id specified by comicIds
+     * if the Discount exists
+     * and if the Discount is not already active (or worse, already expired)
+     * and if the Comics exists
+     * and if each Comic is not already discounted in the interval delimited by
+     * Discount's activation date and Discount's expiration date
+     */
+    public void applyDiscountToComics(@Min(0) long discountId, @NotEmpty Set<@Min(0) @NotNull Long> comicIds) {
+
+        // verify that discount exists
+        Optional<Discount> disc = discountRepository.findById(discountId);
+        if (disc.isEmpty())
+            throw new IllegalArgumentException("Discount " + discountId + " not found.");
+
+        Discount target = disc.get();
+
+        // verify that the discount is not yet active
+        if (target.getActivationDate().compareTo(new Date()) < 0)
+            throw new IllegalArgumentException(
+                    "Failed to apply discount " + discountId
+                            + ": discount is active or already expired.");
+
+        List<Comic> comicsAlreadyDiscountedInPeriod = discountRepository
+                .findComicsDiscountedInPeriod(target.getActivationDate(), target.getExpirationDate());
+
+        Set<Comic> comicsToDiscount = new HashSet<>();
+        StringBuilder problemsEncountered = new StringBuilder();
+
+        Optional<Comic> cmc = null;
+        for (Long id : comicIds) {
+            cmc = comicRepository.findById(id);
+            if (cmc.isEmpty()) {
+                problemsEncountered.append("Comic " + id + " not found.\n");
+                continue;
+            }
+            if (comicsAlreadyDiscountedInPeriod.contains(cmc.get())) {
+                problemsEncountered
+                        .append("Comic " + id + " is already discounted in the same time interval of this Discount ( "
+                                + disc.get().getActivationDate() + " - " + disc.get().getExpirationDate() + " ).\n");
+                continue;
+            }
+            comicsToDiscount.add(cmc.get());
+        }
+
+        // check if there has been any problems
+        if (problemsEncountered.length() > 0)
+            throw new IllegalArgumentException(problemsEncountered.append("Operation canceled.").toString());
+
+        // bind bidirectional relations with Comic
+        for (Comic comic : comicsToDiscount)
+            target.addPromotion(comic);
 
     }// applyDiscountToComics
 
-    public void removeDiscountFromComics(@Min(0) long discountId, @NotEmpty Set< @Min(0)Long> comicIds){
+    /*
+     * Remove the Comics specified by comicIds from Discount with id discountId
+     * if the Discount exists
+     * and if the Discount is not alredy active (or already expired)
+     * and if the comics exists
+     * and if each comic is curretly discounted by this Discount
+     */
+    public void removeDiscountFromComics(@Min(0) long discountId, @NotEmpty Set<@Min(0) Long> comicIds) {
+
+        // verify that discount exists
+        Optional<Discount> disc = discountRepository.findById(discountId);
+        if (disc.isEmpty())
+            throw new IllegalArgumentException("Discount " + discountId + " not found.");
+
+        Discount target = disc.get();
+
+        // verify that the discount is not yet active
+        if (target.getActivationDate().compareTo(new Date()) < 0)
+            throw new IllegalArgumentException(
+                    "Failed to apply discount " + discountId
+                            + ": discount is active or already expired.");
+        
+        Set<Comic> comicsAlreadyDiscounted = target.getComicsInPromotion();
+
+        Set<Comic> comicsToRemove = new HashSet<>();
+        StringBuilder problemsEncountered = new StringBuilder();
+
+        Optional<Comic> cmc = null;
+        for (Long id : comicIds) {
+            cmc = comicRepository.findById(id);
+            if (cmc.isEmpty()) {
+                problemsEncountered.append("Comic " + id + " not found.\n");
+                continue;
+            }
+            if (!comicsAlreadyDiscounted.contains(cmc.get())) {
+                problemsEncountered
+                        .append("Comic " + id + " is not discounted by Discount "+discountId+".\n");
+                continue;
+            }
+            comicsToRemove.add(cmc.get());
+        }
+
+        // check if there has been any problems
+        if (problemsEncountered.length() > 0)
+            throw new IllegalArgumentException(problemsEncountered.append("Operation canceled.").toString());
+
+        // unbind bidirectional relations with Comic
+        for (Comic comic : comicsToRemove)
+            target.removePromotion(comic);
 
     }// removeDiscountFromComics
 

@@ -1,5 +1,6 @@
 package im.enricods.ComicsStore.controllers;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -14,7 +15,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -27,112 +27,132 @@ import im.enricods.ComicsStore.utils.InvalidValue;
 @RestController
 @RequestMapping(path = "/discounts")
 public class DiscountController {
-    
+
     @Autowired
     private DiscountService discountService;
 
     @GetMapping(path = "/all")
-    public ResponseEntity<?> getAll(@RequestParam(defaultValue = "0") int pageNumber, @RequestParam(defaultValue = "10") int pageSize, @RequestParam(defaultValue = "activationDate") String sortBy){
-        try{
+    public ResponseEntity<?> getAll(@RequestParam(defaultValue = "0") int pageNumber,
+            @RequestParam(defaultValue = "10") int pageSize,
+            @RequestParam(defaultValue = "activationDate") String sortBy) {
+        try {
             List<Discount> result = discountService.getAllDiscounts(pageNumber, pageSize, sortBy);
             return new ResponseEntity<List<Discount>>(result, HttpStatus.OK);
-        }
-        catch(ConstraintViolationException e){
+        } catch (ConstraintViolationException e) {
             return new ResponseEntity<List<InvalidValue>>(InvalidValue.getAllInvalidValues(e), HttpStatus.BAD_REQUEST);
         }
-        //sortBy
-        catch(PropertyReferenceException e){
+        // sortBy
+        catch (PropertyReferenceException e) {
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-    }//getAll
+    }// getAll
 
     @GetMapping(path = "/actives")
-    public List<Discount> getActives(){
+    public List<Discount> getActives() {
         return discountService.getAllActiveDiscounts();
-    }//getActives
+    }// getActives
 
     @PostMapping(path = "/create")
-    public ResponseEntity<?> create(@RequestBody Discount discount){
-        try{
+    public ResponseEntity<?> create(@RequestBody Discount discount) {
+        try {
             Discount result = discountService.add(discount);
-            return new ResponseEntity<Discount>(result,HttpStatus.OK);
-        }
-        catch(ConstraintViolationException e){
-            return new ResponseEntity<List<InvalidValue>>(InvalidValue.getAllInvalidValues(e), HttpStatus.BAD_REQUEST);
-        }
-        catch(IllegalArgumentException e){
-            return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
-    }//create
-
-    @PutMapping(path = "/update")
-    public ResponseEntity<?> update(@RequestBody Discount discount){
-        try{
-            Discount result = discountService.modify(discount);
             return new ResponseEntity<Discount>(result, HttpStatus.OK);
-        }
-        catch(ConstraintViolationException e){
+        } catch (ConstraintViolationException e) {
             return new ResponseEntity<List<InvalidValue>>(InvalidValue.getAllInvalidValues(e), HttpStatus.BAD_REQUEST);
-        }
-        catch(IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-    }//update
+    }// create
 
-    @PatchMapping(path = "/{id}/finish")
-    public ResponseEntity<?> finish(@PathVariable(value = "id") long discountId, @RequestParam(value = "rm", defaultValue = "false") boolean remove){
-        try{
-            discountService.finish(discountId, remove);
-            return new ResponseEntity<String>("Discount "+discountId+" finished successfully!", HttpStatus.OK);
-        }
-        catch(ConstraintViolationException e){
+    @DeleteMapping(path = "/delete/{id}")
+    public ResponseEntity<?> delete(@PathVariable(value = "id") long discountId) {
+        try {
+            discountService.remove(discountId);
+            return new ResponseEntity<String>("Discount " + discountId + " deleted successfully.", HttpStatus.OK);
+        } catch (ConstraintViolationException e) {
             return new ResponseEntity<List<InvalidValue>>(InvalidValue.getAllInvalidValues(e), HttpStatus.BAD_REQUEST);
-        }
-        catch(IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-    }//finish
+    }// delete
 
-    @PatchMapping(path = "/{id}/createPromotions")
-    public ResponseEntity<?> createPromotions(@PathVariable(value = "id") long discountId, @RequestBody Set<Long> comicIds){
-        try{
-            discountService.addPromotions(discountId, comicIds);
-            return new ResponseEntity<String>("Comics is now in discount \""+discountId+"\".",HttpStatus.OK);
-        }
-        catch(ConstraintViolationException e){
+    @PatchMapping(path = "/chper/{id}")
+    public ResponseEntity<?> chper(@PathVariable(value = "id") long discountId,
+            @RequestParam(value = "p") int newPercentage) {
+        try {
+            discountService.changePercentage(discountId, newPercentage);
+            return new ResponseEntity<String>("Percentage of Discount " + discountId
+                    + " updated successfully to the value " + newPercentage + "%.", HttpStatus.OK);
+        } catch (ConstraintViolationException e) {
             return new ResponseEntity<List<InvalidValue>>(InvalidValue.getAllInvalidValues(e), HttpStatus.BAD_REQUEST);
-        }
-        catch(IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-    }//createPromotion
+    }// chper
 
-    @PatchMapping(path = "/{id}/finishPromotions")
-    public ResponseEntity<?> finishPromotions(@PathVariable(value = "id") long discountId, @RequestBody Set<Long> comicIds){
-        try{
-            Discount result = discountService.finishPromotions(discountId, comicIds);
-            return new ResponseEntity<Discount>(result, HttpStatus.OK);
-        }
-        catch(ConstraintViolationException e){
+    @PatchMapping(path = "/chact/{id}")
+    public ResponseEntity<?> chact(@PathVariable(value = "id") long discountId,
+            @RequestParam(value = "d") Date newActivationDate) {
+        try {
+            discountService.changeActivationDate(discountId, newActivationDate);
+            return new ResponseEntity<String>("Activation Date of Discount " + discountId
+                    + " updated successfully to " + newActivationDate + ".", HttpStatus.OK);
+        } catch (ConstraintViolationException e) {
             return new ResponseEntity<List<InvalidValue>>(InvalidValue.getAllInvalidValues(e), HttpStatus.BAD_REQUEST);
-        }
-        catch(IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-    }//finishPromotion
+    }// chact
 
-    @DeleteMapping(path = "/{id}/rmPromotion")
-    public ResponseEntity<?> removePromotion(@PathVariable(value = "id") long discountId, @RequestParam(value = "cmc") long comicId){
-        try{
-            discountService.removePromotion(discountId, comicId);
-            return new ResponseEntity<String>("Promotion [comic:"+comicId+",discount:"+discountId+"] removed.",HttpStatus.OK);
-        }
-        catch(ConstraintViolationException e){
+    @PatchMapping(path = "/chexp/{id}")
+    public ResponseEntity<?> chexp(@PathVariable(value = "id") long discountId,
+            @RequestParam(value = "d") Date newExpirationDate) {
+        try {
+            discountService.changeExpirationDate(discountId, newExpirationDate);
+            return new ResponseEntity<String>("Expiration Date of Discount " + discountId
+                    + " updated successfully to " + newExpirationDate + ".", HttpStatus.OK);
+        } catch (ConstraintViolationException e) {
             return new ResponseEntity<List<InvalidValue>>(InvalidValue.getAllInvalidValues(e), HttpStatus.BAD_REQUEST);
-        }
-        catch(IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-    }//removePromotion
+    }// chact
 
-}//DiscountController
+    @PatchMapping(path = "/finish/{id}")
+    public ResponseEntity<?> finish(@PathVariable(value = "id") long discountId) {
+        try {
+            discountService.finish(discountId);
+            return new ResponseEntity<String>("Discount " + discountId + " finished successfully!", HttpStatus.OK);
+        } catch (ConstraintViolationException e) {
+            return new ResponseEntity<List<InvalidValue>>(InvalidValue.getAllInvalidValues(e), HttpStatus.BAD_REQUEST);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }// finish
+
+    @PatchMapping(path = "/apply/{id}")
+    public ResponseEntity<?> apply(@PathVariable(value = "id") long discountId, @RequestBody Set<Long> comicIds) {
+        try {
+            discountService.applyDiscountToComics(discountId, comicIds);
+            return new ResponseEntity<String>("Discount "+discountId+" applied to comics: "+comicIds, HttpStatus.OK);
+        } catch (ConstraintViolationException e) {
+            return new ResponseEntity<List<InvalidValue>>(InvalidValue.getAllInvalidValues(e), HttpStatus.BAD_REQUEST);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }// apply
+
+    @PatchMapping(path = "/rmcmc/{id}")
+    public ResponseEntity<?> rmcmc(@PathVariable(value = "id") long discountId, @RequestBody Set<Long> comicIds) {
+        try {
+            discountService.removeDiscountFromComics(discountId, comicIds);
+            return new ResponseEntity<String>("Comics: "+comicIds+" removed from discount: "+discountId, HttpStatus.OK);
+        } catch (ConstraintViolationException e) {
+            return new ResponseEntity<List<InvalidValue>>(InvalidValue.getAllInvalidValues(e), HttpStatus.BAD_REQUEST);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }// rmcmc
+    
+
+}// DiscountController
