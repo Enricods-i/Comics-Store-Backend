@@ -14,15 +14,17 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-@Data @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@Entity @Table(name = "cart_content")
+@Data
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@Entity
+@Table(name = "cart_content")
 public class CartContent {
-    
+
     @JsonIgnore
     @EmbeddedId
     @AttributeOverrides({
-        @AttributeOverride(name = "cart", column = @Column(name = "cart_id")),
-        @AttributeOverride(name = "comic", column = @Column(name = "comic_id"))
+            @AttributeOverride(name = "cart", column = @Column(name = "cart_id")),
+            @AttributeOverride(name = "comic", column = @Column(name = "comic_id"))
     })
     private CartContentId id;
 
@@ -39,4 +41,4 @@ public class CartContent {
     @ManyToOne
     private Comic comic;
 
-}//CartContent
+}// CartContent

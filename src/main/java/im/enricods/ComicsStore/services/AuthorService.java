@@ -119,7 +119,8 @@ public class AuthorService {
             cmc = comicRepository.findById(id);
             if (cmc.isEmpty())
                 problemsEncountered.append("Comic " + id + " not found.\n");
-
+            if (target.getWorks().contains(cmc.get()))
+                problemsEncountered.append("Comic "+id+" already belong to the work of the author "+authorId+".\n");
             worksToAdd.add(cmc.get());
         }
 
@@ -139,7 +140,7 @@ public class AuthorService {
         Optional<Author> auth = authorRepository.findById(authorId);
         if (auth.isEmpty())
             throw new IllegalArgumentException("Author " + authorId + " not found!");
-
+        
         Author target = auth.get();
 
         Set<Comic> worksToRemove = new HashSet<>();
@@ -152,7 +153,7 @@ public class AuthorService {
             if (cmc.isEmpty())
                 problemsEncountered.append("Comic " + id + " not found.\n");
             if (!target.getWorks().contains(cmc.get()))
-                problemsEncountered.append("Comic "+id+"does not belong to the work of the author "+authorId);
+                problemsEncountered.append("Comic "+id+" does not belong to the work of the author "+authorId+".\n");
             worksToRemove.add(cmc.get());
         }
 

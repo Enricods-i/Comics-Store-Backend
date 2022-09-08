@@ -9,8 +9,8 @@ import im.enricods.ComicsStore.entities.Cart;
 import im.enricods.ComicsStore.entities.User;
 
 @Repository
-public interface CartRepository extends JpaRepository<Cart,Long>{
-    
+public interface CartRepository extends JpaRepository<Cart, Long> {
+
     Optional<Cart> findByUser(User user);
 
-}//CartRepository
+}// CartRepository

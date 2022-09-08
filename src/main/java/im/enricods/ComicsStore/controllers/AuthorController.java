@@ -76,7 +76,7 @@ public class AuthorController {
     public ResponseEntity<?> update(@RequestBody Author author) {
         try {
             authorService.modify(author);
-            return new ResponseEntity<String>("Author with name \"" + author.getName() + "\" updated succesful!",
+            return new ResponseEntity<String>("Author " + author.getId() + "\" updated succesful!",
                     HttpStatus.OK);
         } catch (ConstraintViolationException e) {
             return new ResponseEntity<List<InvalidValue>>(InvalidValue.getAllInvalidValues(e), HttpStatus.BAD_REQUEST);
@@ -113,7 +113,7 @@ public class AuthorController {
     public ResponseEntity<?> deleteWorks(@PathVariable(value = "id") long authorId, @RequestBody Set<Long> comicIds) {
         try {
             authorService.removeWorks(authorId, comicIds);
-            return new ResponseEntity<String>("Comics added as works to Author " + authorId, HttpStatus.OK);
+            return new ResponseEntity<String>("Comics deleted as works to Author " + authorId, HttpStatus.OK);
         } catch (ConstraintViolationException e) {
             return new ResponseEntity<List<InvalidValue>>(InvalidValue.getAllInvalidValues(e), HttpStatus.BAD_REQUEST);
         } catch (IllegalArgumentException e) {

@@ -1,5 +1,6 @@
 package im.enricods.ComicsStore.services;
 
+import java.util.Iterator;
 import java.util.Optional;
 
 import javax.validation.constraints.Min;
@@ -60,7 +61,7 @@ public class CartService {
             throw new IllegalArgumentException("Comic " + comicId + " not found!");
 
         // verify that the quantity specified is avaiable
-        if (quantity > cmc.get().getQuantity())
+        if (quantity >= cmc.get().getQuantity())
             throw new IllegalArgumentException("Unavaiable quantity for comic " +
                     cmc.get().getNumber() + " in collection " +
                     cmc.get().getCollection().getName() + " !");
@@ -79,14 +80,15 @@ public class CartService {
         if (cart.getContent().contains(comicInCart))
             throw new IllegalArgumentException("Comic " + comicId + " already exists in your cart!");
 
-        cartContentRepository.save(comicInCart);
-
         // bind bidirectional relation
         cart.getContent().add(comicInCart);
+
+        cartContentRepository.save(comicInCart);
+
         // update cart's size
         cart.setSize(cart.getSize() + quantity);
 
-    }// addComicToUsersCart
+    }// addComic
 
     public void removeComic(@NotNull @Min(0) long userId, @NotNull @Min(0) long comicId) {
 
@@ -111,12 +113,35 @@ public class CartService {
         cart.getContent().remove(target.get());
         target.get().setCart(null);
 
-        cartContentRepository.delete(target.get());
-
         // update cart's Size
         cart.setSize(cart.getSize() - target.get().getQuantity());
 
-    }// deleteComicFromUsersCart
+        cartContentRepository.delete(target.get());
+
+    }// removeComic
+
+    public void clear(@Min(0) long userId) {
+
+        // verify that User with userId exists
+        Optional<User> usr = userRepository.findById(userId);
+        if (usr.isEmpty())
+            throw new IllegalArgumentException("User " + userId + " not found!");
+
+        Cart cart = usr.get().getCart();
+
+        CartContent cc = null;
+        Iterator<CartContent> it = cart.getContent().iterator();
+        while (it.hasNext()) {
+            cc = it.next();
+            // unbind bidirectional relation with Cart
+            cc.setCart(null);
+            it.remove();
+            cartContentRepository.delete(cc);
+        }
+
+        cart.setSize(0);
+
+    }// clear
 
     public void updateComicQuantity(@NotNull @Min(0) long userId,
             @NotNull @Min(0) long comicId,
@@ -138,20 +163,22 @@ public class CartService {
         Optional<CartContent> comicInCart = cartContentRepository
                 .findById(new CartContentId(usersCart.getId(), comicId));
         if (comicInCart.isEmpty())
-            throw new IllegalArgumentException("Comic " + comicId + " not found in your cart!");
+            throw new IllegalArgumentException("Comic " + comicId + " not found in your cart.");
 
         // verify that the quantity specified is avaiable
         if (newQuantity > cmc.get().getQuantity())
             throw new IllegalArgumentException("Unavaiable quantity for comic " +
                     cmc.get().getNumber() + " in collection " +
-                    cmc.get().getCollection().getName() + " !");
+                    cmc.get().getCollection().getName() + ".");
 
+        
+        int bias = comicInCart.get().getQuantity() - newQuantity;
+        
         comicInCart.get().setQuantity(newQuantity);
 
         // update the cart's size
-        int bias = usersCart.getSize() - newQuantity;
         usersCart.setSize(usersCart.getSize() - bias);
 
-    }// updateComicsQuantity
+    }// updateComicQuantity
 
 }// CartService

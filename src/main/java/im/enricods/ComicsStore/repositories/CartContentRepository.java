@@ -12,13 +12,13 @@ import im.enricods.ComicsStore.entities.CartContentId;
 import im.enricods.ComicsStore.entities.Comic;
 
 @Repository
-public interface CartContentRepository extends JpaRepository<CartContent, CartContentId>{
-    
+public interface CartContentRepository extends JpaRepository<CartContent, CartContentId> {
+
     List<CartContent> findByCart(Cart cart);
 
-    @Query( "SELECT cc "+
-            "FROM CartContent cc "+
+    @Query("SELECT cc " +
+            "FROM CartContent cc " +
             "WHERE cc.comic = :comic")
     List<CartContent> findByComic(Comic comic);
 
-}//CartContentRepository
+}// CartContentRepository

@@ -22,3 +22,5 @@ insert into author (id, name, biography, version) values (21, 'Frisenda Pasquale
 insert into author (id, name, biography, version) values (22, 'Zerocalcare', 'biography', 1);
 insert into author (id, name, biography, version) values (23, 'Gerry Conway', 'biography', 1);
 insert into author (id, name, biography, version) values (24, 'Gil Kane', 'biography', 1);
+
+select setval('author_id_seq', (select max(id) from author));

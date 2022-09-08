@@ -6,3 +6,5 @@ insert into category (id, name, version) values (5, 'Avventura', 1);
 insert into category (id, name, version) values (6, 'Horror', 1);
 insert into category (id, name, version) values (7, 'Umoristico', 1);
 insert into category (id, name, version) values (8, 'Supereroi', 1);
+
+select setval('category_id_seq', (select max(id) from category));

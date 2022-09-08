@@ -18,3 +18,5 @@ insert into personal_data (id, first_name, last_name, birth_date, cart_id, email
 insert into personal_data (id, first_name, last_name, birth_date, cart_id, email, phone_number, city) values (18, 'Carl', 'Falls', '1993-12-11 17:00:49', 18, 'cfallsh@reuters.com', null, 'Komsomolets');
 insert into personal_data (id, first_name, last_name, birth_date, cart_id, email, phone_number, city) values (19, 'Annie', 'Ryman', '2004-10-20 01:41:40', 19, 'arymani@umn.edu', '442-174-0504', 'Tourcoing');
 insert into personal_data (id, first_name, last_name, birth_date, cart_id, email, phone_number, city) values (20, 'Reinhard', 'Lundy', '2000-08-24 11:42:10', 20, 'rlundyj@wikia.com', '765-742-9617', 'Vernon');
+
+select setval('personal_data_id_seq', (select max(id) from personal_data));

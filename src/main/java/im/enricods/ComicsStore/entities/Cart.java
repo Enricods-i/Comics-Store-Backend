@@ -24,33 +24,40 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-@Data @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@Entity @Table(name = "cart_data")
+@Data
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@Entity
+@Table(name = "cart_data")
 public class Cart {
 
-    @NotNull @Min(0)
+    @NotNull
+    @Min(0)
     @EqualsAndHashCode.Include
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @JsonIgnore
     @OneToOne(mappedBy = "cart")
     private User user;
 
-    public void bindToUser(User user){
+    public void bindToUser(User user) {
         this.setUser(user);
         user.setCart(this);
-    }//bindToUser
+    }// bindToUser
 
     @OneToMany(mappedBy = "cart")
     private Set<CartContent> content;
-    
-    @NotNull @Min(0)
+
+    @NotNull
+    @Min(0)
     @Column(nullable = false)
     private int size;
-    
+
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    @UpdateTimestamp @Temporal(TemporalType.TIMESTAMP) @Column(name = "modified_at", nullable = false)
+    @UpdateTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "modified_at", nullable = false)
     private Date dateOfLastModification;
 
-}//Cart
+}// Cart

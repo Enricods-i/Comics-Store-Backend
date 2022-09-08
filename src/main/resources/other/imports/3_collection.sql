@@ -18,3 +18,5 @@ insert into collection (id, name, price, year_of_release, format_and_binding, co
 insert into collection (id, name, price, year_of_release, format_and_binding, color, description, version) values (18, 'Amazing Spider-Man: The Night Gwen Stacy Died', 2.94, 2017, null, false, 'description', 1);
 insert into collection (id, name, price, year_of_release, format_and_binding, color, description, version) values (19, 'Guerra Civile', 7.56, null, 2016, false, 'description', 1);
 insert into collection (id, name, price, year_of_release, format_and_binding, color, description, version) values (20, 'Daredevil: Born Again', 3.62, 2004, null, true, 'description', 1);
+
+select setval('collection_id_seq', (select max(id) from collection));
