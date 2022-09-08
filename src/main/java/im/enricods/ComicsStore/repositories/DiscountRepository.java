@@ -29,11 +29,4 @@ public interface DiscountRepository extends JpaRepository<Discount, Long> {
 			"AND :to > disc.activationDate")
 	List<Comic> findComicsDiscountedInPeriod(Date from, Date to);
 
-	/*
-	 * @Query( "SELECT CASE WHEN COUNT(cip)>0 THEN true ELSE false END "+
-	 * "FROM Discount disc JOIN disc.discountedComics cip "+
-	 * "WHERE disc = :discount")
-	 * boolean hasBeenUsed(Discount discount);
-	 */
-
-}// Discount
+}// DiscountRepository

@@ -28,27 +28,35 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-@Data @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@Entity @Table(name = "discount")
+@Data
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@Entity
+@Table(name = "discount")
 public class Discount {
-    
-    @NotNull @Min(0)
-    @EqualsAndHashCode.Include  
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+
+    @NotNull
+    @Min(0)
+    @EqualsAndHashCode.Include
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @Size(max = 30)
     @Column(length = 30)
     private String name;
 
-    @NotNull @Min(1) @Max(99)
+    @NotNull
+    @Min(1)
+    @Max(99)
     @Column(nullable = false)
     private int percentage;
 
-    @Temporal(TemporalType.DATE) @Column(name = "activation_date", nullable = false)
+    @Temporal(TemporalType.DATE)
+    @Column(name = "activation_date", nullable = false)
     private Date activationDate;
 
-    @Temporal(TemporalType.DATE) @Column(name = "expiration_date", nullable = false)
+    @Temporal(TemporalType.DATE)
+    @Column(name = "expiration_date", nullable = false)
     private Date expirationDate;
 
     @JsonIgnore
@@ -59,31 +67,35 @@ public class Discount {
     @ManyToMany(mappedBy = "discounts")
     private Set<Comic> comicsInPromotion;
 
-    public void addPromotion(Comic comic){
+    public void addPromotion(Comic comic) {
         comic.getDiscounts().add(this);
         this.comicsInPromotion.add(comic);
-    }//addPromotion
+    }// addPromotion
 
-    public void removePromotion(Comic comic){
+    public void removePromotion(Comic comic) {
         comic.getDiscounts().remove(this);
         this.comicsInPromotion.remove(comic);
-    }//removePromotion
-    
+    }// removePromotion
+
     @JsonIgnore
     @ManyToMany(mappedBy = "discountsApplied")
     private Set<ComicInPurchase> discountedComics;
 
-    public void registerDiscount(ComicInPurchase cip){
+    public void registerDiscount(ComicInPurchase cip) {
         cip.getDiscountsApplied().add(this);
         this.discountedComics.add(cip);
-    }//registerDiscount
+    }// registerDiscount
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    @CreationTimestamp @Temporal(TemporalType.TIMESTAMP) @Column(name = "created_at", nullable = false)
+    @CreationTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "created_at", nullable = false)
     private Date creationDate;
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    @UpdateTimestamp @Temporal(TemporalType.TIMESTAMP) @Column(name = "modified_at", nullable = false)
+    @UpdateTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "modified_at", nullable = false)
     private Date dateOfLastModification;
 
-}//Discount
+}// Discount
