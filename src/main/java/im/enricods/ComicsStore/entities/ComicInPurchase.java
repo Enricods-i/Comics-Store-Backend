@@ -16,41 +16,45 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-@Data @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@Entity @Table(name = "comic_in_purchase")
+@Data
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@Entity
+@Table(name = "comic_in_purchase")
 public class ComicInPurchase {
-    
-    @NotNull @Min(0)
+
+    @NotNull
+    @Min(0)
     @EqualsAndHashCode.Include
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @JsonIgnore
-    @ManyToOne @JoinColumn(name = "purchase_id")
+    @JsonIdentityReference(alwaysAsId = true)
+    @ManyToOne
+    @JoinColumn(name = "purchase_id")
     private Purchase purchase;
 
-    @ManyToOne @JoinColumn(name = "comic_id")
+    @ManyToOne
+    @JoinColumn(name = "comic_id")
     private Comic comic;
 
     @ManyToMany
-    @JoinTable(
-        name = "discount_application",
-        joinColumns = @JoinColumn(name = "comic_in_purchase_id"),
-        inverseJoinColumns = @JoinColumn(name = "discount_id")
-    )
+    @JoinTable(name = "discount_application", joinColumns = @JoinColumn(name = "comic_in_purchase_id"), inverseJoinColumns = @JoinColumn(name = "discount_id"))
     private Set<Discount> discountsApplied;
 
-    @NotNull @PositiveOrZero
+    @NotNull
+    @PositiveOrZero
     @Column(name = "comic_price", nullable = false)
     private float comicPrice;
 
-    @NotNull @Min(1)
+    @NotNull
+    @Min(1)
     @Column(name = "comic_quantity", nullable = false)
     private int quantity;
 
-}//ComicInPurchase
+}// ComicInPurchase

@@ -65,7 +65,7 @@ public class PurchaseService {
         // verify that User specified by userId exists
         Optional<User> usr = userRepository.findById(userId);
         if (usr.isEmpty())
-            throw new IllegalArgumentException("User " + userId + " not found!");
+            throw new IllegalArgumentException("User " + userId + " not found.");
 
         Pageable paging = PageRequest.of(pageNumber, pageSize, Sort.by(sortBy));
         return purchaseRepository.findByBuyer(usr.get(), paging).getContent();
@@ -79,48 +79,59 @@ public class PurchaseService {
         // verify that startDate is previous endDate
         if (startDate.compareTo(endDate) >= 0)
             throw new IllegalArgumentException(
-                    "End date (" + endDate + ") is previous start date (" + startDate + ")!");
+                    "End date (" + endDate + ") is previous start date (" + startDate + ").");
 
         Pageable paging = PageRequest.of(pageNumber, pageSize, Sort.by(sortBy));
-        return purchaseRepository.findByPurchaseTimeBetween(startDate, endDate, paging).getContent();
+        return purchaseRepository.findByCreationDateBetween(startDate, endDate, paging).getContent();
 
     }// getInPeriod
 
     public Purchase add(@Min(0) long userId) {
 
+        /*--------------------------------------------controls-----------------------------------------------------*/
         // verify that User specified by userId exists
         Optional<User> usr = userRepository.findById(userId);
         if (usr.isEmpty())
-            throw new IllegalArgumentException("User " + userId + " not found!");
+            throw new IllegalArgumentException("User " + userId + " not found.");
+
+        Cart userCart = usr.get().getCart();
+
+        // verify that the user's cart is not empty
+        if (userCart.getContent().isEmpty())
+            throw new IllegalArgumentException("Cart of user " + userId + " is empty.");
+
+        // verify that quantity of the comics is avaiable now
+        StringBuilder problemsEncountered = new StringBuilder();
+        for (CartContent cmcInCart : userCart.getContent()) {
+            if (cmcInCart.getComic().getQuantity() < cmcInCart.getQuantity())
+                problemsEncountered.append("Unavaiable quantity for comic " + cmcInCart.getComic().getNumber()
+                        + " in collection " + cmcInCart.getComic().getCollection().getName() + ".\n");
+        }
+
+        // check if there has been any problems
+        if (problemsEncountered.length() > 0)
+            throw new ComicsQuantityUnavaiableException(problemsEncountered.append("Operation canceled.").toString());
+        /*-----------------------------------------------------------------------------------------------------------*/
 
         // create Purchase
         Purchase purchase = new Purchase();
         purchase.setPurchasedComics(new HashSet<ComicInPurchase>());
         purchase.bindBuyer(usr.get());
+        purchase = purchaseRepository.save(purchase);
 
-        // support variables-----------------------
-        float total = 0, 
-            purchasePrice = 0;
-        int updatedQuantity = 0;
+        /*----------------------support variables----------------------*/
+        float total = 0,
+                purchasePrice = 0;
         Comic currentComic = null;
-        // ----------------------------------------
+        /*-------------------------------------------------------------*/
 
-        Cart usersCart = usr.get().getCart();
-
-        if (usersCart.getContent().isEmpty())
-            throw new IllegalArgumentException("Cart of user " + userId + " is empty!");
-
-        /* get content of user's cart for get quantity and calculate effective price of
-        each comic and for calculate the purchase's total price */
-        for (CartContent cmcInCart : usersCart.getContent()) {
+        /*
+         * get content of user's cart for get quantity and calculate effective price of
+         * each comic and for calculate the purchase's total price
+         */
+        for (CartContent cmcInCart : userCart.getContent()) {
 
             currentComic = cmcInCart.getComic();
-
-            // verify that quantity of the comic is avaiable now
-            updatedQuantity = currentComic.getQuantity() - cmcInCart.getQuantity();
-            if (updatedQuantity < 0)
-                throw new ComicsQuantityUnavaiableException("Unavaiable quantity for comic " + currentComic.getNumber()
-                        + " in collection " + currentComic.getCollection().getName() + "!");
 
             // create new comicInPurchase entry
             ComicInPurchase cmcInPurchase = new ComicInPurchase();
@@ -142,9 +153,9 @@ public class PurchaseService {
 
             // set quantity of comic in purchase
             cmcInPurchase.setQuantity(cmcInCart.getQuantity());
-            
+
             // update comic's quantity
-            currentComic.setQuantity(updatedQuantity);
+            currentComic.setQuantity(currentComic.getQuantity() - cmcInCart.getQuantity());
 
             // update total amount
             total += purchasePrice * cmcInCart.getQuantity();
@@ -154,23 +165,22 @@ public class PurchaseService {
             currentComic.getComicsSold().add(cmcInPurchase);
 
             // bind bidirectional relation with Purchase
-            cmcInPurchase.setPurchase(purchase);
-            purchase.getPurchasedComics().add(cmcInPurchase);
+            purchase.addComicInPurchase(cmcInPurchase);
 
             // persist
             comicInPurchaseRepository.save(cmcInPurchase);
         } // for
 
         // clear user's cart
-        cartContentRepository.deleteAll(usersCart.getContent());
-        usersCart.getContent().clear();
-        usersCart.setSize(0);
+        cartContentRepository.deleteAll(userCart.getContent());
+        userCart.getContent().clear();
+        userCart.setSize(0);
 
         // set purchase's total
         purchase.setTotal(total);
 
         // persist
-        return purchaseRepository.save(purchase);
+        return purchase;
 
     }// addPurchase
 

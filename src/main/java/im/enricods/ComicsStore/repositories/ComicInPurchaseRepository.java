@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import im.enricods.ComicsStore.entities.ComicInPurchase;
 
 @Repository
-public interface ComicInPurchaseRepository extends JpaRepository<ComicInPurchase,Long>{
-    
-}//ComicInPurchaseRepository
+public interface ComicInPurchaseRepository extends JpaRepository<ComicInPurchase, Long> {
+
+}// ComicInPurchaseRepository

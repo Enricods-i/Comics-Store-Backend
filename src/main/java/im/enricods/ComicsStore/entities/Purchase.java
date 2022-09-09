@@ -20,39 +20,55 @@ import javax.validation.constraints.PositiveOrZero;
 
 import org.hibernate.annotations.CreationTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-@Data @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@Entity @Table(name = "purchase")
+@Data
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@Entity
+@Table(name = "purchase")
 public class Purchase {
-    
-    @NotNull @Min(0)
+
+    @NotNull
+    @Min(0)
     @EqualsAndHashCode.Include
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @JsonIdentityReference
-    @ManyToOne @JoinColumn(name = "user_id")
+    @ManyToOne
+    @JoinColumn(name = "user_id")
     private User buyer;
 
-    public void bindBuyer(User usr){
+    public void bindBuyer(User usr) {
         this.buyer = usr;
         usr.getPurchases().add(this);
     }
 
-    @NotNull @PositiveOrZero
+    @NotNull
+    @PositiveOrZero
     @Column(nullable = false)
     private float total;
 
     @OneToMany(mappedBy = "purchase")
     private Set<ComicInPurchase> purchasedComics;
 
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    @CreationTimestamp @Temporal(TemporalType.TIMESTAMP) @Column(name = "created_at", nullable = false)
-    private Date purchaseTime;
+    public void addComicInPurchase(ComicInPurchase comicInPurchase){
+        this.purchasedComics.add(comicInPurchase);
+        comicInPurchase.setPurchase(this);
+    }
 
-}//Purchase
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @CreationTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "created_at", nullable = false)
+    private Date creationDate;
+
+}// Purchase

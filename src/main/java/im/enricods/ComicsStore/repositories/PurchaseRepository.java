@@ -11,15 +11,16 @@ import im.enricods.ComicsStore.entities.Purchase;
 import im.enricods.ComicsStore.entities.User;
 
 @Repository
-public interface PurchaseRepository extends JpaRepository<Purchase,Long> {
-    
+public interface PurchaseRepository extends JpaRepository<Purchase, Long> {
+
     Page<Purchase> findByBuyer(User user, Pageable pageable);
 
     /*
-    @Query("select p from Purchase p where p.purchaseTime > :startDate and p.purchaseTime < :endDate and p.buyer = :user")
-    List<Purchase> findByBuyerInPeriod(Date startDate, Date endDate, User user);
-    */
+     * @Query("select p from Purchase p where p.purchaseTime > :startDate and p.purchaseTime < :endDate and p.buyer = :user"
+     * )
+     * List<Purchase> findByBuyerInPeriod(Date startDate, Date endDate, User user);
+     */
 
-    Page<Purchase> findByPurchaseTimeBetween(Date startDate, Date endDate, Pageable pageable);
+    Page<Purchase> findByCreationDateBetween(Date startDate, Date endDate, Pageable pageable);
 
-}//PurchaseRepository
+}// PurchaseRepository

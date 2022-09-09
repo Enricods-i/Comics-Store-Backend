@@ -1,6 +1,5 @@
 package im.enricods.ComicsStore.services;
 
-import java.util.Iterator;
 import java.util.Optional;
 
 import javax.validation.constraints.Min;
@@ -61,7 +60,7 @@ public class CartService {
             throw new IllegalArgumentException("Comic " + comicId + " not found!");
 
         // verify that the quantity specified is avaiable
-        if (quantity >= cmc.get().getQuantity())
+        if (quantity > cmc.get().getQuantity())
             throw new IllegalArgumentException("Unavaiable quantity for comic " +
                     cmc.get().getNumber() + " in collection " +
                     cmc.get().getCollection().getName() + " !");
@@ -129,15 +128,8 @@ public class CartService {
 
         Cart cart = usr.get().getCart();
 
-        CartContent cc = null;
-        Iterator<CartContent> it = cart.getContent().iterator();
-        while (it.hasNext()) {
-            cc = it.next();
-            // unbind bidirectional relation with Cart
-            cc.setCart(null);
-            it.remove();
-            cartContentRepository.delete(cc);
-        }
+        cartContentRepository.deleteAll(cart.getContent());
+        cart.getContent().clear();
 
         cart.setSize(0);
 

@@ -24,80 +24,75 @@ import im.enricods.ComicsStore.utils.exceptions.ComicsQuantityUnavaiableExceptio
 @RestController
 @RequestMapping(path = "/purchases")
 public class PurchaseController {
-    
+
     @Autowired
     private PurchaseService purchaseService;
 
     @GetMapping(path = "/all")
-    public ResponseEntity<?> showAll(@RequestParam(defaultValue = "0") int pageNumber, @RequestParam(defaultValue = "10") int pageSize, @RequestParam(defaultValue = "purchaseTime") String sortBy){
-        try{
+    public ResponseEntity<?> showAll(@RequestParam(defaultValue = "0") int pageNumber,
+            @RequestParam(defaultValue = "10") int pageSize,
+            @RequestParam(defaultValue = "creationDate") String sortBy) {
+        try {
             List<Purchase> result = purchaseService.getAll(pageNumber, pageSize, sortBy);
             return new ResponseEntity<List<Purchase>>(result, HttpStatus.OK);
-        }
-        catch(ConstraintViolationException e){
+        } catch (ConstraintViolationException e) {
             return new ResponseEntity<List<InvalidValue>>(InvalidValue.getAllInvalidValues(e), HttpStatus.BAD_REQUEST);
         }
-        //sortBy
-        catch(PropertyReferenceException e){
+        // sortBy
+        catch (PropertyReferenceException e) {
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-    }//showAll
+    }// showAll
 
     @GetMapping(path = "/byUser")
-    public ResponseEntity<?> showByUser(@RequestParam(value = "usr") long userId, @RequestParam(defaultValue = "0") int pageNumber, @RequestParam(defaultValue = "10") int pageSize, @RequestParam(defaultValue = "purchaseTime") String sortBy){
-        try{
+    public ResponseEntity<?> showByUser(@RequestParam(value = "usr") long userId,
+            @RequestParam(defaultValue = "0") int pageNumber, @RequestParam(defaultValue = "10") int pageSize,
+            @RequestParam(defaultValue = "creationDate") String sortBy) {
+        try {
             List<Purchase> result = purchaseService.getByUser(userId, pageNumber, pageSize, sortBy);
             return new ResponseEntity<List<Purchase>>(result, HttpStatus.OK);
-        }
-        catch(ConstraintViolationException e){
+        } catch (ConstraintViolationException e) {
             return new ResponseEntity<List<InvalidValue>>(InvalidValue.getAllInvalidValues(e), HttpStatus.BAD_REQUEST);
-        }
-        catch(IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-        //sortBy
-        catch(PropertyReferenceException e){
+        // sortBy
+        catch (PropertyReferenceException e) {
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-    }//showByUser
+    }// showByUser
 
     @GetMapping(path = "/inPeriod")
-    public ResponseEntity<?> showInPeriod(  @RequestParam(value = "start") @DateTimeFormat(pattern = "dd-MM-yyyy") Date startDate,
-                                            @RequestParam(value = "end") @DateTimeFormat(pattern = "dd-MM-yyyy") Date endDate,
-                                            @RequestParam(defaultValue = "0") int pageNumber, 
-                                            @RequestParam(defaultValue = "10") int pageSize, 
-                                            @RequestParam(defaultValue = "purchaseTime") String sortBy)
-    {
-        try{
+    public ResponseEntity<?> showInPeriod(
+            @RequestParam(value = "start") @DateTimeFormat(pattern = "dd-MM-yyyy") Date startDate,
+            @RequestParam(value = "end") @DateTimeFormat(pattern = "dd-MM-yyyy") Date endDate,
+            @RequestParam(defaultValue = "0") int pageNumber,
+            @RequestParam(defaultValue = "10") int pageSize,
+            @RequestParam(defaultValue = "creationDate") String sortBy) {
+        try {
             List<Purchase> result = purchaseService.getInPeriod(startDate, endDate, pageNumber, pageSize, sortBy);
             return new ResponseEntity<List<Purchase>>(result, HttpStatus.OK);
-        }
-        catch(ConstraintViolationException e){
+        } catch (ConstraintViolationException e) {
             return new ResponseEntity<List<InvalidValue>>(InvalidValue.getAllInvalidValues(e), HttpStatus.BAD_REQUEST);
-        }
-        catch(IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (PropertyReferenceException e) {
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-        catch(PropertyReferenceException e){
-            return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
-    }//showInPeriod
+    }// showInPeriod
 
     @PostMapping(path = "/create")
-    public ResponseEntity<?> create(@RequestParam(value = "usr") long userId){
-        try{
+    public ResponseEntity<?> create(@RequestParam(value = "usr") long userId) {
+        try {
             Purchase result = purchaseService.add(userId);
             return new ResponseEntity<Purchase>(result, HttpStatus.OK);
-        }
-        catch(ConstraintViolationException e){
+        } catch (ConstraintViolationException e) {
             return new ResponseEntity<List<InvalidValue>>(InvalidValue.getAllInvalidValues(e), HttpStatus.BAD_REQUEST);
-        }
-        catch(IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (ComicsQuantityUnavaiableException e) {
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-        catch(ComicsQuantityUnavaiableException e){
-            return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
-    }//create
+    }// create
 
-}//PurchaseController
+}// PurchaseController
