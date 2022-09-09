@@ -1,6 +1,7 @@
 package im.enricods.ComicsStore.services;
 
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
@@ -65,7 +66,7 @@ public class CollectionService {
         // verify that Category specified by categoryId exists
         Optional<Category> ctgr = categoryRepository.findById(categoryId);
         if (ctgr.isEmpty())
-            throw new IllegalArgumentException("Category " + categoryId + " not found!");
+            throw new IllegalArgumentException("Category " + categoryId + " not found.");
 
         Pageable paging = PageRequest.of(pageNumber, pageSize, Sort.by(sortBy));
         Page<Collection> pagedResult = collectionRepository.findByCategory(ctgr.get(), paging);
@@ -82,7 +83,7 @@ public class CollectionService {
         // verify that Author specified by authorId exists
         Optional<Author> auth = authorRepository.findById(authorId);
         if (auth.isEmpty())
-            throw new IllegalArgumentException("Author " + authorId + " not found!");
+            throw new IllegalArgumentException("Author " + authorId + " not found.");
 
         Pageable paging = PageRequest.of(pageNumber, pageSize, Sort.by(sortBy));
         Page<Collection> pagedResult = collectionRepository.findByAuthor(auth.get(), paging);
@@ -98,26 +99,32 @@ public class CollectionService {
             @Min(0) int pageSize,
             String sortBy) {
 
-        if ((name == null && categoryId == null) ||
-                (name == null && authorId == null) ||
-                (categoryId == null && authorId == null))
-            throw new IllegalArgumentException("Too many parameter are null");
+        // verify that at least two fields have been specified
+        int count = 0;
+        if (name == null)
+            count++;
+        if (categoryId == null)
+            count++;
+        if (authorId == null)
+            count++;
+        if (count >= 2)
+            throw new IllegalArgumentException("Too many parameter are null.");
 
+        // verify that Author specified by authorId exists
         Author author = null;
         if (authorId != null) {
-            // verify that Author specified by authorId exists
             Optional<Author> auth = authorRepository.findById(authorId);
             if (auth.isEmpty())
-                throw new IllegalArgumentException("Author " + authorId + " not found!");
+                throw new IllegalArgumentException("Author " + authorId + " not found.");
             author = auth.get();
         }
 
+        // verify that Category specified by categoryId exists
         Category category = null;
         if (categoryId != null) {
-            // verify that Category specified by categoryId exists
             Optional<Category> ctgr = categoryRepository.findById(categoryId);
             if (ctgr.isEmpty())
-                throw new IllegalArgumentException("Category " + categoryId + " not found!");
+                throw new IllegalArgumentException("Category " + categoryId + " not found.");
             category = ctgr.get();
         }
 
@@ -131,7 +138,7 @@ public class CollectionService {
 
         // verify that Collection specified doesn't already exists
         if (collectionRepository.existsByName(collection.getName()))
-            throw new IllegalArgumentException("Collection with name \"" + collection.getName() + "\" already exists!");
+            throw new IllegalArgumentException("Collection with name \"" + collection.getName() + "\" already exists.");
 
         return collectionRepository.save(collection);
 
@@ -142,17 +149,15 @@ public class CollectionService {
         // verify that Collection specified already exists
         Optional<Collection> c1 = collectionRepository.findById(collection.getId());
         if (c1.isEmpty())
-            throw new IllegalArgumentException("Collection with id " + collection.getId() + " not found!");
+            throw new IllegalArgumentException("Collection " + collection.getId() + " not found.");
 
         Collection target = c1.get();
 
-        // verify that a Collection with the name specified doesn't already exist
-        Optional<Collection> c2 = collectionRepository.findByName(collection.getName());
-        if (c2.isPresent() && !c2.get().equals(target))
+        // verify that a Collection with the new name specified doesn't already exist
+        if (!collection.getName().equals(target.getName()) && collectionRepository.existsByName(collection.getName()))
             throw new IllegalArgumentException(
-                    "A Collection with name \"" + collection.getName() + "\" already exists");
+                    "A Collection with name \"" + collection.getName() + "\" already exists.");
 
-        // client can't modify this parameters
         collection.setVersion(target.getVersion());
         collection.setCreationDate(target.getCreationDate());
 
@@ -162,43 +167,43 @@ public class CollectionService {
     }// modify
 
     @Transactional(readOnly = true)
-    public void chCov(@Min(0) long collectionId, MultipartFile img) throws IOException {
+    public void changeCover(@Min(0) long collectionId, MultipartFile img) throws IOException {
 
         // verify that Collection specified already exists
         if (!collectionRepository.existsById(collectionId))
-            throw new IllegalArgumentException("Collection " + collectionId + " not found!");
+            throw new IllegalArgumentException("Collection " + collectionId + " not found.");
 
         Cover.save(Type.COLLECTION.getLabel() + collectionId, img);
 
-    }// chCov
+    }// changeCover
 
     @Transactional(readOnly = true)
-    public void rmCov(@Min(0) long collectionId) {
+    public void removeCover(@Min(0) long collectionId) {
 
         // verify that Collection specified already exists
         if (!collectionRepository.existsById(collectionId))
-            throw new IllegalArgumentException("Collection " + collectionId + " not found!");
+            throw new IllegalArgumentException("Collection " + collectionId + " not found.");
 
         Cover.remove(Type.COLLECTION.getLabel() + collectionId);
 
-    }// rmCov
+    }// removeCover
 
-    // Only an empty Collection can be deleted
     public void remove(@Min(0) long collectionId) {
 
         // verify that Collection specified already exists
         Optional<Collection> cllctn = collectionRepository.findById(collectionId);
         if (cllctn.isEmpty())
-            throw new IllegalArgumentException("Collection " + collectionId + " not found!");
+            throw new IllegalArgumentException("Collection " + collectionId + " not found.");
 
         Collection target = cllctn.get();
 
+        // Only an empty Collection can be removed
         if (!target.getComics().isEmpty())
-            throw new IllegalArgumentException("Collection " + collectionId + " is not empty!");
+            throw new IllegalArgumentException("Collection " + collectionId + " is not empty.");
 
         // unbind bidirectional relations
         Iterator<Category> it = target.getCategories().iterator();
-        while(it.hasNext()){
+        while (it.hasNext()) {
             it.next().getCollections().remove(target);
             it.remove();
         }
@@ -219,12 +224,31 @@ public class CollectionService {
 
         Collection target = cllctn.get();
 
+        Set<Category> categoriesToBind = new HashSet<>();
+        StringBuilder problemsEncountered = new StringBuilder();
+
         Optional<Category> ctgr = null;
         for (Long id : categoryIds) {
             ctgr = categoryRepository.findById(id);
-            if (ctgr.isPresent())
-                ctgr.get().bindCollection(target);
+            if (ctgr.isEmpty()) {
+                problemsEncountered.append("Category " + id + " not found.\n");
+                continue;
+            }
+            if (target.getCategories().contains(ctgr.get())) {
+                problemsEncountered
+                        .append("Category " + id + " already binded to the collection " + collectionId + ".\n");
+                continue;
+            }
+            categoriesToBind.add(ctgr.get());
         }
+
+        // check if there has been any problems
+        if (problemsEncountered.length() > 0)
+            throw new IllegalArgumentException(problemsEncountered.append("Operation canceled.").toString());
+
+        // bind bidirectional relations with Category
+        for (Category category : categoriesToBind)
+            category.bindCollection(target);
 
     }// bindCategories
 
@@ -237,12 +261,30 @@ public class CollectionService {
 
         Collection target = cllctn.get();
 
+        Set<Category> categoriesToUnbind = new HashSet<>();
+        StringBuilder problemsEncountered = new StringBuilder();
+
         Optional<Category> ctgr = null;
         for (Long id : categoryIds) {
             ctgr = categoryRepository.findById(id);
-            if (ctgr.isPresent())
-                ctgr.get().unbindCollection(target);
+            if (ctgr.isEmpty()) {
+                problemsEncountered.append("Category " + id + " not found.\n");
+                continue;
+            }
+            if (!target.getCategories().contains(ctgr.get())) {
+                problemsEncountered.append("Category " + id + " not binded to the collection " + collectionId + ".\n");
+                continue;
+            }
+            categoriesToUnbind.add(ctgr.get());
         }
+
+        // check if there has been any problems
+        if (problemsEncountered.length() > 0)
+            throw new IllegalArgumentException(problemsEncountered.append("Operation canceled.").toString());
+
+        // bind bidirectional relations with Category
+        for (Category category : categoriesToUnbind)
+            category.unbindCollection(target);
 
     }// unbindCategories
 

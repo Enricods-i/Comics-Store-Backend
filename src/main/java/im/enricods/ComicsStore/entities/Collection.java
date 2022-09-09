@@ -27,6 +27,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
@@ -35,20 +36,26 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "name")
-@Data @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@Entity @Table(name = "collection")
+@Data
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@Entity
+@Table(name = "collection")
 public class Collection {
-    
-    @NotNull @Min(0)
+
+    @NotNull
+    @Min(0)
     @EqualsAndHashCode.Include
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @NotNull @Size(min = 1, max = 50)
+    @NotNull
+    @Size(min = 1, max = 50)
     @Column(nullable = false, unique = true, length = 50)
     private String name;
 
-    @NotNull @Positive
+    @NotNull
+    @Positive
     @Column(nullable = false)
     private float price;
 
@@ -60,7 +67,7 @@ public class Collection {
     private String formatAndBinding;
 
     private boolean color;
-   
+
     @Size(max = 1000)
     @Column(length = 1000)
     private String description;
@@ -74,30 +81,32 @@ public class Collection {
     @OrderBy(value = "number asc")
     private List<Comic> comics;
 
-    public void addComic(Comic comic){
+    public void addComic(Comic comic) {
         this.comics.add(comic);
         comic.setCollection(this);
-    }//addComic
+    }// addComic
 
-    public void removeComic(Comic comic){
+    public void removeComic(Comic comic) {
         this.comics.remove(comic);
         comic.setCollection(null);
-    }//rempveComic
+    }// rempveComic
 
+    @JsonIdentityReference
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @ManyToMany
-    @JoinTable(
-        name = "classification",
-        joinColumns = @JoinColumn(name = "collection_id"),
-        inverseJoinColumns = @JoinColumn(name = "category_id")
-    )
+    @JoinTable(name = "classification", joinColumns = @JoinColumn(name = "collection_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
     private Set<Category> categories;
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    @CreationTimestamp @Temporal(TemporalType.TIMESTAMP) @Column(name = "created_at", nullable = false)
+    @CreationTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "created_at", nullable = false)
     private Date creationDate;
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    @UpdateTimestamp @Temporal(TemporalType.TIMESTAMP) @Column(name = "modified_at", nullable = false)
+    @UpdateTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "modified_at", nullable = false)
     private Date dateOfLastModification;
 
-}//Collection
+}// Collection
