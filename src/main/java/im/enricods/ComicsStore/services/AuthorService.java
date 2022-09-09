@@ -117,10 +117,14 @@ public class AuthorService {
         for (long id : comicIds) {
             // verify that a Comic with id exists
             cmc = comicRepository.findById(id);
-            if (cmc.isEmpty())
+            if (cmc.isEmpty()){
                 problemsEncountered.append("Comic " + id + " not found.\n");
-            if (target.getWorks().contains(cmc.get()))
+                continue;
+            }
+            if (target.getWorks().contains(cmc.get())){
                 problemsEncountered.append("Comic "+id+" already belong to the work of the author "+authorId+".\n");
+                continue;
+            }
             worksToAdd.add(cmc.get());
         }
 
@@ -150,10 +154,14 @@ public class AuthorService {
         for (long id : comicIds) {
             // verify that a Comic with id exists
             cmc = comicRepository.findById(id);
-            if (cmc.isEmpty())
+            if (cmc.isEmpty()){
                 problemsEncountered.append("Comic " + id + " not found.\n");
-            if (!target.getWorks().contains(cmc.get()))
+                continue;
+            }
+            if (!target.getWorks().contains(cmc.get())){
                 problemsEncountered.append("Comic "+id+" does not belong to the work of the author "+authorId+".\n");
+                continue;
+            }
             worksToRemove.add(cmc.get());
         }
 
