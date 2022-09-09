@@ -64,7 +64,7 @@ public class Comic {
     private int quantity;
 
     @Min(1)
-    private int pages;
+    private Integer pages;
 
     @NotNull
     @Size(max = 13)
@@ -84,7 +84,8 @@ public class Comic {
     @Version
     private long version;
 
-    @JsonIdentityReference
+    @JsonIdentityReference(alwaysAsId = true)
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @ManyToMany
     @JoinTable(name = "authors", joinColumns = { @JoinColumn(name = "comic_id") }, inverseJoinColumns = {
             @JoinColumn(name = "author_id") })

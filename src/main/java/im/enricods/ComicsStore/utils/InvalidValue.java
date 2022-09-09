@@ -12,17 +12,23 @@ import lombok.Data;
 
 @AllArgsConstructor
 @Data
-public class InvalidValue implements Serializable{
-    
+public class InvalidValue implements Serializable {
+
+    private String field;
     private Object value;
     private String motivation;
 
-    public static List<InvalidValue> getAllInvalidValues(ConstraintViolationException cve){
+    public static List<InvalidValue> getAllInvalidValues(ConstraintViolationException cve) {
         List<InvalidValue> valuesViolated = new LinkedList<>();
-        for(ConstraintViolation<?> cv : cve.getConstraintViolations()){
-            valuesViolated.add(new InvalidValue(cv.getInvalidValue(), cv.getMessage()));
+        String[] pathToField = null;
+        for (ConstraintViolation<?> cv : cve.getConstraintViolations()) {
+            pathToField = cv.getPropertyPath().toString().split("\\.");
+            valuesViolated.add(new InvalidValue(
+                    pathToField[pathToField.length - 1],
+                    cv.getInvalidValue(),
+                    cv.getMessage()));
         }
         return valuesViolated;
-    }//getAllInvalidValues
-    
-}//FieldInvalid
+    }// getAllInvalidValues
+
+}// FieldInvalid
