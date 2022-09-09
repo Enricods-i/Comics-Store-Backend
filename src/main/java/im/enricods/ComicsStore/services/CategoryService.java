@@ -1,5 +1,6 @@
 package im.enricods.ComicsStore.services;
 
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
@@ -24,113 +25,147 @@ import im.enricods.ComicsStore.repositories.CollectionRepository;
 @Transactional
 @Validated
 public class CategoryService {
-    
+
     @Autowired
     private CategoryRepository categoryRepository;
 
     @Autowired
     private CollectionRepository collectionRepository;
 
-
     @Transactional(readOnly = true)
-    public List<Category> getAll(){
+    public List<Category> getAll() {
 
         return categoryRepository.findAll();
 
-    }//showAllCategories
-
+    }// getAll
 
     @Transactional(readOnly = true)
-    public List<Category> getByName(@NotNull @Size(min=3, max=30) String categoryName){
+    public List<Category> getByName(@NotNull @Size(min = 3, max = 30) String categoryName) {
 
         return categoryRepository.findByNameIgnoreCaseContaining(categoryName);
 
-    }//showAllCategories
+    }// getByName
 
+    public Category add(@NotNull @Size(min = 1, max = 30) String categoryName) {
 
-    public void add(@NotNull @Size(min=1, max=30) String categoryName){
+        // verify that Category with the name specified doesn't already exist
+        if (categoryRepository.existsByName(categoryName))
+            throw new IllegalArgumentException("Category with name \"" + categoryName + "\" already exists");
 
-        //verify that Category with the name specified doesn't already exist
-        if(categoryRepository.existsByName(categoryName))
-            throw new IllegalArgumentException("Category with name \""+categoryName+"\" already exists");
-        
         Category c = new Category();
         c.setName(categoryName);
 
-        categoryRepository.save(c);
+        return categoryRepository.save(c);
 
-    }//createCategory
+    }// add
 
+    public void changeName(@NotNull @Min(0) long categoryId, @NotNull @Size(min = 3, max = 30) String newName) {
 
-    public void changeName(@NotNull @Min(0) long categoryId, @NotNull @Size(min=3, max=30) String newName){
-
-        //verify that Category with the id specified already exists
+        // verify that Category with the id specified already exists
         Optional<Category> ctgr = categoryRepository.findById(categoryId);
-        if(ctgr.isEmpty())
-            throw new IllegalArgumentException("Category "+categoryId+" not found!");
-        
-        if(categoryRepository.existsByName(newName))
-            throw new IllegalArgumentException("Category with name \""+newName+"\" already exists!");
-        
+        if (ctgr.isEmpty())
+            throw new IllegalArgumentException("Category " + categoryId + " not found!");
+
+        if (categoryRepository.existsByName(newName))
+            throw new IllegalArgumentException("Category with name \"" + newName + "\" already exists!");
+
         ctgr.get().setName(newName);
-        
-    }//changeCategoryName
 
+    }// changeName
 
-    public void remove(@NotNull @Min(0) long categoryId){
+    public void remove(@NotNull @Min(0) long categoryId) {
 
-        //verify that Category with the id specified already exists
+        // verify that Category with the id specified already exists
         Optional<Category> ctgr = categoryRepository.findById(categoryId);
-        if(ctgr.isEmpty())
-            throw new IllegalArgumentException("Category "+categoryId+" not found!");
-        
+        if (ctgr.isEmpty())
+            throw new IllegalArgumentException("Category " + categoryId + " not found!");
+
         Category target = ctgr.get();
 
-        //unbind bidirectional relations
+        // unbind bidirectional relations with Collection
         Iterator<Collection> it = target.getCollections().iterator();
-        while(it.hasNext()){
+        while (it.hasNext()) {
             it.next().getCategories().remove(target);
             it.remove();
         }
 
         categoryRepository.delete(target);
-        
-    }//deleteCategory
 
+    }// remove
 
-    public void bindCollections(@NotNull @Min(0) long categoryId, @NotEmpty Set<@NotNull @Min(0) Long> collectionIds){
+    public void bindCollections(@NotNull @Min(0) long categoryId, @NotEmpty Set<@NotNull @Min(0) Long> collectionIds) {
 
-        //verify that Category with the id specified already exists
+        // verify that Category with the id specified already exists
         Optional<Category> ctgr = categoryRepository.findById(categoryId);
-        if(ctgr.isEmpty())
-            throw new IllegalArgumentException("Category "+categoryId+" not found!");
+        if (ctgr.isEmpty())
+            throw new IllegalArgumentException("Category " + categoryId + " not found!");
+
+        Category target = ctgr.get();
+
+        Set<Collection> collectionsToBind = new HashSet<>();
+        StringBuilder problemsEncountered = new StringBuilder();
 
         Optional<Collection> cllctn = null;
-        for(Long id : collectionIds){
-            //verify that Collection with current id exists
+        for (Long id : collectionIds) {
+            // verify that Collection with current id exists
             cllctn = collectionRepository.findById(id);
-            if(cllctn.isPresent())
-                ctgr.get().bindCollection(cllctn.get());
+            if (cllctn.isEmpty()){
+                problemsEncountered.append("Collection "+id+" not found.\n");
+                continue;
+            }
+            if (target.getCollections().contains(cllctn.get())){
+                problemsEncountered.append("Collection "+id+" is already binded with category "+categoryId+".\n");
+                continue;
+            }
+            collectionsToBind.add(cllctn.get());
         }
 
-    }//bindCollections
+        // check if there has been any problems
+        if (problemsEncountered.length() > 0)
+            throw new IllegalArgumentException(problemsEncountered.append("Operation canceled.").toString());
 
+        // bind bidirectional relations with Collection
+        for (Collection collection : collectionsToBind)
+            target.bindCollection(collection);
 
-    public void unbindCollections(@NotNull @Min(0) long categoryId, @NotEmpty Set<@NotNull @Min(0) Long> collectionIds){
+    }// bindCollections
 
-        //verify that Category with the id specified already exists
+    public void unbindCollections(@NotNull @Min(0) long categoryId,
+            @NotEmpty Set<@NotNull @Min(0) Long> collectionIds) {
+
+        // verify that Category with the id specified already exists
         Optional<Category> ctgr = categoryRepository.findById(categoryId);
-        if(ctgr.isEmpty())
-            throw new IllegalArgumentException("Category "+categoryId+" not found!");
-        
+        if (ctgr.isEmpty())
+            throw new IllegalArgumentException("Category " + categoryId + " not found!");
+
+        Category target = ctgr.get();
+
+        Set<Collection> collectionsToUnbind = new HashSet<>();
+        StringBuilder problemsEncountered = new StringBuilder();
+
         Optional<Collection> cllctn = null;
-        for(Long id : collectionIds){
-            //verify that Collection with current id exists
+        for (Long id : collectionIds) {
+            // verify that Collection with current id exists
             cllctn = collectionRepository.findById(id);
-             if(cllctn.isPresent())
-                 ctgr.get().unbindCollection(cllctn.get());
+            if (cllctn.isEmpty()){
+                problemsEncountered.append("Collection "+id+" not found.\n");
+                continue;
+            }
+            if (!target.getCollections().contains(cllctn.get())){
+                problemsEncountered.append("Collection "+id+" is not binded with category "+categoryId+".\n");
+                continue;
+            }
+            collectionsToUnbind.add(cllctn.get());
         }
 
-    }//unbindCollections
+        // check if there has been any problems
+        if (problemsEncountered.length() > 0)
+            throw new IllegalArgumentException(problemsEncountered.append("Operation canceled.").toString());
 
-}//CategoryService
+        // bind bidirectional relations with Collection
+        for (Collection collection : collectionsToUnbind)
+            target.unbindCollection(collection);
+
+    }// unbindCollections
+
+}// CategoryService

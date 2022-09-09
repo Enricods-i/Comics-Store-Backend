@@ -29,16 +29,21 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "name")
-@Data @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@Entity @Table(name = "category")
+@Data
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@Entity
+@Table(name = "category")
 public class Category {
-    
-    @NotNull @Min(0)
+
+    @NotNull
+    @Min(0)
     @EqualsAndHashCode.Include
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @NotNull @Size(min = 1, max = 30)
+    @NotNull
+    @Size(min = 1, max = 30)
     @Column(nullable = false, unique = true, length = 30)
     private String name;
 
@@ -50,22 +55,26 @@ public class Category {
     @ManyToMany(mappedBy = "categories")
     private Set<Collection> collections;
 
-    public void bindCollection(Collection collection){
+    public void bindCollection(Collection collection) {
         collection.getCategories().add(this);
         this.getCollections().add(collection);
-    }//bindCollection
+    }// bindCollection
 
-    public void unbindCollection(Collection collection){
+    public void unbindCollection(Collection collection) {
         collection.getCategories().remove(this);
         this.getCollections().remove(collection);
-    }//unbindCollection
+    }// unbindCollection
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    @CreationTimestamp @Temporal(TemporalType.TIMESTAMP) @Column(name = "created_at",nullable = false)
+    @CreationTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "created_at", nullable = false)
     private Date creationDate;
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    @UpdateTimestamp @Temporal(TemporalType.TIMESTAMP) @Column(name = "modified_at", nullable = false)
+    @UpdateTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "modified_at", nullable = false)
     private Date dateOfLastModification;
 
-}//Category
+}// Category

@@ -26,94 +26,87 @@ import im.enricods.ComicsStore.utils.InvalidValue;
 @RestController
 @RequestMapping(path = "/categories")
 public class CategoryController {
-    
+
     @Autowired
     private CategoryService categoryService;
 
     @GetMapping(path = "/v/all")
-    public List<Category> showAll(){
+    public List<Category> showAll() {
         return categoryService.getAll();
-    }//getAll
+    }// getAll
 
     @GetMapping(path = "/v/byName")
-    public ResponseEntity<?> getByName(@RequestParam(value = "name") String categoryName){
+    public ResponseEntity<?> getByName(@RequestParam(value = "name") String categoryName) {
         try {
             List<Category> result = categoryService.getByName(categoryName);
             return new ResponseEntity<List<Category>>(result, HttpStatus.OK);
-        }
-        catch(ConstraintViolationException e){
+        } catch (ConstraintViolationException e) {
             return new ResponseEntity<List<InvalidValue>>(InvalidValue.getAllInvalidValues(e), HttpStatus.BAD_REQUEST);
         }
-    }//getByName
+    }// getByName
 
     @PostMapping(path = "/create")
-    public ResponseEntity<?> create(@RequestParam(value = "name") String categoryName){
-        try{
-            categoryService.add(categoryName);
-            return new ResponseEntity<String>("Category \""+ categoryName +"\" added succesful!", HttpStatus.OK);
-        }
-        catch(ConstraintViolationException e){
+    public ResponseEntity<?> create(@RequestParam(value = "name") String categoryName) {
+        try {
+            Category result = categoryService.add(categoryName);
+            return new ResponseEntity<Category>(result, HttpStatus.OK);
+        } catch (ConstraintViolationException e) {
             return new ResponseEntity<List<InvalidValue>>(InvalidValue.getAllInvalidValues(e), HttpStatus.BAD_REQUEST);
-        }
-        catch(IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-    }//create
+    }// create
 
     @DeleteMapping(path = "/delete/{id}")
-    public ResponseEntity<?> delete(@PathVariable(value = "id") long categoryId){
-        try{
+    public ResponseEntity<?> delete(@PathVariable(value = "id") long categoryId) {
+        try {
             categoryService.remove(categoryId);
-            return new ResponseEntity<String>("Category \""+ categoryId +"\" deleted succesful!", HttpStatus.OK);
-        }
-        catch(ConstraintViolationException e){
+            return new ResponseEntity<String>("Category \"" + categoryId + "\" deleted succesfully.", HttpStatus.OK);
+        } catch (ConstraintViolationException e) {
             return new ResponseEntity<List<InvalidValue>>(InvalidValue.getAllInvalidValues(e), HttpStatus.BAD_REQUEST);
-        }
-        catch(IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-    }//delete
+    }// delete
 
     @PutMapping(path = "/chname/{id}")
-    public ResponseEntity<?> updateName(@PathVariable(value = "id") long categoryId, @RequestParam(value = "name") String newName){
+    public ResponseEntity<?> updateName(@PathVariable(value = "id") long categoryId,
+            @RequestParam(value = "name") String newName) {
         try {
             categoryService.changeName(categoryId, newName);
-            return new ResponseEntity<String>("Category "+categoryId+" renamed successful in \""+newName+"\"", HttpStatus.OK);
-        }
-        catch(ConstraintViolationException e){
+            return new ResponseEntity<String>("Category " + categoryId + " renamed successfully in \"" + newName + "\".",
+                    HttpStatus.OK);
+        } catch (ConstraintViolationException e) {
             return new ResponseEntity<List<InvalidValue>>(InvalidValue.getAllInvalidValues(e), HttpStatus.BAD_REQUEST);
-        }
-        catch(IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-    }//updateName
+    }// updateName
 
     @PatchMapping(path = "/bind/{id}")
-    public ResponseEntity<?> bindCollections(@PathVariable(value = "id") long categoryId, @RequestBody Set<Long> collectionIds){
-        try{
+    public ResponseEntity<?> bindCollections(@PathVariable(value = "id") long categoryId,
+            @RequestBody Set<Long> collectionIds) {
+        try {
             categoryService.bindCollections(categoryId, collectionIds);
-            return new ResponseEntity<String>("Collections bound successful!", HttpStatus.OK);
-        }
-        catch(ConstraintViolationException e){
+            return new ResponseEntity<String>("Collections "+collectionIds+" bound successfully to category "+categoryId+".", HttpStatus.OK);
+        } catch (ConstraintViolationException e) {
             return new ResponseEntity<List<InvalidValue>>(InvalidValue.getAllInvalidValues(e), HttpStatus.BAD_REQUEST);
-        }
-        catch(IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-    }//bindCollections
+    }// bindCollections
 
     @PatchMapping(path = "/unbind/{id}")
-    public ResponseEntity<?> unbindCollections(@PathVariable(value = "id") long categoryId, @RequestBody Set<Long> collectionIds){
-        try{
+    public ResponseEntity<?> unbindCollections(@PathVariable(value = "id") long categoryId,
+            @RequestBody Set<Long> collectionIds) {
+        try {
             categoryService.unbindCollections(categoryId, collectionIds);
-            return new ResponseEntity<String>("Collections unbound successful!", HttpStatus.OK);
-        }
-        catch(ConstraintViolationException e){
+            return new ResponseEntity<String>("Collections "+collectionIds+" unbound successfully to category "+categoryId+".", HttpStatus.OK);
+        } catch (ConstraintViolationException e) {
             return new ResponseEntity<List<InvalidValue>>(InvalidValue.getAllInvalidValues(e), HttpStatus.BAD_REQUEST);
-        }
-        catch(IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-    }//bindCollections
+    }// bindCollections
 
-}//CategoryController
+}// CategoryController

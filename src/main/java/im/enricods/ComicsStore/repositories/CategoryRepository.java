@@ -9,10 +9,10 @@ import org.springframework.stereotype.Repository;
 import im.enricods.ComicsStore.entities.Category;
 
 @Repository
-public interface CategoryRepository extends JpaRepository<Category,Long>{
-    
+public interface CategoryRepository extends JpaRepository<Category, Long> {
+
     boolean existsByName(String name);
 
     List<Category> findByNameIgnoreCaseContaining(@Param("name") String name);
 
-}//CategoryRepository
+}// CategoryRepository
