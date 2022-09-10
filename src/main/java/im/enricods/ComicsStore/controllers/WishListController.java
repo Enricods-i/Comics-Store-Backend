@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import im.enricods.ComicsStore.entities.Comic;
 import im.enricods.ComicsStore.entities.WishList;
 import im.enricods.ComicsStore.services.WishListService;
 import im.enricods.ComicsStore.utils.InvalidValue;
@@ -25,106 +26,118 @@ import im.enricods.ComicsStore.utils.InvalidValue;
 @RestController
 @RequestMapping(path = "/wishLists")
 public class WishListController {
-    
+
     @Autowired
     private WishListService wishListService;
 
     @GetMapping(path = "/v/byOwnerAndName")
-    public ResponseEntity<?> showByOwnerAndName(@RequestParam(value = "usr") long userId, @RequestParam String listName){
-        try{
+    public ResponseEntity<?> showByOwnerAndName(@RequestParam(value = "usr") long userId,
+            @RequestParam String listName) {
+        try {
             List<WishList> result = wishListService.getByOwnerAndName(userId, listName);
             return new ResponseEntity<List<WishList>>(result, HttpStatus.OK);
-        }
-        catch(ConstraintViolationException e){
+        } catch (ConstraintViolationException e) {
             return new ResponseEntity<List<InvalidValue>>(InvalidValue.getAllInvalidValues(e), HttpStatus.BAD_REQUEST);
-        }
-        catch(IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-    }//showByOwnerAndName
+    }// showByOwnerAndName
 
     @GetMapping(path = "/v/allByUser")
-    public ResponseEntity<?> showAllByUser(@RequestParam(value = "usr") long userId){
-        try{
+    public ResponseEntity<?> showAllByUser(@RequestParam(value = "usr") long userId) {
+        try {
             List<WishList> result = wishListService.getAllByUser(userId);
             return new ResponseEntity<List<WishList>>(result, HttpStatus.OK);
-        }
-        catch(ConstraintViolationException e){
+        } catch (ConstraintViolationException e) {
             return new ResponseEntity<List<InvalidValue>>(InvalidValue.getAllInvalidValues(e), HttpStatus.BAD_REQUEST);
-        }
-        catch(IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-    }//showAllByUser
+    }// showAllByUser
 
     @PostMapping(path = "/create")
-    public ResponseEntity<?> create(@RequestParam(value = "usr") long userId, @RequestBody WishList wishList){
-        try{
-            WishList result = wishListService.add(userId, wishList);
+    public ResponseEntity<?> create(@RequestParam(value = "usr") long userId, @RequestParam String name) {
+        try {
+            WishList result = wishListService.add(userId, name);
             return new ResponseEntity<WishList>(result, HttpStatus.OK);
-        }
-        catch(ConstraintViolationException e){
+        } catch (ConstraintViolationException e) {
             return new ResponseEntity<List<InvalidValue>>(InvalidValue.getAllInvalidValues(e), HttpStatus.BAD_REQUEST);
-        }
-        catch(IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-    }//create
+    }// create
 
-    @DeleteMapping(path = "/{id}/delete")
-    public ResponseEntity<?> delete(@RequestParam(value = "usr") long userId, @PathVariable(value = "id") long wishListId){
-        try{
+    @GetMapping(path = "/content/{id}")
+    public ResponseEntity<?> showContent(
+            @PathVariable(value = "id") long wishListId,
+            @RequestParam(value = "usr") long userId,
+            @RequestParam(defaultValue = "0") int pageNumber,
+            @RequestParam(defaultValue = "10") int pageSize,
+            @RequestParam(defaultValue = "name") String sortBy) {
+        try {
+            List<Comic> result = wishListService.getContent(userId, wishListId, pageNumber, pageSize, sortBy);
+            return new ResponseEntity<List<Comic>>(result, HttpStatus.OK);
+        } catch (ConstraintViolationException e) {
+            return new ResponseEntity<List<InvalidValue>>(InvalidValue.getAllInvalidValues(e), HttpStatus.BAD_REQUEST);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }// showContent
+
+    @DeleteMapping(path = "/delete/{id}")
+    public ResponseEntity<?> delete(@RequestParam(value = "usr") long userId,
+            @PathVariable(value = "id") long wishListId) {
+        try {
             wishListService.remove(userId, wishListId);
-            return new ResponseEntity<String>("Wish list \""+wishListId+"\" deleted successful!", HttpStatus.OK);
-        }
-        catch(ConstraintViolationException e){
+            return new ResponseEntity<String>("Wish list \"" + wishListId + "\" deleted successfully.", HttpStatus.OK);
+        } catch (ConstraintViolationException e) {
             return new ResponseEntity<List<InvalidValue>>(InvalidValue.getAllInvalidValues(e), HttpStatus.BAD_REQUEST);
-        }
-        catch(IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-    }//delete
+    }// delete
 
-    @PatchMapping(path = "/{id}/chname")
-    public ResponseEntity<?> chName(@RequestParam(value = "usr") long userId, @PathVariable(value = "id") long wishListId, @RequestParam("name") String name){
-        try{
-            wishListService.chName(userId, wishListId, name);
-            return new ResponseEntity<String>("WishList name "+wishListId+" updated successful!", HttpStatus.OK);
-        }
-        catch(ConstraintViolationException e){
+    @PatchMapping(path = "/chname/{id}")
+    public ResponseEntity<?> chName(@RequestParam(value = "usr") long userId,
+            @PathVariable(value = "id") long wishListId, @RequestParam("name") String name) {
+        try {
+            wishListService.changeName(userId, wishListId, name);
+            return new ResponseEntity<String>("WishList name " + wishListId + " updated successfully.", HttpStatus.OK);
+        } catch (ConstraintViolationException e) {
             return new ResponseEntity<List<InvalidValue>>(InvalidValue.getAllInvalidValues(e), HttpStatus.BAD_REQUEST);
-        }
-        catch(IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-    }//chName
+    }// chName
 
-    @PatchMapping(path = "/{id}/addComics")
-    public ResponseEntity<?> addComics(@RequestParam(value = "usr") long userId, @PathVariable("id") long wishListId, @RequestBody Set<Long> comicIds){
-        try{
+    @PatchMapping(path = "/addcmcs/{id}")
+    public ResponseEntity<?> addcmcs(@RequestParam(value = "usr") long userId, @PathVariable("id") long wishListId,
+            @RequestBody Set<Long> comicIds) {
+        try {
             wishListService.addComics(userId, wishListId, comicIds);
-            return new ResponseEntity<String>("Comics added successful to wish list "+wishListId+" .", HttpStatus.OK);
-        }
-        catch(ConstraintViolationException e){
+            return new ResponseEntity<String>(
+                    "Comics " + comicIds + " added successfully to wish list " + wishListId + ".",
+                    HttpStatus.OK);
+        } catch (ConstraintViolationException e) {
             return new ResponseEntity<List<InvalidValue>>(InvalidValue.getAllInvalidValues(e), HttpStatus.BAD_REQUEST);
-        }
-        catch(IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-    }//addComics
+    }// addcmcs
 
-    @PatchMapping(path = "/{id}/deleteComics")
-    public ResponseEntity<?> deleteComics(@RequestParam(value = "usr") long userId, @PathVariable("id") long wishListId, @RequestBody Set<Long> comicIds){
-        try{
+    @PatchMapping(path = "/delcmcs/{id}")
+    public ResponseEntity<?> delcmcs(@RequestParam(value = "usr") long userId, @PathVariable("id") long wishListId,
+            @RequestBody Set<Long> comicIds) {
+        try {
             wishListService.removeComics(userId, wishListId, comicIds);
-            return new ResponseEntity<String>("Comics  deleted successful to wish list "+wishListId+" .", HttpStatus.OK);
-        }
-        catch(ConstraintViolationException e){
+            return new ResponseEntity<String>(
+                    "Comics " + comicIds + " deleted successfully from wish list " + wishListId + ".",
+                    HttpStatus.OK);
+        } catch (ConstraintViolationException e) {
             return new ResponseEntity<List<InvalidValue>>(InvalidValue.getAllInvalidValues(e), HttpStatus.BAD_REQUEST);
-        }
-        catch(IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-    }//deleteComics
+    }// delcmcs
 
-}//WishListController
+}// WishListController

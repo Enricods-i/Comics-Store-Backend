@@ -29,32 +29,38 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "name")
-@Data @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@Entity @Table(name = "wish_list")
+@Data
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@Entity
+@Table(name = "wish_list")
 public class WishList {
-    
-    @NotNull @Min(0)
+
+    @NotNull
+    @Min(0)
     @EqualsAndHashCode.Include
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @NotNull @Size(max = 30)
+    @NotNull
+    @Size(min=3, max = 30)
     @Column(nullable = false, length = 30)
     private String name;
 
     @JsonIgnore
-    @ManyToOne @JoinColumn(name = "user_id")
+    @ManyToOne
+    @JoinColumn(name = "user_id")
     private User owner;
 
     @JsonIgnore
     @ManyToMany
-    @JoinTable( name = "list_content",
-                joinColumns = {@JoinColumn(name = "wish_list_id")},
-                inverseJoinColumns = {@JoinColumn(name = "comic_id")}
-    )
+    @JoinTable(name = "list_content", joinColumns = { @JoinColumn(name = "wish_list_id") }, inverseJoinColumns = {
+            @JoinColumn(name = "comic_id") })
     private Set<Comic> content;
 
-    @CreationTimestamp @Temporal(TemporalType.TIMESTAMP) @Column(name = "created_at", nullable = false)
+    @CreationTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "created_at", nullable = false)
     private Date creationDate;
 
-}//WishList
+}// WishList
