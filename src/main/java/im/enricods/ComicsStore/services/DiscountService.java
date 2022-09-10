@@ -46,7 +46,7 @@ public class DiscountService {
     }// getAllActiveDiscounts
 
     @Transactional(readOnly = true)
-    public List<Discount> getAllDiscounts(@Min(0) int pageNumber, @Min(0) int pageSize, String sortBy) {
+    public List<Discount> getAllDiscounts(@Min(0) int pageNumber, @Min(0) int pageSize, @NotNull String sortBy) {
 
         Pageable paging = PageRequest.of(pageNumber, pageSize, Sort.by(sortBy));
         Page<Discount> pagedResult = discountRepository.findAll(paging);
@@ -60,7 +60,7 @@ public class DiscountService {
      * if the activation date of Discount is previous the expiration date and
      * if today's date is previous activation date of Discount
      */
-    public Discount add(@Valid Discount discount) {
+    public Discount add(@NotNull @Valid Discount discount) {
 
         // verify that a discount with the same name does not exist
         if (discountRepository.existsByName(discount.getName()))
@@ -143,7 +143,7 @@ public class DiscountService {
      * Discount
      * and if today's date is previous to the new activation date
      */
-    public void changeActivationDate(@Min(0) long discountId, Date newActivationDate) {
+    public void changeActivationDate(@Min(0) long discountId, @NotNull Date newActivationDate) {
 
         // verify that discount exists
         Optional<Discount> disc = discountRepository.findById(discountId);
@@ -185,7 +185,7 @@ public class DiscountService {
      * and if the Discount has not been applied to any Comics
      * and if the activation date of the discount is previous to the new expiration
      */
-    public void changeExpirationDate(@Min(0) long discountId, Date newExpirationDate) {
+    public void changeExpirationDate(@Min(0) long discountId, @NotNull Date newExpirationDate) {
 
         // verify that discount exists
         Optional<Discount> disc = discountRepository.findById(discountId);
@@ -252,7 +252,7 @@ public class DiscountService {
      * and if each Comic is not already discounted in the interval delimited by
      * Discount's activation date and Discount's expiration date
      */
-    public void applyDiscountToComics(@Min(0) long discountId, @NotEmpty Set<@Min(0) @NotNull Long> comicIds) {
+    public void applyDiscountToComics(@Min(0) long discountId, @NotEmpty Set<@NotNull @Min(0) Long> comicIds) {
 
         // verify that discount exists
         Optional<Discount> disc = discountRepository.findById(discountId);
@@ -306,7 +306,7 @@ public class DiscountService {
      * and if the comics exists
      * and if each comic is curretly discounted by this Discount
      */
-    public void removeDiscountFromComics(@Min(0) long discountId, @NotEmpty Set<@Min(0) Long> comicIds) {
+    public void removeDiscountFromComics(@Min(0) long discountId, @NotEmpty Set<@NotNull @Min(0) Long> comicIds) {
 
         // verify that discount exists
         Optional<Discount> disc = discountRepository.findById(discountId);

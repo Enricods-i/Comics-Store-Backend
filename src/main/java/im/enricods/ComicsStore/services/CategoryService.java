@@ -59,7 +59,7 @@ public class CategoryService {
 
     }// add
 
-    public void changeName(@NotNull @Min(0) long categoryId, @NotNull @Size(min = 3, max = 30) String newName) {
+    public void changeName(@Min(0) long categoryId, @NotNull @Size(min = 3, max = 30) String newName) {
 
         // verify that Category with the id specified already exists
         Optional<Category> ctgr = categoryRepository.findById(categoryId);
@@ -73,7 +73,7 @@ public class CategoryService {
 
     }// changeName
 
-    public void remove(@NotNull @Min(0) long categoryId) {
+    public void remove(@Min(0) long categoryId) {
 
         // verify that Category with the id specified already exists
         Optional<Category> ctgr = categoryRepository.findById(categoryId);
@@ -93,7 +93,7 @@ public class CategoryService {
 
     }// remove
 
-    public void bindCollections(@NotNull @Min(0) long categoryId, @NotEmpty Set<@NotNull @Min(0) Long> collectionIds) {
+    public void bindCollections(@Min(0) long categoryId, @NotEmpty Set<@NotNull @Min(0) Long> collectionIds) {
 
         // verify that Category with the id specified already exists
         Optional<Category> ctgr = categoryRepository.findById(categoryId);
@@ -109,12 +109,13 @@ public class CategoryService {
         for (Long id : collectionIds) {
             // verify that Collection with current id exists
             cllctn = collectionRepository.findById(id);
-            if (cllctn.isEmpty()){
-                problemsEncountered.append("Collection "+id+" not found.\n");
+            if (cllctn.isEmpty()) {
+                problemsEncountered.append("Collection " + id + " not found.\n");
                 continue;
             }
-            if (target.getCollections().contains(cllctn.get())){
-                problemsEncountered.append("Collection "+id+" is already binded with category "+categoryId+".\n");
+            if (target.getCollections().contains(cllctn.get())) {
+                problemsEncountered
+                        .append("Collection " + id + " is already binded with category " + categoryId + ".\n");
                 continue;
             }
             collectionsToBind.add(cllctn.get());
@@ -130,7 +131,7 @@ public class CategoryService {
 
     }// bindCollections
 
-    public void unbindCollections(@NotNull @Min(0) long categoryId,
+    public void unbindCollections(@Min(0) long categoryId,
             @NotEmpty Set<@NotNull @Min(0) Long> collectionIds) {
 
         // verify that Category with the id specified already exists
@@ -147,12 +148,12 @@ public class CategoryService {
         for (Long id : collectionIds) {
             // verify that Collection with current id exists
             cllctn = collectionRepository.findById(id);
-            if (cllctn.isEmpty()){
-                problemsEncountered.append("Collection "+id+" not found.\n");
+            if (cllctn.isEmpty()) {
+                problemsEncountered.append("Collection " + id + " not found.\n");
                 continue;
             }
-            if (!target.getCollections().contains(cllctn.get())){
-                problemsEncountered.append("Collection "+id+" is not binded with category "+categoryId+".\n");
+            if (!target.getCollections().contains(cllctn.get())) {
+                problemsEncountered.append("Collection " + id + " is not binded with category " + categoryId + ".\n");
                 continue;
             }
             collectionsToUnbind.add(cllctn.get());

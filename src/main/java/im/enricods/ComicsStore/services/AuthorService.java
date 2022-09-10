@@ -37,7 +37,7 @@ public class AuthorService {
     private ComicRepository comicRepository;
 
     @Transactional(readOnly = true)
-    public List<Author> getAll(@Min(0) int pageNumber, @Min(0) int pageSize, String sortBy) {
+    public List<Author> getAll(@Min(0) int pageNumber, @Min(0) int pageSize, @NotNull String sortBy) {
 
         Pageable paging = PageRequest.of(pageNumber, pageSize, Sort.by(sortBy));
         return authorRepository.findAll(paging).getContent();
@@ -46,14 +46,14 @@ public class AuthorService {
 
     @Transactional(readOnly = true)
     public List<Author> getByName(@NotNull @Size(min = 3, max = 20) String name, @Min(0) int pageNumber,
-            @Min(0) int pageSize, String sortBy) {
+            @Min(0) int pageSize, @NotNull String sortBy) {
 
         Pageable paging = PageRequest.of(pageNumber, pageSize, Sort.by(sortBy));
         return authorRepository.findByNameContaining(name, paging).getContent();
 
     }// showAuthorsByName
 
-    public Author add(@Valid Author author) {
+    public Author add(@NotNull @Valid Author author) {
 
         // verify that Author specified doesn't already exists
         if (authorRepository.existsByName(author.getName()))
@@ -66,7 +66,7 @@ public class AuthorService {
 
     }// addAuthor
 
-    public void remove(@NotNull @Min(0) long authorId) {
+    public void remove(@Min(0) long authorId) {
 
         // verify that Author with authorId specified exists
         Optional<Author> auth = authorRepository.findById(authorId);
@@ -86,7 +86,7 @@ public class AuthorService {
 
     }// deleteAuthor
 
-    public void modify(@Valid Author author) {
+    public void modify(@NotNull @Valid Author author) {
 
         // verify that Author specified exists
         Optional<Author> auth = authorRepository.findById(author.getId());
@@ -101,7 +101,7 @@ public class AuthorService {
 
     }// modify
 
-    public void addWorks(@NotNull @Min(0) long authorId, @NotEmpty Set<@NotNull @Min(0) Long> comicIds) {
+    public void addWorks(@Min(0) long authorId, @NotEmpty Set<@NotNull @Min(0) Long> comicIds) {
 
         // verify that Author with authorId specified exists
         Optional<Author> auth = authorRepository.findById(authorId);
@@ -117,12 +117,13 @@ public class AuthorService {
         for (long id : comicIds) {
             // verify that a Comic with id exists
             cmc = comicRepository.findById(id);
-            if (cmc.isEmpty()){
+            if (cmc.isEmpty()) {
                 problemsEncountered.append("Comic " + id + " not found.\n");
                 continue;
             }
-            if (target.getWorks().contains(cmc.get())){
-                problemsEncountered.append("Comic "+id+" already belong to the work of the author "+authorId+".\n");
+            if (target.getWorks().contains(cmc.get())) {
+                problemsEncountered
+                        .append("Comic " + id + " already belong to the work of the author " + authorId + ".\n");
                 continue;
             }
             worksToAdd.add(cmc.get());
@@ -138,13 +139,13 @@ public class AuthorService {
 
     }// addWorks
 
-    public void removeWorks(@NotNull @Min(0) long authorId, @NotEmpty Set<@NotNull @Min(0) Long> comicIds) {
+    public void removeWorks(@Min(0) long authorId, @NotEmpty Set<@NotNull @Min(0) Long> comicIds) {
 
         // verify that Author with authorId specified exists
         Optional<Author> auth = authorRepository.findById(authorId);
         if (auth.isEmpty())
             throw new IllegalArgumentException("Author " + authorId + " not found!");
-        
+
         Author target = auth.get();
 
         Set<Comic> worksToRemove = new HashSet<>();
@@ -154,12 +155,13 @@ public class AuthorService {
         for (long id : comicIds) {
             // verify that a Comic with id exists
             cmc = comicRepository.findById(id);
-            if (cmc.isEmpty()){
+            if (cmc.isEmpty()) {
                 problemsEncountered.append("Comic " + id + " not found.\n");
                 continue;
             }
-            if (!target.getWorks().contains(cmc.get())){
-                problemsEncountered.append("Comic "+id+" does not belong to the work of the author "+authorId+".\n");
+            if (!target.getWorks().contains(cmc.get())) {
+                problemsEncountered
+                        .append("Comic " + id + " does not belong to the work of the author " + authorId + ".\n");
                 continue;
             }
             worksToRemove.add(cmc.get());

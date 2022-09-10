@@ -54,7 +54,7 @@ public class ComicService {
 
     @Transactional(readOnly = true)
     public List<Comic> getByCollection(@Min(0) long collectionId, @Min(0) int pageNumber, @Min(0) int pageSize,
-            String sortBy) {
+            @NotNull String sortBy) {
 
         // verify that a Collection with collectionId exists
         Optional<Collection> cllctn = collectionRepository.findById(collectionId);
@@ -70,7 +70,7 @@ public class ComicService {
     // for the research by author
     @Transactional(readOnly = true)
     public List<Comic> getByCollectionAndAuthor(@Min(0) long collectionId, @Min(0) long authorId,
-            @Min(0) int pageNumber, @Min(0) int pageSize, String sortBy) {
+            @Min(0) int pageNumber, @Min(0) int pageSize, @NotNull String sortBy) {
 
         // verify that a Collection with collectionId exists
         Optional<Collection> cllctn = collectionRepository.findById(collectionId);
@@ -88,7 +88,7 @@ public class ComicService {
 
     }// getByCollectionAndAuthor
 
-    public Comic add(@Min(0) long collectionId, @Valid Comic comic) {
+    public Comic add(@Min(0) long collectionId, @NotNull @Valid Comic comic) {
 
         // verify that a Collection with collectionId exists
         Optional<Collection> cllctn = collectionRepository.findById(collectionId);
@@ -115,7 +115,7 @@ public class ComicService {
 
     }// add
 
-    public void update(@Valid Comic comic) {
+    public void update(@NotNull @Valid Comic comic) {
 
         // verify that the Comic exists
         Optional<Comic> cmc = comicRepository.findById(comic.getId());

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -51,7 +52,7 @@ public class PurchaseService {
     private DiscountRepository discountRepository;
 
     @Transactional(readOnly = true)
-    public List<Purchase> getAll(@Min(0) int pageNumber, @Min(0) int pageSize, String sortBy) {
+    public List<Purchase> getAll(@Min(0) int pageNumber, @Min(0) int pageSize, @NotNull String sortBy) {
 
         Pageable paging = PageRequest.of(pageNumber, pageSize, Sort.by(sortBy));
         Page<Purchase> pagedResult = purchaseRepository.findAll(paging);
@@ -60,7 +61,8 @@ public class PurchaseService {
     }// getAll
 
     @Transactional(readOnly = true)
-    public List<Purchase> getByUser(@Min(0) long userId, @Min(0) int pageNumber, @Min(0) int pageSize, String sortBy) {
+    public List<Purchase> getByUser(@Min(0) long userId, @Min(0) int pageNumber, @Min(0) int pageSize,
+            @NotNull String sortBy) {
 
         // verify that User specified by userId exists
         Optional<User> usr = userRepository.findById(userId);
@@ -73,8 +75,9 @@ public class PurchaseService {
     }// getByUser
 
     @Transactional(readOnly = true)
-    public List<Purchase> getInPeriod(Date startDate, Date endDate, @Min(0) int pageNumber, @Min(0) int pageSize,
-            String sortBy) {
+    public List<Purchase> getInPeriod(@NotNull Date startDate, @NotNull Date endDate, @Min(0) int pageNumber,
+            @Min(0) int pageSize,
+            @NotNull String sortBy) {
 
         // verify that startDate is previous endDate
         if (startDate.compareTo(endDate) >= 0)

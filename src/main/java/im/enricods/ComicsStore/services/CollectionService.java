@@ -49,7 +49,8 @@ public class CollectionService {
     @Transactional(readOnly = true)
     public List<Collection> getByName(@NotNull @Size(min = 3, max = 50) String name,
             @Min(0) int pageNumber,
-            @Min(0) int pageSize, String sortBy) {
+            @Min(0) int pageSize,
+            @NotNull String sortBy) {
 
         Pageable paging = PageRequest.of(pageNumber, pageSize, Sort.by(sortBy));
         Page<Collection> pagedResult = collectionRepository.findByNameContainingIgnoreCase(name, paging);
@@ -61,7 +62,7 @@ public class CollectionService {
     public List<Collection> getByCategory(@Min(0) long categoryId,
             @Min(0) int pageNumber,
             @Min(0) int pageSize,
-            String sortBy) {
+            @NotNull String sortBy) {
 
         // verify that Category specified by categoryId exists
         Optional<Category> ctgr = categoryRepository.findById(categoryId);
@@ -78,7 +79,7 @@ public class CollectionService {
     public List<Collection> getByAuthor(@Min(0) long authorId,
             @Min(0) int pageNumber,
             @Min(0) int pageSize,
-            String sortBy) {
+            @NotNull String sortBy) {
 
         // verify that Author specified by authorId exists
         Optional<Author> auth = authorRepository.findById(authorId);
@@ -97,7 +98,7 @@ public class CollectionService {
             @Min(0) Long authorId,
             @Min(0) int pageNumber,
             @Min(0) int pageSize,
-            String sortBy) {
+            @NotNull String sortBy) {
 
         // verify that at least two fields have been specified
         int count = 0;
@@ -134,7 +135,7 @@ public class CollectionService {
 
     }// advancedSearch
 
-    public Collection add(@Valid Collection collection) {
+    public Collection add(@NotNull @Valid Collection collection) {
 
         // verify that Collection specified doesn't already exists
         if (collectionRepository.existsByName(collection.getName()))
@@ -144,7 +145,7 @@ public class CollectionService {
 
     }// add
 
-    public void modify(@Valid Collection collection) {
+    public void modify(@NotNull @Valid Collection collection) {
 
         // verify that Collection specified already exists
         Optional<Collection> c1 = collectionRepository.findById(collection.getId());
@@ -215,7 +216,7 @@ public class CollectionService {
 
     }// remove
 
-    public void bindCategories(@NotNull @Min(0) long collectionId, @NotEmpty Set<@NotNull @Min(0) Long> categoryIds) {
+    public void bindCategories(@Min(0) long collectionId, @NotEmpty Set<@NotNull @Min(0) Long> categoryIds) {
 
         // verify that Collection specified by collectionId exists
         Optional<Collection> cllctn = collectionRepository.findById(collectionId);
@@ -252,7 +253,7 @@ public class CollectionService {
 
     }// bindCategories
 
-    public void unbindCategories(@NotNull @Min(0) long collectionId, @NotEmpty Set<@NotNull @Min(0) Long> categoryIds) {
+    public void unbindCategories(@Min(0) long collectionId, @NotEmpty Set<@NotNull @Min(0) Long> categoryIds) {
 
         // verify that Collection specified by collectionId exists
         Optional<Collection> cllctn = collectionRepository.findById(collectionId);

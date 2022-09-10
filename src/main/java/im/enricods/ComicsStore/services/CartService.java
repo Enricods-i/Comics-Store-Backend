@@ -3,7 +3,6 @@ package im.enricods.ComicsStore.services;
 import java.util.Optional;
 
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,7 +33,7 @@ public class CartService {
     private CartContentRepository cartContentRepository;
 
     @Transactional(readOnly = true)
-    public Cart getByUser(@NotNull @Min(0) long userId) {
+    public Cart getByUser(@Min(0) long userId) {
 
         // verify that User with Id specified exists
         Optional<User> usr = userRepository.findById(userId);
@@ -45,9 +44,9 @@ public class CartService {
 
     }// getByUser
 
-    public void addComic(@NotNull @Min(0) long userId,
-            @NotNull @Min(0) long comicId,
-            @NotNull @Min(1) int quantity) {
+    public void addComic(@Min(0) long userId,
+            @Min(0) long comicId,
+            @Min(1) int quantity) {
 
         // verify that a User with userId exists
         Optional<User> usr = userRepository.findById(userId);
@@ -89,7 +88,7 @@ public class CartService {
 
     }// addComic
 
-    public void removeComic(@NotNull @Min(0) long userId, @NotNull @Min(0) long comicId) {
+    public void removeComic(@Min(0) long userId, @Min(0) long comicId) {
 
         // verify that User with userId exists
         Optional<User> usr = userRepository.findById(userId);
@@ -135,9 +134,9 @@ public class CartService {
 
     }// clear
 
-    public void updateComicQuantity(@NotNull @Min(0) long userId,
-            @NotNull @Min(0) long comicId,
-            @NotNull @Min(1) int newQuantity) {
+    public void updateComicQuantity(@Min(0) long userId,
+            @Min(0) long comicId,
+            @Min(1) int newQuantity) {
 
         // verify that User with userId exists
         Optional<User> usr = userRepository.findById(userId);
@@ -163,9 +162,8 @@ public class CartService {
                     cmc.get().getNumber() + " in collection " +
                     cmc.get().getCollection().getName() + ".");
 
-        
         int bias = comicInCart.get().getQuantity() - newQuantity;
-        
+
         comicInCart.get().setQuantity(newQuantity);
 
         // update the cart's size
