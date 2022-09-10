@@ -22,7 +22,6 @@ import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
@@ -33,67 +32,79 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-@Data @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@Entity @Table(name = "personal_data")
+@Data
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@Entity
+@Table(name = "personal_data")
 public class User {
 
-    @NotNull @Min(0)
+    @NotNull
+    @Min(0)
     @EqualsAndHashCode.Include
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    
-    @NotNull @Size(min = 2, max = 20)
+
+    @NotNull
+    @Size(min = 2, max = 20)
     @Column(name = "first_name", nullable = false, length = 20)
     private String firstName;
 
-    @NotNull @Size(min = 2, max = 20)
-    @Column(name = "last_name", nullable = false, length = 20)    
+    @NotNull
+    @Size(min = 2, max = 20)
+    @Column(name = "last_name", nullable = false, length = 20)
     private String lastName;
 
-    @NotNull @Past
+    @NotNull
+    @Past
     @Temporal(TemporalType.DATE)
     @Column(name = "birth_date", nullable = false)
-    @DateTimeFormat(pattern = "dd-MM-yyyy")
     private Date birthDate;
 
-    @NotNull @Email
+    @NotNull
+    @Email
     @Column(nullable = false, unique = true, length = 50)
     private String email;
 
-    @Size(min=6, max = 20)
+    @Size(min = 6, max = 20)
     @Column(name = "phone_number", length = 20)
     private String phoneNumber;
 
-    @Size(min=2, max = 20)
+    @Size(min = 2, max = 20)
     @Column(length = 20)
     private String city;
 
     @JsonIgnore
-    @OneToOne @JoinColumn(name = "cart_id")
+    @OneToOne
+    @JoinColumn(name = "cart_id")
     private Cart cart;
-    
+
     @JsonIdentityReference(alwaysAsId = true)
     @OneToMany(mappedBy = "owner")
     private Set<WishList> wishLists;
 
-    public void addWishList(WishList wishList){
+    public void addWishList(WishList wishList) {
         this.wishLists.add(wishList);
         wishList.setOwner(this);
-    }//addWishList
+    }// addWishList
 
-    public void removeWishList(WishList wishList){
+    public void removeWishList(WishList wishList) {
         this.wishLists.remove(wishList);
         wishList.setOwner(null);
-    }//removeWishList
+    }// removeWishList
 
     @JsonIgnore
     @OneToMany(mappedBy = "buyer")
     private Set<Purchase> purchases;
 
-    @CreationTimestamp @Temporal(TemporalType.TIMESTAMP) @Column(name = "created_at", nullable = false)
+    @CreationTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "created_at", nullable = false)
     private Date creationDate;
 
-    @UpdateTimestamp @Temporal(TemporalType.TIMESTAMP) @Column(name = "modified_at", nullable = false)
+    @UpdateTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "modified_at", nullable = false)
     private Date dateOfLastModification;
 
-}//User
+}// User

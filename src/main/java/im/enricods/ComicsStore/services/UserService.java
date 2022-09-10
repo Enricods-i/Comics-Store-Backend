@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,89 +22,84 @@ import im.enricods.ComicsStore.entities.User;
 @Transactional
 @Validated
 public class UserService {
-    
+
     @Autowired
     private UserRepository userRepository;
 
     @Autowired
     private CartRepository cartRepository;
 
-
     @Transactional(readOnly = true)
-    public User getByEmail(@Email String email){
+    public User getByEmail(@NotNull @Email String email) {
 
         Optional<User> usr = userRepository.findByEmail(email);
-        if(usr.isEmpty())
-            throw new IllegalArgumentException("User with email \""+email+"\" not found!");
+        if (usr.isEmpty())
+            throw new IllegalArgumentException("User with email \"" + email + "\" not found.");
         return usr.get();
 
-    }//getByEmail
-
+    }// getByEmail
 
     @Transactional(readOnly = true)
-    public List<User> getByName(@Size(min=1, max=20) String firstName, @Size(min=1, max=20) String lastName){
+    public List<User> getByName(@Size(min = 1, max = 20) String firstName, @Size(min = 1, max = 20) String lastName) {
 
         return userRepository.findByFirstNameOrLastNameAllIgnoreCase(firstName, lastName);
 
-    }//getByName
+    }// getByName
 
-    
     @Transactional(readOnly = true)
-    public List<User> getByCity(@Size(min=2, max=20) String city){
+    public List<User> getByCity(@NotNull @Size(min = 2, max = 20) String city) {
 
         return userRepository.findByCity(city);
 
-    }//getByCity
+    }// getByCity
 
-    
     @Transactional(readOnly = true)
-    public List<User> getByPhoneNumber(@Size(min=6, max=20)String phoneNumber){
+    public List<User> getByPhoneNumber(@NotNull @Size(min = 6, max = 20) String phoneNumber) {
 
         return userRepository.findByPhoneNumber(phoneNumber);
 
-    }//getByPhoneNumber
+    }// getByPhoneNumber
 
-    
-    public User add(@Valid User user){
+    public User add(@NotNull @Valid User user) {
 
-        //verify that User specified doesn't already exist
-        if(userRepository.existsByEmail(user.getEmail()))
-            throw new IllegalArgumentException("User with email \""+user.getEmail()+"\" already exists!");
+        // verify that User specified doesn't already exist
+        if (userRepository.existsByEmail(user.getEmail()))
+            throw new IllegalArgumentException("User with email \"" + user.getEmail() + "\" already exists.");
 
-        //create user's cart
+        // create user's cart
         Cart cart = new Cart();
-        //persist cart
+        // persist cart
         cart = cartRepository.save(cart);
 
-        //bind cart
+        // bind cart
         cart.bindToUser(user);
 
-        //persist user
+        // persist user
         User result = userRepository.save(user);
 
         return result;
 
-    }//add
+    }// add
 
-    
-    public void modify(@Valid User user){
+    public void modify(@NotNull @Valid User user) {
 
-        //verify that User specified exists
+        // verify that User specified exists
         Optional<User> usr = userRepository.findById(user.getId());
-        if(usr.isEmpty())
-            throw new IllegalArgumentException("User "+user.getId()+" not found!");
+        if (usr.isEmpty())
+            throw new IllegalArgumentException("User " + user.getId() + " not found.");
 
-        //if modifying email verify that does not exist a User with the same email
-        if( !user.getEmail().equals(usr.get().getEmail()) && userRepository.existsByEmail(usr.get().getEmail()) )
-            throw new IllegalArgumentException("User with email \""+user.getEmail()+"\" already exists!\nOperation calceled.");
+        // if modifying email verify that does not exist a User with the same email
+        if (!user.getEmail().equals(usr.get().getEmail()) && userRepository.existsByEmail(usr.get().getEmail()))
+            throw new IllegalArgumentException(
+                    "User with email \"" + user.getEmail() + "\" already exists!\nOperation calceled.");
 
-        //set fields that client can't modify
+        // set fields that client can't modify
         user.setCart(usr.get().getCart());
         user.setCreationDate(usr.get().getCreationDate());
 
-        //merge
+        // merge
         userRepository.save(user);
 
-    }//modify
+    }// modify
 
-}//UserService
+}// UserService

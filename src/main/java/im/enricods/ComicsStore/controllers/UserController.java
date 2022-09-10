@@ -22,72 +22,76 @@ import im.enricods.ComicsStore.utils.InvalidValue;
 @RestController
 @RequestMapping(path = "users")
 public class UserController {
-    
+
     @Autowired
     private UserService userService;
 
     @GetMapping(path = "/byFirstNameAndLastName")
-    public ResponseEntity<?> showByFirstNameAndLastName(@RequestParam(value = "fName") String firstName, @RequestParam(value = "lName") String lastName){
-        try{
+    public ResponseEntity<?> showByFirstNameAndLastName(@RequestParam(value = "fName") String firstName,
+            @RequestParam(value = "lName") String lastName) {
+        try {
             List<User> result = userService.getByName(firstName, lastName);
             return new ResponseEntity<List<User>>(result, HttpStatus.OK);
-        }
-        catch(ConstraintViolationException e){
+        } catch (ConstraintViolationException e) {
             return new ResponseEntity<List<InvalidValue>>(InvalidValue.getAllInvalidValues(e), HttpStatus.BAD_REQUEST);
         }
-    }//showByFirstNameAndLastName
+    }// showByFirstNameAndLastName
 
     @GetMapping(path = "/byCity")
-    public ResponseEntity<?> showByCity(@RequestParam String city){
-        try{
+    public ResponseEntity<?> showByCity(@RequestParam String city) {
+        try {
             List<User> result = userService.getByCity(city);
             return new ResponseEntity<List<User>>(result, HttpStatus.OK);
-        }
-        catch(ConstraintViolationException e){
+        } catch (ConstraintViolationException e) {
             return new ResponseEntity<List<InvalidValue>>(InvalidValue.getAllInvalidValues(e), HttpStatus.BAD_REQUEST);
         }
-    }//showByCity
+    }// showByCity
 
     @GetMapping(path = "/byEmail")
-    public ResponseEntity<?> showByEmail(@RequestParam String email){
-        try{
+    public ResponseEntity<?> showByEmail(@RequestParam String email) {
+        try {
             User result = userService.getByEmail(email);
             return new ResponseEntity<User>(result, HttpStatus.OK);
-        }
-        catch(ConstraintViolationException e){
+        } catch (ConstraintViolationException e) {
             return new ResponseEntity<List<InvalidValue>>(InvalidValue.getAllInvalidValues(e), HttpStatus.BAD_REQUEST);
-        }
-        catch(IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-    }//showByEmail
+    }// showByEmail
+
+    @GetMapping(path = "/byPhoneNumber")
+    public ResponseEntity<?> showByPhoneNumber(@RequestParam String phoneNumber) {
+        try {
+            List<User> result = userService.getByPhoneNumber(phoneNumber);
+            return new ResponseEntity<List<User>>(result, HttpStatus.OK);
+        } catch (ConstraintViolationException e) {
+            return new ResponseEntity<List<InvalidValue>>(InvalidValue.getAllInvalidValues(e), HttpStatus.BAD_REQUEST);
+        }
+    }// showByPhoneNumber
 
     @PostMapping(path = "/create")
-    public ResponseEntity<?> create(@RequestBody User user){
-        try{
+    public ResponseEntity<?> create(@RequestBody User user) {
+        try {
             User result = userService.add(user);
             return new ResponseEntity<User>(result, HttpStatus.OK);
-        }
-        catch(ConstraintViolationException e){
+        } catch (ConstraintViolationException e) {
             return new ResponseEntity<List<InvalidValue>>(InvalidValue.getAllInvalidValues(e), HttpStatus.BAD_REQUEST);
-        }
-        catch(IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-    }//create
+    }// create
 
     @PutMapping(path = "/update")
-    public ResponseEntity<?> update(@RequestBody User user){
-        try{
+    public ResponseEntity<?> update(@RequestBody User user) {
+        try {
             userService.modify(user);
-            return new ResponseEntity<String>("User \""+user.getFirstName()+" "+user.getLastName()+ "\" ("+user.getId()+") updated successful!", HttpStatus.OK);
-        }
-        catch(ConstraintViolationException e){
+            return new ResponseEntity<String>("User \"" + user.getFirstName() + " " + user.getLastName() + "\" ("
+                    + user.getId() + ") updated successful!", HttpStatus.OK);
+        } catch (ConstraintViolationException e) {
             return new ResponseEntity<List<InvalidValue>>(InvalidValue.getAllInvalidValues(e), HttpStatus.BAD_REQUEST);
-        }
-        catch(IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-    }//update
+    }// update
 
-}//UserController
+}// UserController

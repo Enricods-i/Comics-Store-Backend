@@ -9,10 +9,10 @@ import org.springframework.stereotype.Repository;
 import im.enricods.ComicsStore.entities.User;
 
 @Repository
-public interface UserRepository extends JpaRepository<User,Long> {
+public interface UserRepository extends JpaRepository<User, Long> {
 
     List<User> findByFirstNameOrLastNameAllIgnoreCase(String firstName, String lastName);
-    
+
     Optional<User> findByEmail(String email);
 
     boolean existsByEmail(String email);
@@ -21,4 +21,4 @@ public interface UserRepository extends JpaRepository<User,Long> {
 
     List<User> findByCity(String city);
 
-}//UserRepository
+}// UserRepository
