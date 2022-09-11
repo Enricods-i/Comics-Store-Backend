@@ -25,6 +25,9 @@ import im.enricods.ComicsStore.entities.WishList;
 import im.enricods.ComicsStore.repositories.ComicRepository;
 import im.enricods.ComicsStore.repositories.UserRepository;
 import im.enricods.ComicsStore.repositories.WishListRepository;
+import im.enricods.ComicsStore.utils.Problem;
+import im.enricods.ComicsStore.utils.ProblemCode;
+import im.enricods.ComicsStore.utils.exceptions.BadRequestException;
 
 @Service
 @Transactional
@@ -46,9 +49,9 @@ public class WishListService {
         // verify that User specified by userId exists
         Optional<User> usr = userRepository.findById(userId);
         if (usr.isEmpty())
-            throw new IllegalArgumentException("User " + userId + " not found.");
+            throw new BadRequestException(new Problem(ProblemCode.USER_NOT_FOUND, "userId"));
 
-        return wishListRepository.findByOwnerAndNameContaining(usr.get(), name);
+        return wishListRepository.findByOwnerAndNameContainingIgnoreCase(usr.get(), name);
 
     }// getByOwnerAndName
 
@@ -58,7 +61,7 @@ public class WishListService {
         // verify that User specified by userId exists
         Optional<User> usr = userRepository.findById(userId);
         if (usr.isEmpty())
-            throw new IllegalArgumentException("User " + userId + " not found.");
+            throw new BadRequestException(new Problem(ProblemCode.USER_NOT_FOUND, "userId"));
 
         return wishListRepository.findByOwner(usr.get());
 
@@ -69,12 +72,12 @@ public class WishListService {
         // verify that User specified by userId exists
         Optional<User> usr = userRepository.findById(userId);
         if (usr.isEmpty())
-            throw new IllegalArgumentException("User " + userId + " not found.");
+            throw new BadRequestException(new Problem(ProblemCode.USER_NOT_FOUND, "userId"));
 
         // verify that does not already exist a wish list with name "name" belonging to
         // the user "usr"
         if (wishListRepository.existsByOwnerAndName(usr.get(), name))
-            throw new IllegalArgumentException("A wish list with name \"" + name + "\" already exists.");
+            throw new BadRequestException(new Problem(ProblemCode.LIST_ALREADY_EXISTS, "name"));
 
         WishList list = new WishList();
         list.setName(name);
@@ -95,17 +98,16 @@ public class WishListService {
         // verify that User specified by userId exists
         Optional<User> usr = userRepository.findById(userId);
         if (usr.isEmpty())
-            throw new IllegalArgumentException("User " + userId + " not found.");
+            throw new BadRequestException(new Problem(ProblemCode.USER_NOT_FOUND, "userId"));
 
         // verify that WishList specified exists
         Optional<WishList> list = wishListRepository.findById(wishListId);
         if (list.isEmpty())
-            throw new IllegalArgumentException("Wish list " + wishListId + " not found.");
+            throw new BadRequestException(new Problem(ProblemCode.LIST_NOT_FOUND, "wishListId"));
 
         // verify that WishList "list" belongs to User "usr"
         if (!usr.get().getWishLists().contains(list.get()))
-            throw new IllegalArgumentException(
-                    "The wish list " + wishListId + " does not belong to the user " + userId + ".");
+            throw new BadRequestException(new Problem(ProblemCode.UNAUTHORIZED, "userId", "wishListId"));
 
         Pageable paging = PageRequest.of(pageNumber, pageSize, Sort.by(sortBy));
         Page<Comic> pagedResult = wishListRepository.getContent(list.get(), paging);
@@ -118,17 +120,16 @@ public class WishListService {
         // verify that User specified by userId exists
         Optional<User> usr = userRepository.findById(userId);
         if (usr.isEmpty())
-            throw new IllegalArgumentException("User " + userId + " not found.");
+            throw new BadRequestException(new Problem(ProblemCode.USER_NOT_FOUND, "userId"));
 
         // verify that WishList specified exists
         Optional<WishList> list = wishListRepository.findById(wishListId);
         if (list.isEmpty())
-            throw new IllegalArgumentException("Wish list " + wishListId + " not found.");
+            throw new BadRequestException(new Problem(ProblemCode.LIST_NOT_FOUND, "wishListId"));
 
         // verify that WishList "list" belongs to User "usr"
         if (!usr.get().getWishLists().contains(list.get()))
-            throw new IllegalArgumentException(
-                    "The wish list " + wishListId + " does not belong to the user " + userId + ".");
+            throw new BadRequestException(new Problem(ProblemCode.UNAUTHORIZED, "userId", "wishListId"));
 
         WishList target = list.get();
 
@@ -145,17 +146,16 @@ public class WishListService {
         // verify that User specified by userId exists
         Optional<User> usr = userRepository.findById(userId);
         if (usr.isEmpty())
-            throw new IllegalArgumentException("User " + userId + " not found.");
+            throw new BadRequestException(new Problem(ProblemCode.USER_NOT_FOUND, "userId"));
 
         // verify that WishList specified exists
         Optional<WishList> list = wishListRepository.findById(wishListId);
         if (list.isEmpty())
-            throw new IllegalArgumentException("Wish list " + wishListId + " not found.");
+            throw new BadRequestException(new Problem(ProblemCode.LIST_NOT_FOUND, "wishListId"));
 
         // verify that WishList specified belongs to User specified
         if (!usr.get().getWishLists().contains(list.get()))
-            throw new IllegalArgumentException(
-                    "The wish list " + wishListId + " does not belong to the user " + userId + ".");
+            throw new BadRequestException(new Problem(ProblemCode.UNAUTHORIZED, "userId", "wishListId"));
 
         list.get().setName(newName);
 
@@ -166,40 +166,46 @@ public class WishListService {
         // verify that User specified by userId exists
         Optional<User> usr = userRepository.findById(userId);
         if (usr.isEmpty())
-            throw new IllegalArgumentException("User " + userId + " not found.");
+            throw new BadRequestException(new Problem(ProblemCode.USER_NOT_FOUND, "userId"));
 
         // verify that WishList specified exists
         Optional<WishList> list = wishListRepository.findById(wishListId);
         if (list.isEmpty())
-            throw new IllegalArgumentException("Wish list " + wishListId + " not found.");
+            throw new BadRequestException(new Problem(ProblemCode.LIST_NOT_FOUND, "wishListId"));
 
         // verify that WishList specified belongs to User specified
         if (!usr.get().getWishLists().contains(list.get()))
-            throw new IllegalArgumentException(
-                    "The wish list " + wishListId + " does not belong to the user " + userId + ".");
+            throw new BadRequestException(new Problem(ProblemCode.UNAUTHORIZED, "userId", "wishListId"));
 
         WishList target = list.get();
 
         Set<Comic> comicsToAdd = new HashSet<>();
-        StringBuilder problemsEncountered = new StringBuilder();
+        Problem problemCNF = new Problem(ProblemCode.COMIC_NOT_FOUND);
+        Problem problemCAIL = new Problem(ProblemCode.COMIC_ALREADY_IN_LIST);
 
         Optional<Comic> cmc = null;
         for (long id : comicIds) {
             cmc = comicRepository.findById(id);
             if (cmc.isEmpty()) {
-                problemsEncountered.append("Comic " + id + " not found.\n");
+                problemCNF.add(Long.toString(id));
                 continue;
             }
             if (target.getContent().contains(cmc.get())) {
-                problemsEncountered.append("Comic: " + id + " is already in your wish list " + wishListId + ".\n");
+                problemCAIL.add(Long.toString(id));
+                problemCAIL.add(Long.toString(wishListId));
                 continue;
             }
             comicsToAdd.add(cmc.get());
         }
 
         // check if there has been any problems
-        if (problemsEncountered.length() > 0)
-            throw new IllegalArgumentException(problemsEncountered.append("Operation canceled.").toString());
+        Set<Problem> problemsEncountered = new HashSet<>();
+        if (!problemCNF.getInvalidFields().isEmpty())
+            problemsEncountered.add(problemCNF);
+        if (!problemCAIL.getInvalidFields().isEmpty())
+            problemsEncountered.add(problemCAIL);
+        if (!problemsEncountered.isEmpty())
+            throw new BadRequestException(problemsEncountered);
 
         // bind bidirectional relations with Comic
         for (Comic comic : comicsToAdd)
@@ -213,40 +219,46 @@ public class WishListService {
         // verify that User specified by userId exists
         Optional<User> usr = userRepository.findById(userId);
         if (usr.isEmpty())
-            throw new IllegalArgumentException("User " + userId + " not found.");
+            throw new BadRequestException(new Problem(ProblemCode.USER_NOT_FOUND, "userId"));
 
         // verify that WishList specified exists
         Optional<WishList> list = wishListRepository.findById(wishListId);
         if (list.isEmpty())
-            throw new IllegalArgumentException("Wish list " + wishListId + " not found.");
+            throw new BadRequestException(new Problem(ProblemCode.LIST_NOT_FOUND, "wishListId"));
 
         // verify that WishList specified belongs to User specified
         if (!usr.get().getWishLists().contains(list.get()))
-            throw new IllegalArgumentException(
-                    "The wish list " + wishListId + " does not belong to the user " + userId + ".");
+            throw new BadRequestException(new Problem(ProblemCode.UNAUTHORIZED, "userId", "wishListId"));
 
         WishList target = list.get();
 
         Set<Comic> comicsToRemove = new HashSet<>();
-        StringBuilder problemsEncountered = new StringBuilder();
+        Problem problemCNF = new Problem(ProblemCode.COMIC_NOT_FOUND);
+        Problem problemCAIL = new Problem(ProblemCode.COMIC_ALREADY_IN_LIST);
 
         Optional<Comic> cmc = null;
         for (long id : comicIds) {
             cmc = comicRepository.findById(id);
             if (cmc.isEmpty()) {
-                problemsEncountered.append("Comic " + id + " not found.\n");
+                problemCNF.add(Long.toString(id));
                 continue;
             }
             if (!target.getContent().contains(cmc.get())) {
-                problemsEncountered.append("Wish list: " + wishListId + " does not contains comic " + id + ".\n");
+                problemCAIL.add(Long.toString(id));
+                problemCAIL.add(Long.toString(wishListId));
                 continue;
             }
             comicsToRemove.add(cmc.get());
         }
 
         // check if there has been any problems
-        if (problemsEncountered.length() > 0)
-            throw new IllegalArgumentException(problemsEncountered.append("Operation canceled.").toString());
+        Set<Problem> problemsEncountered = new HashSet<>();
+        if (!problemCNF.getInvalidFields().isEmpty())
+            problemsEncountered.add(problemCNF);
+        if (!problemCAIL.getInvalidFields().isEmpty())
+            problemsEncountered.add(problemCAIL);
+        if (!problemsEncountered.isEmpty())
+            throw new BadRequestException(problemsEncountered);
 
         // unbind bidirectional relations with Comic
         for (Comic comic : comicsToRemove)

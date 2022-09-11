@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import im.enricods.ComicsStore.entities.Comic;
 import im.enricods.ComicsStore.entities.User;
@@ -13,7 +14,7 @@ import im.enricods.ComicsStore.entities.WishList;
 
 public interface WishListRepository extends JpaRepository<WishList, Long> {
 
-    List<WishList> findByOwnerAndNameContaining(User user, String name);
+    List<WishList> findByOwnerAndNameContainingIgnoreCase(@Param("user") User user, @Param("name") String name);
 
     List<WishList> findByOwner(User user);
 
