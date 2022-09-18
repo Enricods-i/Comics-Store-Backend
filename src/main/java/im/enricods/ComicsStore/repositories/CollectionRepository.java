@@ -4,6 +4,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import im.enricods.ComicsStore.entities.Author;
@@ -27,11 +28,18 @@ public interface CollectionRepository extends JpaRepository<Collection, Long> {
                         "WHERE cat = :category")
         Page<Collection> findByCategory(Category category, Pageable pageable);
 
-        @Query(value = "SELECT col " +
+        @Query(         "SELECT DISTINCT col " +
                         "FROM Collection col JOIN col.comics com JOIN com.authors auth JOIN col.categories cat " +
-                        "WHERE (col.name LIKE :name OR :name IS NULL) AND " +
-                        "(auth = :author OR :author IS NULL) AND " +
-                        "(cat = :category OR :category IS NULL)")
-        Page<Collection> advancedSearch(String name, Author author, Category category, Pageable pageable);
+                        "WHERE " +
+                        "(LOWER(col.name) LIKE '%'||:name||'%') " +
+                        "AND " +
+                        "(LOWER(auth.name) LIKE '%'||:author||'%') " +
+                        "AND " +
+                        "(LOWER(cat.name) LIKE '%'||:category||'%')")
+        Page<Collection> advancedSearch(
+                        @Param("name") String name,
+                        @Param("author") String author,
+                        @Param("category") String category,
+                        Pageable pageable);
 
 }// CollectionRepository

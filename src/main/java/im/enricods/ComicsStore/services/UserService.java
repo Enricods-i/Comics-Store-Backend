@@ -15,6 +15,9 @@ import org.springframework.validation.annotation.Validated;
 
 import im.enricods.ComicsStore.repositories.CartRepository;
 import im.enricods.ComicsStore.repositories.UserRepository;
+import im.enricods.ComicsStore.utils.BadRequestException;
+import im.enricods.ComicsStore.utils.Problem;
+import im.enricods.ComicsStore.utils.ProblemCode;
 import im.enricods.ComicsStore.entities.Cart;
 import im.enricods.ComicsStore.entities.User;
 
@@ -34,7 +37,7 @@ public class UserService {
 
         Optional<User> usr = userRepository.findByEmail(email);
         if (usr.isEmpty())
-            throw new IllegalArgumentException("User with email \"" + email + "\" not found.");
+            throw new BadRequestException(new Problem(ProblemCode.USER_NOT_FOUND, "email"));
         return usr.get();
 
     }// getByEmail
@@ -64,7 +67,7 @@ public class UserService {
 
         // verify that User specified doesn't already exist
         if (userRepository.existsByEmail(user.getEmail()))
-            throw new IllegalArgumentException("User with email \"" + user.getEmail() + "\" already exists.");
+            throw new BadRequestException(new Problem(ProblemCode.USER_ALREADY_EXISTS, "user"));
 
         // create user's cart
         Cart cart = new Cart();
@@ -81,24 +84,23 @@ public class UserService {
 
     }// add
 
-    public void modify(@NotNull @Valid User user) {
+    public User modify(@NotNull @Valid User user) {
 
         // verify that User specified exists
         Optional<User> usr = userRepository.findById(user.getId());
         if (usr.isEmpty())
-            throw new IllegalArgumentException("User " + user.getId() + " not found.");
+            throw new BadRequestException(new Problem(ProblemCode.USER_NOT_FOUND, "user"));
 
         // if modifying email verify that does not exist a User with the same email
-        if (!user.getEmail().equals(usr.get().getEmail()) && userRepository.existsByEmail(usr.get().getEmail()))
-            throw new IllegalArgumentException(
-                    "User with email \"" + user.getEmail() + "\" already exists!\nOperation calceled.");
+        if (!user.getEmail().equals(usr.get().getEmail()) && userRepository.existsByEmail(user.getEmail()))
+            throw new BadRequestException(new Problem(ProblemCode.USER_ALREADY_EXISTS, "user"));
 
         // set fields that client can't modify
         user.setCart(usr.get().getCart());
         user.setCreationDate(usr.get().getCreationDate());
 
         // merge
-        userRepository.save(user);
+        return userRepository.save(user);
 
     }// modify
 

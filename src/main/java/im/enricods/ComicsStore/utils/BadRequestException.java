@@ -1,10 +1,9 @@
-package im.enricods.ComicsStore.utils.exceptions;
+package im.enricods.ComicsStore.utils;
 
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-import im.enricods.ComicsStore.utils.Problem;
 import lombok.Getter;
 import lombok.ToString;
 

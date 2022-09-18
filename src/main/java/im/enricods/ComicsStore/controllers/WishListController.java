@@ -21,8 +21,8 @@ import org.springframework.web.bind.annotation.RestController;
 import im.enricods.ComicsStore.entities.Comic;
 import im.enricods.ComicsStore.entities.WishList;
 import im.enricods.ComicsStore.services.WishListService;
+import im.enricods.ComicsStore.utils.BadRequestException;
 import im.enricods.ComicsStore.utils.Problem;
-import im.enricods.ComicsStore.utils.exceptions.BadRequestException;
 
 @RestController
 @RequestMapping(path = "/wishLists")

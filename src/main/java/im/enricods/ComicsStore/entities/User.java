@@ -63,6 +63,7 @@ public class User {
 
     @NotNull
     @Email
+    @Size(max = 50)
     @Column(nullable = false, unique = true, length = 50)
     private String email;
 
@@ -79,7 +80,7 @@ public class User {
     @JoinColumn(name = "cart_id")
     private Cart cart;
 
-    @JsonIdentityReference(alwaysAsId = true)
+    @JsonIgnore
     @OneToMany(mappedBy = "owner")
     private Set<WishList> wishLists;
 

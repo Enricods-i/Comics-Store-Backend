@@ -25,9 +25,9 @@ import im.enricods.ComicsStore.entities.WishList;
 import im.enricods.ComicsStore.repositories.ComicRepository;
 import im.enricods.ComicsStore.repositories.UserRepository;
 import im.enricods.ComicsStore.repositories.WishListRepository;
+import im.enricods.ComicsStore.utils.BadRequestException;
 import im.enricods.ComicsStore.utils.Problem;
 import im.enricods.ComicsStore.utils.ProblemCode;
-import im.enricods.ComicsStore.utils.exceptions.BadRequestException;
 
 @Service
 @Transactional
@@ -234,7 +234,7 @@ public class WishListService {
 
         Set<Comic> comicsToRemove = new HashSet<>();
         Problem problemCNF = new Problem(ProblemCode.COMIC_NOT_FOUND);
-        Problem problemCAIL = new Problem(ProblemCode.COMIC_ALREADY_IN_LIST);
+        Problem problemCNIL = new Problem(ProblemCode.COMIC_NOT_IN_LIST);
 
         Optional<Comic> cmc = null;
         for (long id : comicIds) {
@@ -244,8 +244,8 @@ public class WishListService {
                 continue;
             }
             if (!target.getContent().contains(cmc.get())) {
-                problemCAIL.add(Long.toString(id));
-                problemCAIL.add(Long.toString(wishListId));
+                problemCNIL.add(Long.toString(id));
+                problemCNIL.add(Long.toString(wishListId));
                 continue;
             }
             comicsToRemove.add(cmc.get());
@@ -255,8 +255,8 @@ public class WishListService {
         Set<Problem> problemsEncountered = new HashSet<>();
         if (!problemCNF.getInvalidFields().isEmpty())
             problemsEncountered.add(problemCNF);
-        if (!problemCAIL.getInvalidFields().isEmpty())
-            problemsEncountered.add(problemCAIL);
+        if (!problemCNIL.getInvalidFields().isEmpty())
+            problemsEncountered.add(problemCNIL);
         if (!problemsEncountered.isEmpty())
             throw new BadRequestException(problemsEncountered);
 

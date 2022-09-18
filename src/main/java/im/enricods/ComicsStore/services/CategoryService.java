@@ -20,6 +20,9 @@ import im.enricods.ComicsStore.entities.Category;
 import im.enricods.ComicsStore.entities.Collection;
 import im.enricods.ComicsStore.repositories.CategoryRepository;
 import im.enricods.ComicsStore.repositories.CollectionRepository;
+import im.enricods.ComicsStore.utils.BadRequestException;
+import im.enricods.ComicsStore.utils.Problem;
+import im.enricods.ComicsStore.utils.ProblemCode;
 
 @Service
 @Transactional
@@ -50,7 +53,7 @@ public class CategoryService {
 
         // verify that Category with the name specified doesn't already exist
         if (categoryRepository.existsByName(categoryName))
-            throw new IllegalArgumentException("Category with name \"" + categoryName + "\" already exists");
+            throw new BadRequestException(new Problem(ProblemCode.CATEGORY_ALREADY_EXISTS, "categoryName"));
 
         Category c = new Category();
         c.setName(categoryName);
@@ -64,10 +67,10 @@ public class CategoryService {
         // verify that Category with the id specified already exists
         Optional<Category> ctgr = categoryRepository.findById(categoryId);
         if (ctgr.isEmpty())
-            throw new IllegalArgumentException("Category " + categoryId + " not found!");
+            throw new BadRequestException(new Problem(ProblemCode.CATEGORY_NOT_FOUND, "categoryId"));
 
         if (categoryRepository.existsByName(newName))
-            throw new IllegalArgumentException("Category with name \"" + newName + "\" already exists!");
+            throw new BadRequestException(new Problem(ProblemCode.CATEGORY_ALREADY_EXISTS, "newName"));
 
         ctgr.get().setName(newName);
 
@@ -78,7 +81,7 @@ public class CategoryService {
         // verify that Category with the id specified already exists
         Optional<Category> ctgr = categoryRepository.findById(categoryId);
         if (ctgr.isEmpty())
-            throw new IllegalArgumentException("Category " + categoryId + " not found!");
+            throw new BadRequestException(new Problem(ProblemCode.CATEGORY_NOT_FOUND, "categoryId"));
 
         Category target = ctgr.get();
 
@@ -98,32 +101,38 @@ public class CategoryService {
         // verify that Category with the id specified already exists
         Optional<Category> ctgr = categoryRepository.findById(categoryId);
         if (ctgr.isEmpty())
-            throw new IllegalArgumentException("Category " + categoryId + " not found!");
+            throw new BadRequestException(new Problem(ProblemCode.CATEGORY_NOT_FOUND, "categoryId"));
 
         Category target = ctgr.get();
 
         Set<Collection> collectionsToBind = new HashSet<>();
-        StringBuilder problemsEncountered = new StringBuilder();
+        Problem problemCNF = new Problem(ProblemCode.COLLECTION_NOT_FOUND);
+        Problem problemCAIC = new Problem(ProblemCode.CATEGORY_ALREADY_IN_COLLECTION);
 
         Optional<Collection> cllctn = null;
         for (Long id : collectionIds) {
             // verify that Collection with current id exists
             cllctn = collectionRepository.findById(id);
             if (cllctn.isEmpty()) {
-                problemsEncountered.append("Collection " + id + " not found.\n");
+                problemCNF.add(Long.toString(id));
                 continue;
             }
             if (target.getCollections().contains(cllctn.get())) {
-                problemsEncountered
-                        .append("Collection " + id + " is already binded with category " + categoryId + ".\n");
+                problemCAIC.add(Long.toString(id));
+                problemCAIC.add(Long.toString(categoryId));
                 continue;
             }
             collectionsToBind.add(cllctn.get());
         }
 
         // check if there has been any problems
-        if (problemsEncountered.length() > 0)
-            throw new IllegalArgumentException(problemsEncountered.append("Operation canceled.").toString());
+        Set<Problem> problemsEncountered = new HashSet<>();
+        if (!problemCNF.getInvalidFields().isEmpty())
+            problemsEncountered.add(problemCNF);
+        if (!problemCAIC.getInvalidFields().isEmpty())
+            problemsEncountered.add(problemCAIC);
+        if (!problemsEncountered.isEmpty())
+            throw new BadRequestException(problemsEncountered);
 
         // bind bidirectional relations with Collection
         for (Collection collection : collectionsToBind)
@@ -137,31 +146,38 @@ public class CategoryService {
         // verify that Category with the id specified already exists
         Optional<Category> ctgr = categoryRepository.findById(categoryId);
         if (ctgr.isEmpty())
-            throw new IllegalArgumentException("Category " + categoryId + " not found!");
+            throw new BadRequestException(new Problem(ProblemCode.CATEGORY_NOT_FOUND, "categoryId"));
 
         Category target = ctgr.get();
 
         Set<Collection> collectionsToUnbind = new HashSet<>();
-        StringBuilder problemsEncountered = new StringBuilder();
+        Problem problemCNF = new Problem(ProblemCode.COLLECTION_NOT_FOUND);
+        Problem problemCNIC = new Problem(ProblemCode.CATEGORY_NOT_IN_COLLECTION);
 
         Optional<Collection> cllctn = null;
         for (Long id : collectionIds) {
             // verify that Collection with current id exists
             cllctn = collectionRepository.findById(id);
             if (cllctn.isEmpty()) {
-                problemsEncountered.append("Collection " + id + " not found.\n");
+                problemCNF.add(Long.toString(id));
                 continue;
             }
             if (!target.getCollections().contains(cllctn.get())) {
-                problemsEncountered.append("Collection " + id + " is not binded with category " + categoryId + ".\n");
+                problemCNIC.add(Long.toString(id));
+                problemCNIC.add(Long.toString(categoryId));
                 continue;
             }
             collectionsToUnbind.add(cllctn.get());
         }
 
         // check if there has been any problems
-        if (problemsEncountered.length() > 0)
-            throw new IllegalArgumentException(problemsEncountered.append("Operation canceled.").toString());
+        Set<Problem> problemsEncountered = new HashSet<>();
+        if (!problemCNF.getInvalidFields().isEmpty())
+            problemsEncountered.add(problemCNF);
+        if (!problemCNIC.getInvalidFields().isEmpty())
+            problemsEncountered.add(problemCNIC);
+        if (!problemsEncountered.isEmpty())
+            throw new BadRequestException(problemsEncountered);
 
         // bind bidirectional relations with Collection
         for (Collection collection : collectionsToUnbind)

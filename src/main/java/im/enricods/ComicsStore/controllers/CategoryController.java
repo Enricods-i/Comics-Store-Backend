@@ -21,7 +21,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import im.enricods.ComicsStore.entities.Category;
 import im.enricods.ComicsStore.services.CategoryService;
-import im.enricods.ComicsStore.utils.InvalidValue;
+import im.enricods.ComicsStore.utils.BadRequestException;
+import im.enricods.ComicsStore.utils.Problem;
 
 @RestController
 @RequestMapping(path = "/categories")
@@ -41,7 +42,8 @@ public class CategoryController {
             List<Category> result = categoryService.getByName(categoryName);
             return new ResponseEntity<List<Category>>(result, HttpStatus.OK);
         } catch (ConstraintViolationException e) {
-            return new ResponseEntity<List<InvalidValue>>(InvalidValue.getAllInvalidValues(e), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<Set<Problem>>(Problem.getProblemFromConstraintViolationException(e),
+                    HttpStatus.BAD_REQUEST);
         }
     }// getByName
 
@@ -51,9 +53,10 @@ public class CategoryController {
             Category result = categoryService.add(categoryName);
             return new ResponseEntity<Category>(result, HttpStatus.OK);
         } catch (ConstraintViolationException e) {
-            return new ResponseEntity<List<InvalidValue>>(InvalidValue.getAllInvalidValues(e), HttpStatus.BAD_REQUEST);
-        } catch (IllegalArgumentException e) {
-            return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<Set<Problem>>(Problem.getProblemFromConstraintViolationException(e),
+                    HttpStatus.BAD_REQUEST);
+        } catch (BadRequestException e) {
+            return new ResponseEntity<Set<Problem>>(e.getProblems(), HttpStatus.BAD_REQUEST);
         }
     }// create
 
@@ -63,9 +66,10 @@ public class CategoryController {
             categoryService.remove(categoryId);
             return new ResponseEntity<String>("Category \"" + categoryId + "\" deleted succesfully.", HttpStatus.OK);
         } catch (ConstraintViolationException e) {
-            return new ResponseEntity<List<InvalidValue>>(InvalidValue.getAllInvalidValues(e), HttpStatus.BAD_REQUEST);
-        } catch (IllegalArgumentException e) {
-            return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<Set<Problem>>(Problem.getProblemFromConstraintViolationException(e),
+                    HttpStatus.BAD_REQUEST);
+        } catch (BadRequestException e) {
+            return new ResponseEntity<Set<Problem>>(e.getProblems(), HttpStatus.BAD_REQUEST);
         }
     }// delete
 
@@ -77,9 +81,10 @@ public class CategoryController {
             return new ResponseEntity<String>("Category " + categoryId + " renamed successfully in \"" + newName + "\".",
                     HttpStatus.OK);
         } catch (ConstraintViolationException e) {
-            return new ResponseEntity<List<InvalidValue>>(InvalidValue.getAllInvalidValues(e), HttpStatus.BAD_REQUEST);
-        } catch (IllegalArgumentException e) {
-            return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<Set<Problem>>(Problem.getProblemFromConstraintViolationException(e),
+                    HttpStatus.BAD_REQUEST);
+        } catch (BadRequestException e) {
+            return new ResponseEntity<Set<Problem>>(e.getProblems(), HttpStatus.BAD_REQUEST);
         }
     }// updateName
 
@@ -90,9 +95,10 @@ public class CategoryController {
             categoryService.bindCollections(categoryId, collectionIds);
             return new ResponseEntity<String>("Collections "+collectionIds+" bound successfully to category "+categoryId+".", HttpStatus.OK);
         } catch (ConstraintViolationException e) {
-            return new ResponseEntity<List<InvalidValue>>(InvalidValue.getAllInvalidValues(e), HttpStatus.BAD_REQUEST);
-        } catch (IllegalArgumentException e) {
-            return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<Set<Problem>>(Problem.getProblemFromConstraintViolationException(e),
+                    HttpStatus.BAD_REQUEST);
+        } catch (BadRequestException e) {
+            return new ResponseEntity<Set<Problem>>(e.getProblems(), HttpStatus.BAD_REQUEST);
         }
     }// bindCollections
 
@@ -103,9 +109,10 @@ public class CategoryController {
             categoryService.unbindCollections(categoryId, collectionIds);
             return new ResponseEntity<String>("Collections "+collectionIds+" unbound successfully to category "+categoryId+".", HttpStatus.OK);
         } catch (ConstraintViolationException e) {
-            return new ResponseEntity<List<InvalidValue>>(InvalidValue.getAllInvalidValues(e), HttpStatus.BAD_REQUEST);
-        } catch (IllegalArgumentException e) {
-            return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<Set<Problem>>(Problem.getProblemFromConstraintViolationException(e),
+                    HttpStatus.BAD_REQUEST);
+        } catch (BadRequestException e) {
+            return new ResponseEntity<Set<Problem>>(e.getProblems(), HttpStatus.BAD_REQUEST);
         }
     }// bindCollections
 

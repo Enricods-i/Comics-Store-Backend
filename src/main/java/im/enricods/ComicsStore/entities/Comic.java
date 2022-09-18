@@ -48,7 +48,6 @@ public class Comic {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @JsonIdentityReference(alwaysAsId = true)
     @ManyToOne
     @JoinColumn(name = "collection_id")
     private Collection collection;

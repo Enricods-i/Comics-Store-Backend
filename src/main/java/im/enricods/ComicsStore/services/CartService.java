@@ -17,6 +17,9 @@ import im.enricods.ComicsStore.entities.User;
 import im.enricods.ComicsStore.repositories.CartContentRepository;
 import im.enricods.ComicsStore.repositories.ComicRepository;
 import im.enricods.ComicsStore.repositories.UserRepository;
+import im.enricods.ComicsStore.utils.BadRequestException;
+import im.enricods.ComicsStore.utils.Problem;
+import im.enricods.ComicsStore.utils.ProblemCode;
 
 @Service
 @Transactional
@@ -38,7 +41,7 @@ public class CartService {
         // verify that User with Id specified exists
         Optional<User> usr = userRepository.findById(userId);
         if (usr.isEmpty())
-            throw new IllegalArgumentException("User " + userId + " not found!");
+            throw new BadRequestException(new Problem(ProblemCode.USER_NOT_FOUND, "userId"));
 
         return usr.get().getCart();
 
@@ -51,18 +54,16 @@ public class CartService {
         // verify that a User with userId exists
         Optional<User> usr = userRepository.findById(userId);
         if (usr.isEmpty())
-            throw new IllegalArgumentException("User " + userId + " not found!");
+            throw new BadRequestException(new Problem(ProblemCode.USER_NOT_FOUND, "userId"));
 
         // verify that a Comic with comicId exists
         Optional<Comic> cmc = comicRepository.findById(comicId);
         if (cmc.isEmpty())
-            throw new IllegalArgumentException("Comic " + comicId + " not found!");
+            throw new BadRequestException(new Problem(ProblemCode.COMIC_NOT_FOUND, "comicId"));
 
         // verify that the quantity specified is avaiable
         if (quantity > cmc.get().getQuantity())
-            throw new IllegalArgumentException("Unavaiable quantity for comic " +
-                    cmc.get().getNumber() + " in collection " +
-                    cmc.get().getCollection().getName() + " !");
+            throw new BadRequestException(new Problem(ProblemCode.COMIC_QUANTITY_UNAVAIABLE, "quantity"));
 
         Cart cart = usr.get().getCart();
 
@@ -76,7 +77,7 @@ public class CartService {
         // verify that user's Cart doesn't already contain the Comic specified by
         // comicId
         if (cart.getContent().contains(comicInCart))
-            throw new IllegalArgumentException("Comic " + comicId + " already exists in your cart!");
+            throw new BadRequestException(new Problem(ProblemCode.COMIC_ALREADY_IN_CART, "comicId"));
 
         // bind bidirectional relation
         cart.getContent().add(comicInCart);
@@ -93,19 +94,19 @@ public class CartService {
         // verify that User with userId exists
         Optional<User> usr = userRepository.findById(userId);
         if (usr.isEmpty())
-            throw new IllegalArgumentException("User " + userId + " not found!");
+            throw new BadRequestException(new Problem(ProblemCode.USER_NOT_FOUND, "userId"));
 
         // verify that a Comic with comicId exists
         Optional<Comic> cmc = comicRepository.findById(comicId);
         if (cmc.isEmpty())
-            throw new IllegalArgumentException("Comic " + comicId + " not found!");
+            throw new BadRequestException(new Problem(ProblemCode.COMIC_NOT_FOUND, "comicId"));
 
         Cart cart = usr.get().getCart();
 
         // verify that user's Cart contains Comic specified by comicId
         Optional<CartContent> target = cartContentRepository.findById(new CartContentId(cart.getId(), comicId));
         if (target.isEmpty())
-            throw new IllegalArgumentException("Comic " + comicId + " not found in your cart!");
+            throw new BadRequestException(new Problem(ProblemCode.COMIC_NOT_FOUND_IN_CART, "comicId", "userId"));
 
         // unbind bidirectional relation
         cart.getContent().remove(target.get());
@@ -123,7 +124,7 @@ public class CartService {
         // verify that User with userId exists
         Optional<User> usr = userRepository.findById(userId);
         if (usr.isEmpty())
-            throw new IllegalArgumentException("User " + userId + " not found!");
+            throw new BadRequestException(new Problem(ProblemCode.USER_NOT_FOUND, "userId"));
 
         Cart cart = usr.get().getCart();
 
@@ -141,12 +142,12 @@ public class CartService {
         // verify that User with userId exists
         Optional<User> usr = userRepository.findById(userId);
         if (usr.isEmpty())
-            throw new IllegalArgumentException("User " + userId + " not found!");
+            throw new BadRequestException(new Problem(ProblemCode.USER_NOT_FOUND, "userId"));
 
         // verify that a Comic with comicId exists
         Optional<Comic> cmc = comicRepository.findById(comicId);
         if (cmc.isEmpty())
-            throw new IllegalArgumentException("Comic " + comicId + " not found!");
+            throw new BadRequestException(new Problem(ProblemCode.COMIC_NOT_FOUND, "comicId"));
 
         Cart usersCart = usr.get().getCart();
 
@@ -154,13 +155,11 @@ public class CartService {
         Optional<CartContent> comicInCart = cartContentRepository
                 .findById(new CartContentId(usersCart.getId(), comicId));
         if (comicInCart.isEmpty())
-            throw new IllegalArgumentException("Comic " + comicId + " not found in your cart.");
+            throw new BadRequestException(new Problem(ProblemCode.COMIC_NOT_FOUND_IN_CART, "comicId", "userId"));
 
         // verify that the quantity specified is avaiable
         if (newQuantity > cmc.get().getQuantity())
-            throw new IllegalArgumentException("Unavaiable quantity for comic " +
-                    cmc.get().getNumber() + " in collection " +
-                    cmc.get().getCollection().getName() + ".");
+            throw new BadRequestException(new Problem(ProblemCode.COMIC_QUANTITY_UNAVAIABLE, "newQuantity"));
 
         int bias = comicInCart.get().getQuantity() - newQuantity;
 
