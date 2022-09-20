@@ -80,7 +80,7 @@ public class AuthorService {
         if (!authorRepository.existsById(authorId))
             throw new BadRequestException(new Problem(ProblemCode.AUTHOR_NOT_FOUND, "authorId"));
 
-        Cover.save(Type.COLLECTION.getLabel() + authorId, img);
+        Cover.save(Type.AUTHOR.getLabel() + authorId, img);
 
     }// changeCover
 
@@ -91,7 +91,7 @@ public class AuthorService {
         if (!authorRepository.existsById(authorId))
             throw new BadRequestException(new Problem(ProblemCode.AUTHOR_NOT_FOUND, "authorId"));
 
-        Cover.remove(Type.COLLECTION.getLabel() + authorId);
+        Cover.remove(Type.AUTHOR.getLabel() + authorId);
 
     }// removeCover
 

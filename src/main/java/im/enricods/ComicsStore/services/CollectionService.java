@@ -131,11 +131,15 @@ public class CollectionService {
             throw new BadRequestException(new Problem(ProblemCode.TOO_FEW_PARAMETER, "name", "categoryName", "authorName")); */
 
         Pageable paging = PageRequest.of(pageNumber, pageSize, Sort.by(sortBy));
-        System.out.println(name+ "\n"+authorName+"\n"+categoryName);
         Page<Collection> pagedResult = collectionRepository.advancedSearch(name, authorName, categoryName, paging);
         return pagedResult.getContent();
 
     }// advancedSearch
+
+    @Transactional(readOnly=true)
+    public List<Collection> getRecentAdditions(){
+        return collectionRepository.findTop9ByOrderByCreationDateDesc();
+    }//getRecentAdditions
 
     public Collection add(@NotNull @Valid Collection collection) {
 

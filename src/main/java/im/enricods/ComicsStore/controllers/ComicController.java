@@ -37,8 +37,10 @@ public class ComicController {
     private ComicService comicService;
 
     @GetMapping(path = "/v/byCollection")
-    public ResponseEntity<?> showByCollections(@RequestParam(value = "cllctn") long collectionId,
-            @RequestParam(defaultValue = "0") int pageNumber, @RequestParam(defaultValue = "10") int pageSize,
+    public ResponseEntity<?> showByCollections(
+            @RequestParam(value = "cllctn") long collectionId,
+            @RequestParam(defaultValue = "0") int pageNumber,
+            @RequestParam(defaultValue = "10") int pageSize,
             @RequestParam(defaultValue = "number") String sortBy) {
         try {
             List<Comic> result = comicService.getByCollection(collectionId, pageNumber, pageSize, sortBy);
@@ -131,7 +133,7 @@ public class ComicController {
     public ResponseEntity<?> update(@RequestBody Comic comic) {
         try {
             comicService.update(comic);
-            return new ResponseEntity<String>("Comic "+comic.getId()+" updated successfully.", HttpStatus.OK);
+            return new ResponseEntity<String>("Comic " + comic.getId() + " updated successfully.", HttpStatus.OK);
         } catch (ConstraintViolationException e) {
             return new ResponseEntity<Set<Problem>>(Problem.getProblemFromConstraintViolationException(e),
                     HttpStatus.BAD_REQUEST);
@@ -157,7 +159,8 @@ public class ComicController {
     public ResponseEntity<?> addAuthors(@PathVariable(value = "id") long comicId, @RequestBody Set<Long> authorIds) {
         try {
             comicService.addAuthors(comicId, authorIds);
-            return new ResponseEntity<String>("Authors "+authorIds+" added successfully to comic " + comicId + ".", HttpStatus.OK);
+            return new ResponseEntity<String>("Authors " + authorIds + " added successfully to comic " + comicId + ".",
+                    HttpStatus.OK);
         } catch (ConstraintViolationException e) {
             return new ResponseEntity<Set<Problem>>(Problem.getProblemFromConstraintViolationException(e),
                     HttpStatus.BAD_REQUEST);
@@ -170,7 +173,8 @@ public class ComicController {
     public ResponseEntity<?> delAuthors(@PathVariable(value = "id") long comicId, @RequestBody Set<Long> authorIds) {
         try {
             comicService.removeAuthors(comicId, authorIds);
-            return new ResponseEntity<String>("Authors "+authorIds+" deleted successfully from comic " + comicId + ".",
+            return new ResponseEntity<String>(
+                    "Authors " + authorIds + " deleted successfully from comic " + comicId + ".",
                     HttpStatus.OK);
         } catch (ConstraintViolationException e) {
             return new ResponseEntity<Set<Problem>>(Problem.getProblemFromConstraintViolationException(e),

@@ -47,8 +47,10 @@ public class PurchaseController {
     }// showAll
 
     @GetMapping(path = "/byUser")
-    public ResponseEntity<?> showByUser(@RequestParam(value = "usr") long userId,
-            @RequestParam(defaultValue = "0") int pageNumber, @RequestParam(defaultValue = "10") int pageSize,
+    public ResponseEntity<?> showByUser(
+            @RequestParam(value = "usr") long userId,
+            @RequestParam(defaultValue = "0") int pageNumber, 
+            @RequestParam(defaultValue = "10") int pageSize,
             @RequestParam(defaultValue = "creationDate") String sortBy) {
         try {
             List<Purchase> result = purchaseService.getByUser(userId, pageNumber, pageSize, sortBy);
@@ -81,7 +83,7 @@ public class PurchaseController {
         } catch (BadRequestException e) {
             return new ResponseEntity<Set<Problem>>(e.getProblems(), HttpStatus.BAD_REQUEST);
         }
-        //sortBy
+        // sortBy
         catch (PropertyReferenceException e) {
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }

@@ -1,5 +1,7 @@
 package im.enricods.ComicsStore.repositories;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -17,6 +19,8 @@ public interface CollectionRepository extends JpaRepository<Collection, Long> {
         boolean existsByName(String name);
 
         Page<Collection> findByNameContainingIgnoreCase(String name, Pageable pageable);
+
+        List<Collection> findTop9ByOrderByCreationDateDesc();
 
         @Query("SELECT DISTINCT col " +
                         "FROM Collection col JOIN col.comics com JOIN com.authors auth " +

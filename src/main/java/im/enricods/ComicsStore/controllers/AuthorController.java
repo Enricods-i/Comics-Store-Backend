@@ -67,9 +67,9 @@ public class AuthorController {
     }// getByName
 
     @GetMapping(path = "/cover/{id}")
-    public ResponseEntity<?> getCover(@PathVariable(value = "id") long collectionId) {
+    public ResponseEntity<?> getCover(@PathVariable(value = "id") long authorId) {
         try {
-            return new ResponseEntity<byte[]>(Cover.get(Type.AUTHOR.getLabel() + collectionId), HttpStatus.OK);
+            return new ResponseEntity<byte[]>(Cover.get(Type.AUTHOR.getLabel() + authorId), HttpStatus.OK);
         } catch (IOException e) {
             return new ResponseEntity<String>("Server error", HttpStatus.INTERNAL_SERVER_ERROR);
         }

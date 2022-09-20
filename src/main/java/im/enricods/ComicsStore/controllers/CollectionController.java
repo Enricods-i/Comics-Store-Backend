@@ -122,6 +122,11 @@ public class CollectionController {
         }
     }
 
+    @GetMapping(path = "/v/news")
+    public ResponseEntity<?> showRecentAdditions() {
+        return new ResponseEntity<List<Collection>>(collectionService.getRecentAdditions(), HttpStatus.OK);
+    }
+
     @GetMapping(path = "/cover/{id}")
     public ResponseEntity<?> getCover(@PathVariable(value = "id") long collectionId) {
         try {
