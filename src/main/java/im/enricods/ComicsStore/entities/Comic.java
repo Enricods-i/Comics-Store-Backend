@@ -25,16 +25,12 @@ import javax.validation.constraints.Size;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
@@ -48,7 +44,6 @@ public class Comic {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @JsonIdentityReference(alwaysAsId = true)
     @ManyToOne
     @JoinColumn(name = "collection_id")
     private Collection collection;
@@ -84,7 +79,6 @@ public class Comic {
     @Version
     private long version;
 
-    @JsonIdentityReference(alwaysAsId = true)
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @ManyToMany
     @JoinTable(name = "authors", joinColumns = { @JoinColumn(name = "comic_id") }, inverseJoinColumns = {

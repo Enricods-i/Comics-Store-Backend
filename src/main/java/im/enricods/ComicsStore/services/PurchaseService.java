@@ -22,7 +22,9 @@ import im.enricods.ComicsStore.repositories.ComicInPurchaseRepository;
 import im.enricods.ComicsStore.repositories.DiscountRepository;
 import im.enricods.ComicsStore.repositories.PurchaseRepository;
 import im.enricods.ComicsStore.repositories.UserRepository;
-import im.enricods.ComicsStore.utils.exceptions.ComicsQuantityUnavaiableException;
+import im.enricods.ComicsStore.utils.BadRequestException;
+import im.enricods.ComicsStore.utils.Problem;
+import im.enricods.ComicsStore.utils.ProblemCode;
 import im.enricods.ComicsStore.entities.Cart;
 import im.enricods.ComicsStore.entities.CartContent;
 import im.enricods.ComicsStore.entities.Comic;
@@ -67,7 +69,7 @@ public class PurchaseService {
         // verify that User specified by userId exists
         Optional<User> usr = userRepository.findById(userId);
         if (usr.isEmpty())
-            throw new IllegalArgumentException("User " + userId + " not found.");
+            throw new BadRequestException(new Problem(ProblemCode.USER_NOT_FOUND, "userId"));
 
         Pageable paging = PageRequest.of(pageNumber, pageSize, Sort.by(sortBy));
         return purchaseRepository.findByBuyer(usr.get(), paging).getContent();
@@ -81,8 +83,7 @@ public class PurchaseService {
 
         // verify that startDate is previous endDate
         if (startDate.compareTo(endDate) >= 0)
-            throw new IllegalArgumentException(
-                    "End date (" + endDate + ") is previous start date (" + startDate + ").");
+            throw new BadRequestException(new Problem(ProblemCode.DATE_WRONG_RANGE, "startdate","endDate"));
 
         Pageable paging = PageRequest.of(pageNumber, pageSize, Sort.by(sortBy));
         return purchaseRepository.findByCreationDateBetween(startDate, endDate, paging).getContent();
@@ -95,25 +96,24 @@ public class PurchaseService {
         // verify that User specified by userId exists
         Optional<User> usr = userRepository.findById(userId);
         if (usr.isEmpty())
-            throw new IllegalArgumentException("User " + userId + " not found.");
+            throw new BadRequestException(new Problem(ProblemCode.USER_NOT_FOUND, "userId"));
 
         Cart userCart = usr.get().getCart();
 
         // verify that the user's cart is not empty
         if (userCart.getContent().isEmpty())
-            throw new IllegalArgumentException("Cart of user " + userId + " is empty.");
+            throw new BadRequestException(new Problem(ProblemCode.CART_IS_EMPTY, "userId"));
 
         // verify that quantity of the comics is avaiable now
-        StringBuilder problemsEncountered = new StringBuilder();
+        Problem problemsCQU = new Problem(ProblemCode.COMIC_QUANTITY_UNAVAIABLE);
         for (CartContent cmcInCart : userCart.getContent()) {
             if (cmcInCart.getComic().getQuantity() < cmcInCart.getQuantity())
-                problemsEncountered.append("Unavaiable quantity for comic " + cmcInCart.getComic().getNumber()
-                        + " in collection " + cmcInCart.getComic().getCollection().getName() + ".\n");
+                problemsCQU.add(Long.toString(cmcInCart.getComic().getId()));
         }
 
         // check if there has been any problems
-        if (problemsEncountered.length() > 0)
-            throw new ComicsQuantityUnavaiableException(problemsEncountered.append("Operation canceled.").toString());
+        if (!problemsCQU.getInvalidFields().isEmpty())
+            throw new BadRequestException(problemsCQU);
         /*-----------------------------------------------------------------------------------------------------------*/
 
         // create Purchase
@@ -124,7 +124,7 @@ public class PurchaseService {
 
         /*----------------------support variables----------------------*/
         float total = 0,
-                purchasePrice = 0;
+            purchasePrice = 0;
         Comic currentComic = null;
         /*-------------------------------------------------------------*/
 

@@ -1,5 +1,6 @@
 package im.enricods.ComicsStore.controllers;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 
@@ -19,10 +20,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import im.enricods.ComicsStore.entities.Author;
 import im.enricods.ComicsStore.services.AuthorService;
-import im.enricods.ComicsStore.utils.InvalidValue;
+import im.enricods.ComicsStore.utils.BadRequestException;
+import im.enricods.ComicsStore.utils.Problem;
+import im.enricods.ComicsStore.utils.covers.Cover;
+import im.enricods.ComicsStore.utils.covers.Type;
 
 @RestController
 @RequestMapping(path = "/authors")
@@ -52,7 +57,8 @@ public class AuthorController {
             List<Author> result = authorService.getByName(authorName, pageNumber, pageSize, sortBy);
             return new ResponseEntity<List<Author>>(result, HttpStatus.OK);
         } catch (ConstraintViolationException e) {
-            return new ResponseEntity<List<InvalidValue>>(InvalidValue.getAllInvalidValues(e), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<Set<Problem>>(Problem.getProblemFromConstraintViolationException(e),
+                    HttpStatus.BAD_REQUEST);
         }
         // if the sortBy parameter has values that are not allowed
         catch (PropertyReferenceException e) {
@@ -60,15 +66,55 @@ public class AuthorController {
         }
     }// getByName
 
+    @GetMapping(path = "/cover/{id}")
+    public ResponseEntity<?> getCover(@PathVariable(value = "id") long authorId) {
+        try {
+            return new ResponseEntity<byte[]>(Cover.get(Type.AUTHOR.getLabel() + authorId), HttpStatus.OK);
+        } catch (IOException e) {
+            return new ResponseEntity<String>("Server error", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }// getCover
+
+    @PatchMapping(path = "/chcov/{id}")
+    public ResponseEntity<?> chcov(
+            @PathVariable(value = "id") long authorId,
+            @RequestParam("img") MultipartFile image) {
+        try {
+            authorService.changeCover(authorId, image);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (ConstraintViolationException e) {
+            return new ResponseEntity<Set<Problem>>(Problem.getProblemFromConstraintViolationException(e),
+                    HttpStatus.BAD_REQUEST);
+        } catch (BadRequestException e) {
+            return new ResponseEntity<Set<Problem>>(e.getProblems(), HttpStatus.BAD_REQUEST);
+        } catch (IOException e) {
+            return new ResponseEntity<String>("Server error", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }// chcov
+
+    @PatchMapping(path = "/delcov/{id}")
+    public ResponseEntity<?> delcov(@PathVariable(value = "id") long authorId) {
+        try {
+            authorService.removeCover(authorId);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (ConstraintViolationException e) {
+            return new ResponseEntity<Set<Problem>>(Problem.getProblemFromConstraintViolationException(e),
+                    HttpStatus.BAD_REQUEST);
+        } catch (BadRequestException e) {
+            return new ResponseEntity<Set<Problem>>(e.getProblems(), HttpStatus.BAD_REQUEST);
+        }
+    }// delcov
+
     @PostMapping(path = "/create")
     public ResponseEntity<?> create(@RequestBody Author author) {
         try {
             Author res = authorService.add(author);
             return new ResponseEntity<Author>(res, HttpStatus.OK);
         } catch (ConstraintViolationException e) {
-            return new ResponseEntity<List<InvalidValue>>(InvalidValue.getAllInvalidValues(e), HttpStatus.BAD_REQUEST);
-        } catch (IllegalArgumentException e) {
-            return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<Set<Problem>>(Problem.getProblemFromConstraintViolationException(e),
+                    HttpStatus.BAD_REQUEST);
+        } catch (BadRequestException e) {
+            return new ResponseEntity<Set<Problem>>(e.getProblems(), HttpStatus.BAD_REQUEST);
         }
     }// create
 
@@ -76,12 +122,12 @@ public class AuthorController {
     public ResponseEntity<?> update(@RequestBody Author author) {
         try {
             authorService.modify(author);
-            return new ResponseEntity<String>("Author " + author.getId() + "\" updated succesful!",
-                    HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.OK);
         } catch (ConstraintViolationException e) {
-            return new ResponseEntity<List<InvalidValue>>(InvalidValue.getAllInvalidValues(e), HttpStatus.BAD_REQUEST);
-        } catch (IllegalArgumentException e) {
-            return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<Set<Problem>>(Problem.getProblemFromConstraintViolationException(e),
+                    HttpStatus.BAD_REQUEST);
+        } catch (BadRequestException e) {
+            return new ResponseEntity<Set<Problem>>(e.getProblems(), HttpStatus.BAD_REQUEST);
         }
     }// update
 
@@ -89,11 +135,12 @@ public class AuthorController {
     public ResponseEntity<?> delete(@PathVariable(value = "id") long authorId) {
         try {
             authorService.remove(authorId);
-            return new ResponseEntity<String>("Author \"" + authorId + "\" deleted succesful!", HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.OK);
         } catch (ConstraintViolationException e) {
-            return new ResponseEntity<List<InvalidValue>>(InvalidValue.getAllInvalidValues(e), HttpStatus.BAD_REQUEST);
-        } catch (IllegalArgumentException e) {
-            return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<Set<Problem>>(Problem.getProblemFromConstraintViolationException(e),
+                    HttpStatus.BAD_REQUEST);
+        } catch (BadRequestException e) {
+            return new ResponseEntity<Set<Problem>>(e.getProblems(), HttpStatus.BAD_REQUEST);
         }
     }// delete
 
@@ -101,11 +148,12 @@ public class AuthorController {
     public ResponseEntity<?> addWorks(@PathVariable(value = "id") long authorId, @RequestBody Set<Long> comicIds) {
         try {
             authorService.addWorks(authorId, comicIds);
-            return new ResponseEntity<String>("Comics added as works to Author " + authorId, HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.OK);
         } catch (ConstraintViolationException e) {
-            return new ResponseEntity<List<InvalidValue>>(InvalidValue.getAllInvalidValues(e), HttpStatus.BAD_REQUEST);
-        } catch (IllegalArgumentException e) {
-            return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<Set<Problem>>(Problem.getProblemFromConstraintViolationException(e),
+                    HttpStatus.BAD_REQUEST);
+        } catch (BadRequestException e) {
+            return new ResponseEntity<Set<Problem>>(e.getProblems(), HttpStatus.BAD_REQUEST);
         }
     }// addWorks
 
@@ -113,11 +161,12 @@ public class AuthorController {
     public ResponseEntity<?> deleteWorks(@PathVariable(value = "id") long authorId, @RequestBody Set<Long> comicIds) {
         try {
             authorService.removeWorks(authorId, comicIds);
-            return new ResponseEntity<String>("Comics deleted as works to Author " + authorId, HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.OK);
         } catch (ConstraintViolationException e) {
-            return new ResponseEntity<List<InvalidValue>>(InvalidValue.getAllInvalidValues(e), HttpStatus.BAD_REQUEST);
-        } catch (IllegalArgumentException e) {
-            return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<Set<Problem>>(Problem.getProblemFromConstraintViolationException(e),
+                    HttpStatus.BAD_REQUEST);
+        } catch (BadRequestException e) {
+            return new ResponseEntity<Set<Problem>>(e.getProblems(), HttpStatus.BAD_REQUEST);
         }
     }// addWorks
 

@@ -1,5 +1,6 @@
 package im.enricods.ComicsStore.services;
 
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -19,11 +20,17 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.multipart.MultipartFile;
 
 import im.enricods.ComicsStore.entities.Author;
 import im.enricods.ComicsStore.entities.Comic;
 import im.enricods.ComicsStore.repositories.AuthorRepository;
 import im.enricods.ComicsStore.repositories.ComicRepository;
+import im.enricods.ComicsStore.utils.BadRequestException;
+import im.enricods.ComicsStore.utils.Problem;
+import im.enricods.ComicsStore.utils.ProblemCode;
+import im.enricods.ComicsStore.utils.covers.Cover;
+import im.enricods.ComicsStore.utils.covers.Type;
 
 @Service
 @Transactional
@@ -42,7 +49,7 @@ public class AuthorService {
         Pageable paging = PageRequest.of(pageNumber, pageSize, Sort.by(sortBy));
         return authorRepository.findAll(paging).getContent();
 
-    }// showAllAuthors
+    }// getAllAuthors
 
     @Transactional(readOnly = true)
     public List<Author> getByName(@NotNull @Size(min = 3, max = 20) String name, @Min(0) int pageNumber,
@@ -51,13 +58,13 @@ public class AuthorService {
         Pageable paging = PageRequest.of(pageNumber, pageSize, Sort.by(sortBy));
         return authorRepository.findByNameContaining(name, paging).getContent();
 
-    }// showAuthorsByName
+    }// getAuthorsByName
 
     public Author add(@NotNull @Valid Author author) {
 
         // verify that Author specified doesn't already exists
         if (authorRepository.existsByName(author.getName()))
-            throw new IllegalArgumentException("Author with name \"" + author.getName() + "\" already exists!");
+            throw new BadRequestException(new Problem(ProblemCode.AUTHOR_ALREADY_EXISTS, "author.name"));
 
         author.setId(0);
 
@@ -66,12 +73,34 @@ public class AuthorService {
 
     }// addAuthor
 
+    @Transactional(readOnly = true)
+    public void changeCover(@Min(0) long authorId, MultipartFile img) throws IOException {
+
+        // verify that Collection specified already exists
+        if (!authorRepository.existsById(authorId))
+            throw new BadRequestException(new Problem(ProblemCode.AUTHOR_NOT_FOUND, "authorId"));
+
+        Cover.save(Type.AUTHOR.getLabel() + authorId, img);
+
+    }// changeCover
+
+    @Transactional(readOnly = true)
+    public void removeCover(@Min(0) long authorId) {
+
+        // verify that Collection specified already exists
+        if (!authorRepository.existsById(authorId))
+            throw new BadRequestException(new Problem(ProblemCode.AUTHOR_NOT_FOUND, "authorId"));
+
+        Cover.remove(Type.AUTHOR.getLabel() + authorId);
+
+    }// removeCover
+
     public void remove(@Min(0) long authorId) {
 
         // verify that Author with authorId specified exists
         Optional<Author> auth = authorRepository.findById(authorId);
         if (auth.isEmpty())
-            throw new IllegalArgumentException("Author " + authorId + " not found!");
+            throw new BadRequestException(new Problem(ProblemCode.AUTHOR_NOT_FOUND, "authorId"));
 
         Author target = auth.get();
 
@@ -91,7 +120,7 @@ public class AuthorService {
         // verify that Author specified exists
         Optional<Author> auth = authorRepository.findById(author.getId());
         if (auth.isEmpty())
-            throw new IllegalArgumentException("Author " + author.getId() + " not found!");
+            throw new BadRequestException(new Problem(ProblemCode.AUTHOR_NOT_FOUND, "author.id"));
 
         author.setVersion(auth.get().getVersion());
         author.setCreationDate(auth.get().getCreationDate());
@@ -106,32 +135,38 @@ public class AuthorService {
         // verify that Author with authorId specified exists
         Optional<Author> auth = authorRepository.findById(authorId);
         if (auth.isEmpty())
-            throw new IllegalArgumentException("Author " + authorId + " not found!");
+            throw new BadRequestException(new Problem(ProblemCode.AUTHOR_NOT_FOUND, "authorId"));
 
         Author target = auth.get();
 
         Set<Comic> worksToAdd = new HashSet<>();
-        StringBuilder problemsEncountered = new StringBuilder();
+        Problem problemCNF = new Problem(ProblemCode.COMIC_NOT_FOUND);
+        Problem problemAAIC = new Problem(ProblemCode.AUTHOR_ALREADY_IN_COMIC);
 
         Optional<Comic> cmc = null;
         for (long id : comicIds) {
             // verify that a Comic with id exists
             cmc = comicRepository.findById(id);
             if (cmc.isEmpty()) {
-                problemsEncountered.append("Comic " + id + " not found.\n");
+                problemCNF.add(Long.toString(id));
                 continue;
             }
             if (target.getWorks().contains(cmc.get())) {
-                problemsEncountered
-                        .append("Comic " + id + " already belong to the work of the author " + authorId + ".\n");
+                problemAAIC.add(Long.toString(id));
+                problemAAIC.add(Long.toString(authorId));
                 continue;
             }
             worksToAdd.add(cmc.get());
         }
 
         // check if there has been any problems
-        if (problemsEncountered.length() > 0)
-            throw new IllegalArgumentException(problemsEncountered.append("Operation canceled.").toString());
+        Set<Problem> problemsEncountered = new HashSet<>();
+        if (!problemCNF.getInvalidFields().isEmpty())
+            problemsEncountered.add(problemCNF);
+        if (!problemAAIC.getInvalidFields().isEmpty())
+            problemsEncountered.add(problemAAIC);
+        if (!problemsEncountered.isEmpty())
+            throw new BadRequestException(problemsEncountered);
 
         // bind bidirectional relations with Comic
         for (Comic comic : worksToAdd)
@@ -144,32 +179,38 @@ public class AuthorService {
         // verify that Author with authorId specified exists
         Optional<Author> auth = authorRepository.findById(authorId);
         if (auth.isEmpty())
-            throw new IllegalArgumentException("Author " + authorId + " not found!");
+            throw new BadRequestException(new Problem(ProblemCode.AUTHOR_NOT_FOUND, "authorId"));
 
         Author target = auth.get();
 
         Set<Comic> worksToRemove = new HashSet<>();
-        StringBuilder problemsEncountered = new StringBuilder();
+        Problem problemCNF = new Problem(ProblemCode.COMIC_NOT_FOUND);
+        Problem problemANIC = new Problem(ProblemCode.AUTHOR_ALREADY_IN_COMIC);
 
         Optional<Comic> cmc = null;
         for (long id : comicIds) {
             // verify that a Comic with id exists
             cmc = comicRepository.findById(id);
             if (cmc.isEmpty()) {
-                problemsEncountered.append("Comic " + id + " not found.\n");
+                problemCNF.add(Long.toString(id));
                 continue;
             }
             if (!target.getWorks().contains(cmc.get())) {
-                problemsEncountered
-                        .append("Comic " + id + " does not belong to the work of the author " + authorId + ".\n");
+                problemANIC.add(Long.toString(id));
+                problemANIC.add(Long.toString(authorId));
                 continue;
             }
             worksToRemove.add(cmc.get());
         }
 
         // check if there has been any problems
-        if (problemsEncountered.length() > 0)
-            throw new IllegalArgumentException(problemsEncountered.append("Operation canceled.").toString());
+        Set<Problem> problemsEncountered = new HashSet<>();
+        if (!problemCNF.getInvalidFields().isEmpty())
+            problemsEncountered.add(problemCNF);
+        if (!problemANIC.getInvalidFields().isEmpty())
+            problemsEncountered.add(problemANIC);
+        if (!problemsEncountered.isEmpty())
+            throw new BadRequestException(problemsEncountered);
 
         // bind bidirectional relations with Comic
         for (Comic comic : worksToRemove)

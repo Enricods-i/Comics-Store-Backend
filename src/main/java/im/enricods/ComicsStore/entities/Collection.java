@@ -26,16 +26,12 @@ import javax.validation.constraints.Size;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "name")
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
@@ -47,7 +43,7 @@ public class Collection {
     @EqualsAndHashCode.Include
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @NotNull
     @Size(min = 1, max = 50)
@@ -57,16 +53,16 @@ public class Collection {
     @NotNull
     @Positive
     @Column(nullable = false)
-    private float price;
+    private Float price;
 
     @Column(name = "year_of_release")
-    private int yearOfRelease;
+    private Integer yearOfRelease;
 
     @Size(max = 30)
     @Column(name = "format_and_binding", length = 30)
     private String formatAndBinding;
 
-    private boolean color;
+    private Boolean color;
 
     @Size(max = 1000)
     @Column(length = 1000)
@@ -91,7 +87,6 @@ public class Collection {
         comic.setCollection(null);
     }// rempveComic
 
-    @JsonIdentityReference
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @ManyToMany
     @JoinTable(name = "classification", joinColumns = @JoinColumn(name = "collection_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))

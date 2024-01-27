@@ -92,8 +92,8 @@ erDiagram
 
     Comic_in_purchase {
         long id
-        int quantity
-        float price
+        int comic_quantity
+        float comic_price
     }
 
     Comic }o--o{ Discount : promotion

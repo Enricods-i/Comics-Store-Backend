@@ -23,15 +23,11 @@ import javax.validation.constraints.Size;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
@@ -63,6 +59,7 @@ public class User {
 
     @NotNull
     @Email
+    @Size(max = 50)
     @Column(nullable = false, unique = true, length = 50)
     private String email;
 
@@ -79,7 +76,7 @@ public class User {
     @JoinColumn(name = "cart_id")
     private Cart cart;
 
-    @JsonIdentityReference(alwaysAsId = true)
+    @JsonIgnore
     @OneToMany(mappedBy = "owner")
     private Set<WishList> wishLists;
 
