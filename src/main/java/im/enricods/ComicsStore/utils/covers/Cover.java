@@ -16,7 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class Cover {
 
     //@Value("${images-path}")
-    private static final String IMAGES_DIRECTORY = "/home/eds/Progetti/Comics-Store-BE/src/main/resources/images/";
+    private static final String IMAGES_DIRECTORY = "/home/eds/Documenti/Comics-Store-BE/src/main/resources/images/";
 
     @Async
     public static void save(String fileName, MultipartFile file) throws IOException{

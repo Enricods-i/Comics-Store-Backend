@@ -4,7 +4,7 @@ spring:
     datasource:
         username: eds
         password: eds
-        url: jdbc:postgresql://localhost:5432/comics_store
+        url: jdbc:postgresql://localhost:5432/comics_shop
     web:
         resources:
             static-locations: classpath:/images/
@@ -27,4 +27,4 @@ spring:
 #        key-store-type: PKCS12
 #        key-store: /etc/pki/tls/certs/server.key
 
-images-path: "/home/eds/Progetti/Comics-Store-BE/images/"
+images-path: "/home/eds/Documenti/Comics-Store-BE/src/main/resources/images"
