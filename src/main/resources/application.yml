@@ -3,11 +3,13 @@ spring:
         name: Comics_store
     datasource:
         username: eds
-        password: eds
+        # password is in an external config file
         url: jdbc:postgresql://localhost:5432/comics_shop
     web:
         resources:
             static-locations: classpath:/images/
+    config:
+        import: "datasource_passwd.yml"
 #    security:
 #        oauth2:
 #            resourceserver:
